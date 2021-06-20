@@ -63,7 +63,7 @@ No permissions are requires to read or write an app's private storage. [More on 
 
 Shared storage is visible to all apps, is persistent after an app is uninstalled. On devices running Android 10 and later shared storage is implemented as a database, you cannot access shared storage with POSIX file operations. The Kivy and KivyMD file choosers do not work, you must use the Android file picker.
 
-The nearby [storage example](https://github.com/RobertFlatt/Android-for-Python/tree/main/storage) demonstrates the database insert(), delete(), and retrieve() operations.
+The nearby [storage example](https://github.com/Android-for-Python/Storage-Example) demonstrates the database insert(), delete(), and retrieve() operations.
 
 Shared storage is organized based on root directories located in Android's 'Main Storage'. They are 'Music', 'Movies', 'Pictures', 'Documents', and 'Downloads'.
 
@@ -73,7 +73,7 @@ On devices running Android 9 and less, for shared storage, both file access and 
 
 ## Sharing a file between apps
 
-Files in Shared Storage can be shared between apps. Either using the file picker, or the Share mechanism. See the examples: [Sending a Share](https://github.com/RobertFlatt/Android-for-Python/tree/main/share_snd) and [Receiving a Share](https://github.com/RobertFlatt/Android-for-Python/tree/main/share_rcv).
+Files in Shared Storage can be shared between apps. Either using the file picker, or the Share mechanism. See the examples: [Sending a Share](https://github.com/Android-for-Python/Share-Send-Example) and [Receiving a Share](https://github.com/Android-for-Python/Share-Receive-Example).
 
 # Threads and Subprocesses
 
@@ -327,7 +327,7 @@ KivyMD is in development, which means some functionality [is still changing](htt
 
 ## Camera
 
-It is hard to get the Kivy Camera widget to work on Android, the OpenCV camera does not work on Android. Try the [Xcamera widget](https://github.com/kivy-garden/xcamera) from the Kivy Garden, or [kivy-anderoid-camera](https://github.com/alecvn/kivy-android-camera). Also there is [Color blind camera](https://github.com/inclement/colour-blind-camera) and [zbarcam](https://github.com/kivy-garden/zbarcam). Another option is [CameraXF](https://github.com/RobertFlatt/Android-for-Python/tree/main/cameraxf), a turnkey full screen photo, video, and image analysis camera.
+It is hard to get the Kivy Camera widget to work on Android, the OpenCV camera does not work on Android. Try the [Xcamera widget](https://github.com/kivy-garden/xcamera) from the Kivy Garden, or [kivy-anderoid-camera](https://github.com/alecvn/kivy-android-camera). Also there is [Color blind camera](https://github.com/inclement/colour-blind-camera) and [zbarcam](https://github.com/kivy-garden/zbarcam). Another option is [CameraXF](https://github.com/Android-for-Python/CameraXF-Example), a turnkey full screen photo, video, and image analysis camera.
 
 ## Keyboard
 
@@ -416,7 +416,7 @@ DownloadManagerRequest = autoclass('android.app.DownloadManager$Request')
 
 Then use this to write code with Python syntax and semantics, and Java class semantics added. Some basic knowledge of Java semantics is required, get over it. Android classes will require (possibly extensive) reading of the [Android Developer Guide](https://developer.android.com/guide) and [Android Reference](https://developer.android.com/reference).
 
-It is also possible to write Java class implementations in Python usiny `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/RobertFlatt/Android-for-Python/blob/main/cameraxf/cameraxf/listeners.py).
+It is also possible to write Java class implementations in Python usiny `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py).
 
 Note: some documentation examples are obsolete. If you see '.renpy.' as a sub field in an autoclass argument replace it with '.kivy.'.
 
@@ -434,13 +434,13 @@ Pyjnius allows us to call Java from Python, calling Python from Java is achived 
 
 The steps are outlined below, with links to an example in cameraxf.
 
-- Create a [Java wrapper interface class](https://github.com/RobertFlatt/Android-for-Python/blob/main/cameraxf/cameraxf/camerax_src/org/kivy/camerax/CallbackWrapper.java), the class contains the Java callback method prototypes.
+- Create a [Java wrapper interface class](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/camerax_src/org/kivy/camerax/CallbackWrapper.java), the class contains the Java callback method prototypes.
 
-- Create a [Python implementation](https://github.com/RobertFlatt/Android-for-Python/blob/main/cameraxf/cameraxf/listeners.py#L118) of the wrapper class as a subclass of `PythonJavaClass`. Note that the Python class has the Python callback method as an initialization parameter, the Java interface did not have this. 
+- Create a [Python implementation](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py#L118) of the wrapper class as a subclass of `PythonJavaClass`. Note that the Python class has the Python callback method as an initialization parameter, the Java interface did not have this. 
 
-- Create the [listener derived from the abstract class](https://github.com/RobertFlatt/Android-for-Python/blob/main/cameraxf/cameraxf/camerax_src/org/kivy/camerax/ImageSavedCallback.java) as usual. Except it has the wrapper class as an initialization parameter, so it can call the wrapper's callback method(s).
+- Create the [listener derived from the abstract class](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/camerax_src/org/kivy/camerax/ImageSavedCallback.java) as usual. Except it has the wrapper class as an initialization parameter, so it can call the wrapper's callback method(s).
 
-- [In Python](https://github.com/RobertFlatt/Android-for-Python/blob/main/cameraxf/cameraxf/camerax.py#L354-L356) instantiate the wrapper with a reference to the Python callback method as an parameter. In Python instantiate the listener implementing the abstract class with a reference to the wrapper as an parameter. In Python instantiate the Java functionality with it's listener as a parameter.
+- [In Python](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/camerax.py#L354-L356) instantiate the wrapper with a reference to the Python callback method as an parameter. In Python instantiate the listener implementing the abstract class with a reference to the wrapper as an parameter. In Python instantiate the Java functionality with it's listener as a parameter.
 
 No, I won't do it for you.
 
@@ -460,7 +460,7 @@ There is a `#garden_requirements =` field in buildozer.spec, as far as I know th
 
 ## Android for Python
 
-[Android for Python](https://github.com/RobertFlatt/Android-for-Python) contains examples of some Android features as used from Python (and this document). These examples only run on Android.
+[Android for Python](https://github.com/Android-for-Python) contains examples of some Android features as used from Python (and this document). These examples only run on Android.
 
 ## Other Resources
 
