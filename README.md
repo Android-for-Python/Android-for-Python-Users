@@ -200,7 +200,7 @@ Python for Android always enables manifest WRITE_EXTERNAL_STORAGE permission. WR
 
 Any app manifest permission documented in that list as having "Protection level: dangerous" additionally require a user permission. The four listed above are all "dangerous". User permissions generate the dialog that Android apps present to the user, this is initiated with a `request_permissions()` call.
 
-In a Kivy App `request_permissions()` may be called from the `build()` method, there can **only be one** such call in the `build()` method. If there is more than one call, no permission request will be made. `request_permissions()` **must not** be called from the `on_start()` method as this will break the Kivy Lifecycle; there will be an `on_resume()` without a prior `on_pause()`. `request_permissions()` may be called after `on_start()` timestep has completed, but only once per timestep.
+In a Kivy App `request_permissions()` may be called from the `build()` method, there can **only be one** such call in the `build()` method. If there is more than one call, no permission request will be made. `request_permissions()` **must not** be called from the `on_start()` method as this will break the Kivy Lifecycle; there will be an `on_resume()` without a prior `on_pause()`. `request_permissions()` may be called after the `on_start()` timestep has completed, but only once per timestep.
 
 See any of the nearby examples.
 
