@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/06/19
+Revised 2021/06/28
 
 # Table of Contents
 
@@ -25,6 +25,7 @@ Revised 2021/06/19
 - [App Permissions](#app-permissions)
 - [Buildozer and p4a](#buildozer-and-p4a)
   * [Install](#install)
+  * [UC Browser Interaction](#uc-browser-interaction)
   * [Changing buildozer.spec](#changing-buildozerspec)
   * [Some buildozer.spec options](#some-buildozerspec-options)
     + [package.domain](#packagedomain)
@@ -197,7 +198,9 @@ Manifest permissions are declared in the buildozer.spec file. Common examples ar
 
 Python for Android always enables manifest WRITE_EXTERNAL_STORAGE permission. WRITE_EXTERNAL_STORAGE implies READ_EXTERNAL_STORAGE. [WRITE_EXTERNAL_STORAGE is never required](https://developer.android.com/training/data-storage#permissions) for devices running api >= 30.
 
-Any app manifest permission documented in that list as having "Protection level: dangerous" additionally require a user permission. The four listed above are all "dangerous". User permissions generate the dialog that Android apps present to the user. In a Kivy App this must be called from the `build()` method using `request_permissions()` which is part of the `android.permissions` package.
+Any app manifest permission documented in that list as having "Protection level: dangerous" additionally require a user permission. The four listed above are all "dangerous". User permissions generate the dialog that Android apps present to the user, this is initiated with a `request_permissions()` call.
+
+In a Kivy App `request_permissions()` may be called from the `build()` method, there can **only be one** such call in the `build()` method. If there is more than one call, no permission request will be made. `request_permissions()` **must not** be called from the `on_start()` method as this will break the Kivy Lifecycle; there will be an `on_resume()` without a prior `on_pause()`. `request_permissions()` may be called after `on_start()` timestep has completed, but only once per timestep.
 
 See any of the nearby examples.
 
@@ -227,8 +230,9 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 * There are Python style trailing comments in the buildozer.spec
 
-* The first time an app is run after its install it may be *very* slow to start if UC Browser is installed on the Android device and is scanning.
+## UC Browser Interaction
 
+If UC Browser is installed and is scanning, the first time a Kivy app is run after its install it may be *very* slow to start. To verify this is the case look ing the debug logcat output for multiple UC Browser messages about bad video file format.
 
 ## Changing buildozer.spec
 
@@ -251,6 +255,9 @@ This must contain exctly one period (.) surrounded by alpha numeric characters, 
 
 ### requirements
 
+The current Buildozer default version for Kivy is obsolete, change it to 
+`requirements = python3,kivy==2.0.0`
+
 #### requirements basics
 
 This is basically the list of pip packages and the Python version that your app depends on. On the desktop this is handled for you by `pip3 install`, at the cost of disk space. On Android there is no `pip3` so you have to do it by hand.
@@ -262,9 +269,6 @@ It is important that you understand what your app depends on. The requirements l
 Do not add Python system modules, only packages you might install with pip3 on the desktop. Or for some recipes, other recipies whose name begins with 'lib'.
 
 There are some pip3 packages that are added automatically, no need to put these in requirements: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android, certifi`.
-
-The current Buildozer default version for Kivy is obsolete, change it to 
-`requirements = python3,kivy==2.0.0`
 
 The packages you add here **must be pure Python, or have a recipe** [in this list](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). If this is not the case, the options are to:
 
@@ -406,7 +410,7 @@ class Main(ScreenManager):
         Window.bind(on_keyboard = self.keyboard)
         
     def keyboard(self,window,key,*args):
-        if key == 27 and self.current != "main":
+        if key == 27 and self.sm.current != "main":
             self.current = some_previous_screen
             return True   # key event consumed by app
         else:           
