@@ -537,6 +537,8 @@ There are **a lot of useful features** to be found at these links:
 
 [https://github.com/tshirtman](https://github.com/tshirtman)
 
+[https://github.com/Kulothungan16/Example-Kivy-Apps](https://github.com/Kulothungan16/Example-Kivy-Apps)
+
 ## Android Store
 
 ### How to create a Release APK
