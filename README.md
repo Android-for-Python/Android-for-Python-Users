@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/06/28
+Revised 2021/07/31
 
 # Table of Contents
 
@@ -87,7 +87,7 @@ Lastly this document is my understanding as of the date above. I am not a develo
    
 The file system model is different, the app cannot use any directory in the file system. The app has specific private storage directories that support file operations. The app also has storage shared between apps, this is implemented as a database.
 
-Threads are available and unlike the desktop, run on all available cores. This is cool. But a subprocess can't execute an app, and there is no command shell to run inside a subprocess.
+Threads are available like the desktop. But an app can't execute a subprocess.
 
 Multi-tasking; on the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and then does not execute any app code. Execution without a UI requires an Android service.
 
@@ -137,39 +137,39 @@ Files in Shared Storage can be shared between apps. Either using the file picker
 
 # Threads and Subprocesses
 
-Threads are available and are have more utility than on the desktop because they are executed on all available cores. The single core thread implementation on desktops allows lazy assumptions about thread result ordering. These will bite you on Android if the code is not written in a thread safe manner. Always use callbacks.
-
-Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
+Threads are available. Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
 
 The Python subprocess is not available. The Android equivalent is an Activity, an Activity with no UI is a Service. An Activity can be created through Pyjnius and Java, by first creating an Intent. The special case of creating an Android Service can be automated using Buildozer.
 
 # Android Service
 
-An [Android Service](https://developer.android.com/guide/components/services) is somewhat equivalent to a Python subprocess, in that it can perform operations in the background. An Android service has asynchronous execution and an independent memory space, however unlike a subprocess it does not execute on a different core. In this context we create an Android service that can emulate a Python subprocess, this emulation does not have the lifetime of a true Android service.
+An [Android Service](https://developer.android.com/guide/components/services) is somewhat equivalent to a Python subprocess, in that it can perform operations in the background. An Android service has asynchronous execution and an independent memory space, and may execute on a different core. In the Python context we create an Android service that can emulate a Python subprocess, this emulation does not have the lifetime of a true Android service.
 
 The best (and only) Kivy example is [Kivy Service Osc](https://github.com/tshirtman/kivy_service_osc). OSC is a good package for message passing between app and service. However it is not designed for passing large datas, consider using the file system in this case.
 
 ## Specifying a Service 
 
-If the context of Kivy, an Android service is a python script. The script has a file name and we give the service some name; these are associated in `buildozer.spec` (here `the_service.py` is the name of the script, and `Whatever` the name we give the service). To start a background service:
+If the context of Kivy, an Android service is a python script. The script has a file name and we give the service some name; these are declared in `buildozer.spec` (here `the_service.py` is the name of the script, and `Worker` is the name we give the service *which must be a valid Java class name*). 
 ```
 # (list) List of service to declare
-services = Whatever:the_service.py
+services = Worker:the_service.py
 ```
 
-We start the service from an app using the full app package name, '.Service', and the name of the service:
+We start the service from an app using the service name, with a standard prefix:
 ```
 from android import mActivity
 context =  mActivity.getApplicationContext()
-SERVICE_NAME = str(context.getPackageName()) + '.Service' + 'Whatever'
+SERVICE_NAME = str(context.getPackageName()) + '.Service' + 'Worker'
 self.service = autoclass(SERVICE_NAME)
 self.service.start(mActivity,'')
 ```
 
+`SERVICE_NAME` is the name of a Java class implementing the service.
+
 A [foreground service](https://developer.android.com/guide/components/foreground-services) is specified in buildozer.spec with: 
 ```
 # (list) List of service to declare
-services = Whatever:the_service.py:foreground
+services = Worker:the_service.py:foreground
 
 # (list) Permissions
 android.permissions = FOREGROUND_SERVICE
@@ -184,7 +184,7 @@ A service can be killed at any time by Android if it requires the resources. Thi
 
 ## Service Performance
 
-Unlike a Python subprocess an Android Service executes on the same core as the UI that started it (perhaps multitasking?), so the service can impact UI performance. Computational or I/O tasks in the service should be performed in threads.
+Like a desktop subprocess an Android Service can execute on a different core to the UI that started it, so the service can improve performance of computational tasks.
 
 ## p4a Service Implementation
 
@@ -330,7 +330,7 @@ android.permissions = INTERNET, CAMERA, READ_EXTERNAL_STORAGE
 
 The current buildozer default is 27, but should be "as high as possible". 
 ```
-android.api = 30
+android.api = 31
 ```
 
 ### android.minapi
