@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/07/31
+Revised 2021/08/01
 
 # Table of Contents
 
@@ -145,7 +145,7 @@ The Python subprocess is not available. The Android equivalent is an Activity, a
 
 An [Android Service](https://developer.android.com/guide/components/services) is somewhat equivalent to a Python subprocess, in that it can perform operations in the background. An Android service has asynchronous execution and an independent memory space, and may execute on a different core. In the Python context we create an Android service that can emulate a Python subprocess, this emulation does not have the lifetime of a true Android service.
 
-The best (and only) Kivy example is [Kivy Service Osc](https://github.com/tshirtman/kivy_service_osc). OSC is a good package for message passing between app and service. However it is not designed for passing large datas, consider using the file system in this case.
+There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy_service_osc), and [Mutli-Service Example](https://github.com/Android-for-Python/Multi-Service-Example). OSC is a good package for message passing between app and service. However it is not designed for passing large datas, consider using the file system in this case. OSC requires INTERNET permission.
 
 ## Specifying a Service 
 
@@ -164,7 +164,7 @@ self.service = autoclass(SERVICE_NAME)
 self.service.start(mActivity,'')
 ```
 
-`SERVICE_NAME` is the name of a Java class implementing the service.
+`SERVICE_NAME` is the name of a Java class implementing the service, which in turn executes the `the_service.py`.
 
 A [foreground service](https://developer.android.com/guide/components/foreground-services) is specified in buildozer.spec with: 
 ```
