@@ -64,6 +64,7 @@ Revised 2021/08/01
 - [Appendix B : Using an emulator](#appendix-b---using-an-emulator)
 - [Appendix C : Locally modifying a recipe](#appendix-c---locally-modifying-a-recipe)
 - [Appendix D : Debugging on WSL](#appendix-d---debugging-on-wsl)
+- [Appendix E : Copying from private storage](#appendix-e---copying-from-private-storage)
 
 # Introduction
 
@@ -137,7 +138,7 @@ Files in Shared Storage can be shared between apps. Either using the file picker
 
 # Threads and Subprocesses
 
-Threads are available. Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
+Threads are available. Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
 
 The Python subprocess is not available. The Android equivalent is an Activity, an Activity with no UI is a Service. An Activity can be created through Pyjnius and Java, by first creating an Intent. The special case of creating an Android Service can be automated using Buildozer.
 
@@ -390,7 +391,7 @@ KivyMD is in development, which means some functionality [is still changing](htt
 
 ## Camera
 
-It is hard to get the Kivy Camera widget to work on Android, the OpenCV camera does not work on Android. Try the [Xcamera widget](https://github.com/kivy-garden/xcamera) from the Kivy Garden, or [kivy-anderoid-camera](https://github.com/alecvn/kivy-android-camera). Also there is [Color blind camera](https://github.com/inclement/colour-blind-camera) and [zbarcam](https://github.com/kivy-garden/zbarcam). Another option is [CameraXF](https://github.com/Android-for-Python/CameraXF-Example), a turnkey full screen photo, video, and image analysis camera.
+It is hard to get the Kivy Camera widget to work on Android. Try the [Xcamera widget](https://github.com/kivy-garden/xcamera) from the Kivy Garden, or [kivy-anderoid-camera](https://github.com/alecvn/kivy-android-camera). For OpenCV try [Kivy-Android-Camera](https://github.com/tibssy/Kivy-Android-Camera). Also there is [Color blind camera](https://github.com/inclement/colour-blind-camera) and [zbarcam](https://github.com/kivy-garden/zbarcam). Another option is [CameraXF](https://github.com/Android-for-Python/CameraXF-Example), a turnkey full screen photo, video, and image analysis camera.
 
 ## Keyboard
 
@@ -661,3 +662,14 @@ Finally, `adb devices` in Linux Subsystem should show your device
 List of devices attached
 0A052FDE40019P  device
 ```
+
+# Appendix E : Copying from private storage
+
+To copy from app private storage on an Android device to the host computer:
+
+Connect the device via USB, on device enable Developer Mode and USB debugging.
+
+In Android Studio run `View->Tool Windows->Device File Explorer`
+In Device File Explorer go to `/data/data/org.test.example/files` or lower
+Right click the item and `Save As`
+
