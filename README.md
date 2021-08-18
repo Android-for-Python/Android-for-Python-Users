@@ -8,7 +8,7 @@ Revised 2021/08/01
 # Table of Contents
 
 - [Introduction](#introduction)
-- [What is Different about Android?](#what-is-different-about-android-)
+- [What is Different about Android?](#what-is-different-about-android)
   * [Posix](#posix)
   * [Wheels](#wheels)
   * [Meta-information](#meta-information)
@@ -59,12 +59,12 @@ Revised 2021/08/01
   * [Other Resources](#other-resources)
   * [Android Store](#android-store)
     + [How to create a Release APK](#how-to-create-a-release-apk)
-    + [How to create a Release Bundle (.aab)](#how-to-create-a-release-bundle--aab-)
-- [Appendix A : Using adb](#appendix-a---using-adb)
-- [Appendix B : Using an emulator](#appendix-b---using-an-emulator)
-- [Appendix C : Locally modifying a recipe](#appendix-c---locally-modifying-a-recipe)
-- [Appendix D : Debugging on WSL](#appendix-d---debugging-on-wsl)
-- [Appendix E : Copying from private storage](#appendix-e---copying-from-private-storage)
+    + [How to create a Release Bundle (.aab)](#how-to-create-a-release-bundle-aab)
+- [Appendix A : Using adb](#appendix-a--using-adb)
+- [Appendix B : Using an emulator](#appendix-b--using-an-emulator)
+- [Appendix C : Locally modifying a recipe](#appendix-c--locally-modifying-a-recipe)
+- [Appendix D : Debugging on WSL](#appendix-d--debugging-on-wsl)
+- [Appendix E : Copying from private storage](#appendix-e--copying-from-private-storage)
 
 # Introduction
 
@@ -566,7 +566,7 @@ Basically the workaround specifies part of `project/.buildozer` as an Android St
 
 3) If Android Studio offers a Gradle plugin update (perhaps to `4.2.0`) then accept this update. This results in using Gradle 6.7.1 (in my case).
 
-4) Addition step [from](https://discord.com/channels/423249981340778496/712344698559397895/877601658102751252) "Set android.enableUncompressedNativeLibs=false into my gradle.properties file" 
+4) Additional step [from](https://discord.com/channels/423249981340778496/712344698559397895/877601658102751252) "Set android.enableUncompressedNativeLibs=false into my gradle.properties file" 
 
 5) Go to `Build->Generate Signed Bundle or APK`, select `Bundle` and follow the steps.
 
