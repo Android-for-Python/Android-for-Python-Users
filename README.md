@@ -566,7 +566,9 @@ Basically the workaround specifies part of `project/.buildozer` as an Android St
 
 3) If Android Studio offers a Gradle plugin update (perhaps to `4.2.0`) then accept this update. This results in using Gradle 6.7.1 (in my case).
 
-4) Go to `Build->Generate Signed Bundle or APK`, select `Bundle` and follow the steps.
+4) Addition step [from](https://discord.com/channels/423249981340778496/712344698559397895/877601658102751252) "Set android.enableUncompressedNativeLibs=false into my gradle.properties file" 
+
+5) Go to `Build->Generate Signed Bundle or APK`, select `Bundle` and follow the steps.
 
 
 If Buildozer was run on a virtual machine:
