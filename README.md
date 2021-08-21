@@ -40,21 +40,23 @@ Revised 2021/08/20
     + [android.ndk](#androidndk)
     + [android.arch](#androidarch)
 - [Debugging](#debugging)
-- [Some Related Topics](#some-related-topics)
-  * [Layout](#layout)
-  * [KivyMD](#kivymd)
+- [Android Hardware](#android-hardware)
   * [Camera](#camera)
   * [Keyboard](#keyboard)
   * [Back Button and Gesture](#back-button-and-gesture)
-  * [Kivy Lifecycle](#kivy-lifecycle)
+- [Android Packages](#android-packages)
   * [The Android package](#the-android-package)
   * [Plyer](#plyer)
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
     + [Pyjnius Challenges](#pyjnius-challenges)
-    + [Callbacks with a Java Abstract Class.](#callbacks-with-a-java-abstract-class)
+    + [Callbacks with a Java Abstract Class.](#callbacks-with-a-java-abstract-cl  * [Android Notifications](#android-notifications)
+ass)
+- [Some Related Topics](#some-related-topics)
+  * [Layout](#layout)
+  * [KivyMD](#kivymd)
+  * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
-  * [Android Notifications](#android-notifications)
   * [Android for Python](#android-for-python)
   * [Other Resources](#other-resources)
   * [Android Store](#android-store)
@@ -383,19 +385,7 @@ If you don't see an error message with the Python only messages, there is probab
 
 It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
 
-# Some Related Topics
-
-## Layout
-
-A portable layout is not an Android specific issue. In general for Kivy apps use [density-independent pixels](https://kivy.org/doc/stable/api-kivy.metrics.html) 'dp' to specify an absolute size, and scale-independent pixels 'sp' to specify a font.
-
-## KivyMD
-
-The KivyMD widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
-
-KivyMD is in development, which means some functionality [is still changing](https://kivymd.readthedocs.io/en/latest/changelog/index.html). Next time KivyMD is downloaded the version number may be the same, but some widget may be different!
-
-[How to use KivyMD with Buildozer](https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-use-with-buildozer). There may be additional Buildozer settings required for KivyMD, see KivyMD's sample [buildozer.spec](https://github.com/kivymd/KivyMD/blob/master/demos/kitchen_sink/buildozer.spec).
+# Android Hardware
 
 ## Camera
 
@@ -428,15 +418,7 @@ class Main(ScreenManager):
 
 If `kivy==master` is used `p4a.branch = develop` **must** be used, else there will be a run time error `object has no attribute 'changeKeyboard'`. `kivy==2.0.0` does not appear sensitive to `p4a.branch`.
 
-## Kivy Lifecycle
-
-Follow the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle), it abstracts the app behavior that Android expects.
-
-Do not place code in the app that interacts with Android 'script style', to be executed before the Kivy build() call.
-
-`request_permissions()` must only be called from the App's `build()` method, and only one once with an argument that is a list of all required permissions.
-
-The App's `on_stop()` method is not always called, use `on_pause()` to save state.
+# Android Packages
 
 ## The Android package
 
@@ -514,8 +496,33 @@ The steps are outlined below, with links to an example in cameraxf.
 
 - [In Python](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/camerax.py#L354-L356) instantiate the wrapper with a reference to the Python callback method as an parameter. In Python instantiate the listener implementing the abstract class with a reference to the wrapper as an parameter. In Python instantiate the Java functionality with it's listener as a parameter.
 
-No, I won't do it for you.
+## Android Notifications
 
+[Android-Notification-in-Python](https://github.com/Guhan-SenSam/Android-Notification-in-Python)
+
+# Some Related Topics
+
+## Layout
+
+A portable layout is not an Android specific issue. In general for Kivy apps use [density-independent pixels](https://kivy.org/doc/stable/api-kivy.metrics.html) 'dp' to specify an absolute size, and scale-independent pixels 'sp' to specify a font.
+
+## KivyMD
+
+The KivyMD widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
+
+KivyMD is in development, which means some functionality [is still changing](https://kivymd.readthedocs.io/en/latest/changelog/index.html). Next time KivyMD is downloaded the version number may be the same, but some widget may be different!
+
+[How to use KivyMD with Buildozer](https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-use-with-buildozer). There may be additional Buildozer settings required for KivyMD, see KivyMD's sample [buildozer.spec](https://github.com/kivymd/KivyMD/blob/master/demos/kitchen_sink/buildozer.spec).
+
+## Kivy Lifecycle
+
+Follow the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle), it abstracts the app behavior that Android expects.
+
+Do not place code in the app that interacts with Android 'script style', to be executed before the Kivy build() call.
+
+`request_permissions()` must only be called from the App's `build()` method, and only one once with an argument that is a list of all required permissions.
+
+The App's `on_stop()` method is not always called, use `on_pause()` to save state.
 
 ## Kivy Garden
 
@@ -525,10 +532,6 @@ For flowers that are maintained add them to your buildozer.spec like this:
 `requirements = python3, kivy==2.0.0, kivy_garden.xcamera`. For flowers that are not maintained copy the code to your project and edit so that it builds.
 
 There is a `#garden_requirements =` field in buildozer.spec, as far as I know this is legacy code and should be ignored.
-
-## Android Notifications
-
-[Android-Notification-in-Python](https://github.com/Guhan-SenSam/Android-Notification-in-Python)
 
 ## Android for Python
 
