@@ -367,13 +367,13 @@ Successful setup is indicated by log output similar to:
 List of devices attached
 0A052FDE40019P  device
 ```
-If 'List of devices attached' is followed by an empty line then the connection failed, regardless of what the Buildozer log say afterwards. Either because the device debug options are not set or the debugger is run from a virtual machine.
+If 'List of devices attached' is followed by an empty line then the connection failed, regardless of what the Buildozer log says afterwards. Because either the device debug options are not set, or the debugger is run from a virtual machine that can't see a physical USB port.
 
 In the logcat output look for 'Traceback', what follows is a Python stack trace, which usually indicates the cause of the issue. For example:
 ```
 ModuleNotFoundError: No module named 'some-import-name'
 ```
-Where 'some-import-name' is in 'some-pip-package', then this pip package name is missing from [buildozer.spec requirements](#requirements).
+Where 'some-import-name' is in 'some-pip-package', then this pip package name is missing from [buildozer.spec requirements](#requirements). To get the import's package name look at the import statement in the Python code; get the file name and line number of the import statement from the traceback.
 
 If you don't see an error message with the Python only messages, there is probably an error message from Android. If using Buildozer's 'deploy run logcat', comment the Python only filter:
 ```
