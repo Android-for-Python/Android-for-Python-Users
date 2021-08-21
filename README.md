@@ -142,7 +142,7 @@ Files in Shared Storage can be shared between apps. Either using the file picker
 
 Threads are available. Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
 
-The Python subprocess depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commandswhich of course are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and run from `subprocess.Popen` have app only permission. 
+The Python subprocess depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commands which of course are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and run from `subprocess.Popen` have app only permission. 
 
 There is no `python3` executable, Python's `sys.executable` is empty. To run a Python script in a new process, we use an Android Service.
 
@@ -360,9 +360,7 @@ On the desktop your friends are the Python stack trace, and logging or print sta
 
 First connect the device via USB, on the Android device enable 'Developer Mode' and 'USB debugging'.
 
-If Buildozer was run on a virtual machine then it may not be able to use the the physical USB port and the 'deploy run logcat' options will not work. [In this case use adb instead.](#appendix-a--using-adb)
-
-If Buildozer was run on a WSL then it may not be able to use the the physical USB port and the 'debug deploy run logcat' options will not work. [In this case use adb instead.](#appendix-d--debugging-on-wsl)
+If Buildozer was run on a virtual machine such as WSL then it may not be able to use the the physical USB port and the 'deploy run logcat' options will not work. [In this case use adb instead.](#appendix-a--using-adb)
 
 Successful setup is indicated by log output similar to:
 ```
