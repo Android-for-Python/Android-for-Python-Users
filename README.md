@@ -58,6 +58,7 @@ Revised 2021/08/20
   * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
 - [Resources](#resources)
+  * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
   * [Other Resources](#other-resources)
 - [Android Store](#android-store)
@@ -536,9 +537,19 @@ There is a `#garden_requirements =` field in buildozer.spec, as far as I know th
 
 # Resources
 
+## Read the Fine Manual
+
+Really.
+
+[Buildozer](https://github.com/kivy/buildozer/tree/master/docs/source)
+[Python for Android](https://github.com/kivy/python-for-android/tree/develop/doc/source)
+[Pyjnius](https://github.com/kivy/pyjnius/tree/master/docs/source)
+
+Don't rely on other sources, they can be obsolete.
+
 ## Android for Python
 
-[Android for Python](https://github.com/Android-for-Python) contains examples of some Android features as used from Python (and this document). These examples only run on Android.
+[Android for Python Examples](https://github.com/Android-for-Python/INDEX-of-Examples) contains examples of some Android features as used from Python. These examples only run on Android.
 
 ## Other Resources
 
