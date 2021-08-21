@@ -52,11 +52,12 @@ Revised 2021/08/20
     + [Pyjnius Challenges](#pyjnius-challenges)
     + [Callbacks with a Java Abstract Class](#callbacks-with-a-java-abstract-class)
   * [Android Notifications](#android-notifications)
-- [Some Related Topics](#some-related-topics)
+- [Kivy Related Topics](#some-related-topics)
   * [Layout](#layout)
   * [KivyMD](#kivymd)
   * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
+- [Resources](#resources)
   * [Android for Python](#android-for-python)
   * [Other Resources](#other-resources)
   * [Android Store](#android-store)
@@ -500,7 +501,7 @@ The steps are outlined below, with links to an example in cameraxf.
 
 [Android-Notification-in-Python](https://github.com/Guhan-SenSam/Android-Notification-in-Python)
 
-# Some Related Topics
+# Kivy Related Topics
 
 ## Layout
 
@@ -532,6 +533,8 @@ For flowers that are maintained add them to your buildozer.spec like this:
 `requirements = python3, kivy==2.0.0, kivy_garden.xcamera`. For flowers that are not maintained copy the code to your project and edit so that it builds.
 
 There is a `#garden_requirements =` field in buildozer.spec, as far as I know this is legacy code and should be ignored.
+
+# Resources
 
 ## Android for Python
 
