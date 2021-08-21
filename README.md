@@ -50,8 +50,7 @@ Revised 2021/08/20
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
     + [Pyjnius Challenges](#pyjnius-challenges)
-    + [Callbacks with a Java Abstract Class.](#callbacks-with-a-java-abstract-cl
-ass)
+    + [Callbacks with a Java Abstract Class](#callbacks-with-a-java-abstract-class)
   * [Android Notifications](#android-notifications)
 - [Some Related Topics](#some-related-topics)
   * [Layout](#layout)
