@@ -542,7 +542,9 @@ There is a `#garden_requirements =` field in buildozer.spec, as far as I know th
 Really.
 
 [Buildozer](https://github.com/kivy/buildozer/tree/master/docs/source)
+
 [Python for Android](https://github.com/kivy/python-for-android/tree/develop/doc/source)
+
 [Pyjnius](https://github.com/kivy/pyjnius/tree/master/docs/source)
 
 Don't rely on other sources, they can be obsolete.
