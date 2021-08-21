@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/08/01
+Revised 2021/08/20
 
 # Table of Contents
 
@@ -84,13 +84,15 @@ Lastly this document is my understanding as of the date above. I am not a develo
 
 ## Posix
 
-   Android is not POSIX compliant (POSIX is so deep in your assumptions about computers you probably don't know it exists).
+Android is not POSIX compliant (POSIX is so deep in your assumptions about computers you probably don't know it exists).
    
 The file system model is different, the app cannot use any directory in the file system. The app has specific private storage directories that support file operations. The app also has storage shared between apps, this is implemented as a database.
 
-Threads are available like the desktop. But an app can't execute a subprocess.
+Threads are available like the desktop. Subprocess is available, but the excutable called by subprocess on the desktop almost certainly is not available.
 
-Multi-tasking; on the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and then does not execute any app code. Execution without a UI requires an Android service.
+Multi-tasking, on the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and then does not execute any app code. Execution without a UI requires an Android service.
+
+Apps have a lifecycle, keep to the [Kivy Lifcycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle) so that the app keeps to the [Android Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle#alc). Android api calls made outside of the Kivy App class or its children may cause non-deterministic behavior or crashes.
 
 ## Wheels
 
@@ -140,7 +142,9 @@ Files in Shared Storage can be shared between apps. Either using the file picker
 
 Threads are available. Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
 
-The Python subprocess is not available. The Android equivalent is an Activity, an Activity with no UI is a Service. An Activity can be created through Pyjnius and Java, by first creating an Intent. The special case of creating an Android Service can be automated using Buildozer.
+The Python subprocess depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commandswhich of course are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and run from `subprocess.Popen` have app only permission. 
+
+There is no `python3` executable, Python's `sys.executable` is empty. To run a Python script in a new process, we use an Android Service.
 
 # Android Service
 
@@ -373,6 +377,12 @@ ModuleNotFoundError: No module named 'some-import-name'
 ```
 Where 'some-import-name' is in 'some-pip-package', then this pip package name is missing from [buildozer.spec requirements](#requirements).
 
+If you don't see an error message with the Python only messages, there is probably an error message from Android. If using Buildozer's 'deploy run logcat', comment the Python only filter:
+```
+# (str) Android logcat filters to use
+#android.logcat_filters = *:S python:D
+```
+
 It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
 
 # Some Related Topics
@@ -580,18 +590,30 @@ If Buildozer was run on a virtual machine:
 
 # Appendix A : Using adb
 
-The easiest way to get adb is to install Android Studio.
+The easiest way to get `adb` is to install Android Studio.
 
 Add something like this to your PATH:
-     C:\Users\UserName\AppData\Local\Android\Sdk\platform-tools
+`C:\Users\UserName\AppData\Local\Android\Sdk\platform-tools`
 
-Some adb commands:
+Some `adb` commands:
 ```
 adb devices
 adb install -r  cameraxf-0.1-arm64-v8a-debug.apk
+```
+Android and Python messages to a file:
+```
 adb logcat -c
 adb logcat > log.txt
 ```
+Python messages only to the screen:
+```
+adb logcat *:S python:D
+```
+
+Now start your app.
+
+Note that `adb` does not finish, it continues logging until it is terminated.
+
 
 # Appendix B : Using an emulator
 
