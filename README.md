@@ -52,7 +52,7 @@ Revised 2021/08/20
     + [Pyjnius Challenges](#pyjnius-challenges)
     + [Callbacks with a Java Abstract Class](#callbacks-with-a-java-abstract-class)
   * [Android Notifications](#android-notifications)
-- [Kivy Related Topics](#some-related-topics)
+- [Kivy Related Topics](#kivy-related-topics)
   * [Layout](#layout)
   * [KivyMD](#kivymd)
   * [Kivy Lifecycle](#kivy-lifecycle)
@@ -60,9 +60,9 @@ Revised 2021/08/20
 - [Resources](#resources)
   * [Android for Python](#android-for-python)
   * [Other Resources](#other-resources)
-  * [Android Store](#android-store)
-    + [How to create a Release APK](#how-to-create-a-release-apk)
-    + [How to create a Release Bundle (.aab)](#how-to-create-a-release-bundle-aab)
+- [Android Store](#android-store)
+  * [How to create a Release APK](#how-to-create-a-release-apk)
+  * [How to create a Release Bundle (.aab)](#how-to-create-a-release-bundle-aab)
 - [Appendix A : Using adb](#appendix-a--using-adb)
 - [Appendix B : Using an emulator](#appendix-b--using-an-emulator)
 - [Appendix C : Locally modifying a recipe](#appendix-c--locally-modifying-a-recipe)
@@ -554,9 +554,9 @@ There are **a lot of useful features** to be found at these links:
 
 [https://github.com/Kulothungan16/Example-Kivy-Apps](https://github.com/Kulothungan16/Example-Kivy-Apps)
 
-## Android Store
+# Android Store
 
-### How to create a Release APK
+## How to create a Release APK
 
 [The instructions are here](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
 
@@ -566,11 +566,13 @@ Apparently one can upload an armeabi-v7a apk to the play store, but you must fir
 
 HeRo002 tells us what to [expect](https://github.com/kivy/buildozer/issues/1290).
 
-### How to create a Release Bundle (.aab)
+## How to create a Release Bundle (.aab)
 
-The store will soon require that apps are submitted as an [app bundle](https://developer.android.com/guide/app-bundle).
+The store requires that apps are submitted as an [app bundle](https://developer.android.com/guide/app-bundle).
 
-Buildozer does not currently build .aab files. The following is a summary of a workaround posted on [Google Groups.](https://groups.google.com/g/kivy-users/c/LmoegwYuEEk/m/II-wuO-nAgAJ) This workaround only applies to single architecture bundles, there is no workaround for multi architecture bundles. [Because architecture specific Kivy app code is in the apk in `assets/private.mp3`, but in .aab `assets` are architecture independent. A resolution would require renaming private.mp3 for each archicture, and the app picking the right one for the device.] 
+Buildozer does not currently build .aab files. There is [work in progress](https://github.com/misl6/python-for-android/tree/feat/aab-support) to implement this feature in p4a. This is **work in progress**, if you try to use it expect surprises and be able to support yourself.  
+
+The following is a summary of a workaround posted on [Google Groups.](https://groups.google.com/g/kivy-users/c/LmoegwYuEEk/m/II-wuO-nAgAJ) This workaround only applies to single architecture bundles, there is no workaround for multi architecture bundles. [Because architecture specific Kivy app code is in the apk in `assets/private.mp3`, but in .aab `assets` are architecture independent. A resolution would require renaming private.mp3 for each archicture, and the app picking the right one for the device.] 
 
 Basically the workaround specifies part of `project/.buildozer` as an Android Studio project, and lets Android Studio do the work (virtual machine users, also read the two extra items below):
 
