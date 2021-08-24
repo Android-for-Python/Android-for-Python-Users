@@ -583,7 +583,7 @@ HeRo002 tells us what to [expect](https://github.com/kivy/buildozer/issues/1290)
 
 The store requires that apps are submitted as an [app bundle](https://developer.android.com/guide/app-bundle).
 
-Buildozer does not currently build .aab files. There is [work in progress](https://github.com/misl6/python-for-android/tree/feat/aab-support) to implement this feature in p4a. This is **work in progress**, if you try to use it expect surprises and be able to support yourself.  
+Buildozer does not currently build .aab files. There is [work in progress](https://github.com/kivy/python-for-android/pull/2467) to implement this feature in p4a. This is **work in progress**, if you try to use it expect surprises and be able to support yourself.  
 
 The following is a summary of a workaround posted on [Google Groups.](https://groups.google.com/g/kivy-users/c/LmoegwYuEEk/m/II-wuO-nAgAJ) This workaround only applies to single architecture bundles, there is no workaround for multi architecture bundles. [Because architecture specific Kivy app code is in the apk in `assets/private.mp3`, but in .aab `assets` are architecture independent. A resolution would require renaming private.mp3 for each archicture, and the app picking the right one for the device.] 
 
