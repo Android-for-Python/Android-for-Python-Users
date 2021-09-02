@@ -579,7 +579,7 @@ In this case the requirements for OpenCV is incorrectly specified, it should be 
 
 `Module not found error: No module named '_Socket'`
 
-Occurs with some VMs in response to `buildozer android deploy run`
+Occurs with some VMs (just Colab?) in response to `buildozer android deploy run`
 
 Because in most cases you can't `deploy run` from a VM because the VM can't see the physical USB port.
 
