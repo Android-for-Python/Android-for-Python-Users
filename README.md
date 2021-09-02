@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/08/20
+Revised 2021/09/02
 
 # Table of Contents
 
@@ -57,6 +57,11 @@ Revised 2021/08/20
   * [KivyMD](#kivymd)
   * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
+- [Cryptic Error Messages](#cryptic-error-messages)
+  * [Aidl not found](#aidl-not-found)
+  * [64-bit instead of 32-bit](#64-bit-instead-of-32-bit)
+  * [No module named '_Socket'](#no-module-named-_socket)
+  * [weakly-referenced object](#weakly-referenced-object)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
@@ -120,7 +125,7 @@ An app can perform Python file operations (read, write, shutil) on its private s
 
 The location of an app's private storage is given by for example `app_storage_path()` imported as `from android.storage import app_storage_path`
 
-The install directory './' is also private storage, but files do not persist between installs and updates. Only use this directory for reading data files packaged in the apk.
+The install directory './' is also private storage, but files do not persist between installs and updates. Only use this directory for reading data files packaged in the apk. Files saved to './' do persist between installs.
 
 Do not confuse private with secure, on older Android versions it is possible for other apps to read private storage. In this case internal storage is more secure than external storage.
 
@@ -472,7 +477,18 @@ DownloadManagerRequest = autoclass('android.app.DownloadManager$Request')
 
 Then use this to write code with Python syntax and semantics, and Java class semantics added. Some basic knowledge of Java semantics is required, get over it. Android classes will require (possibly extensive) reading of the [Android Developer Guide](https://developer.android.com/guide) and [Android Reference](https://developer.android.com/reference).
 
-It is also possible to write Java class implementations in Python usiny `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py).
+In addition `android.mActivity` gives access to some Android state that may be used by the Android API. For example:
+
+```
+from android import mActivity
+
+    mActivity.getWindowManager()
+    mActivity.getApplicationContext()
+    mActivity.getSystemService( <service type> )
+    mActivity.getContentResolver() 
+```
+
+It is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py).
 
 Note: some documentation examples are obsolete. If you see '.renpy.' as a sub field in an autoclass argument replace it with '.kivy.'.
 
@@ -535,6 +551,50 @@ For flowers that are maintained add them to your buildozer.spec like this:
 
 There is a `#garden_requirements =` field in buildozer.spec, as far as I know this is legacy code and should be ignored.
 
+# Cryptic Error Messages
+
+## Aidl not found
+
+`# Aidl not found, please install it.`
+
+Aidl is part of the Google tools. To get the tools you have to accept the Google license agreements.
+
+Delete `~/.buildozer` , then `buildozer android debug` and accept the license agreements.
+
+## 64-bit instead of 32-bit
+
+`ImportError: dlopen failed: "/data/data/org.test.myapp/files/app/_python_bundle/site-packages/cv2/cv2.so" is 64-bit instead of 32-bit`
+
+The build process included the wrong binary file.
+
+You can check this by changing arch from `armeabi-v7a` to `arm64-v8a`, `buildozer appclean`, and rebuild you will get a different error. This will say failed to link an x86_64 object, which is a more informative message.
+
+The cause is an x86_64 binary from PyPl was used; because there is a requirements specification error in buildozer.spec
+
+One of your requirements needs a recipe (or needs to be specified differently).
+
+In this case the requirements for OpenCV is incorrectly specified, it should be `opencv` because that is the recipe name.
+
+## No module named '_Socket'
+
+`Module not found error: No module named '_Socket'`
+
+Occurs with some VMs in response to `buildozer android deploy run`
+
+Because in most cases you can't `deploy run` from a VM because the VM can't see the physical USB port.
+
+Copy the `.apk` to the desktop, and [use adb](#appendix-a--using-adb).
+
+## weakly-referenced object
+
+`ReferenceError: weakly-referenced object no longer exists`
+
+This almost always due to a known issue in `kivy==1.11.1` with `Python >= 3.8`
+
+The fix for this case is to [use the current Kivy](#requirements).
+
+
+
 # Resources
 
 ## Read the Fine Manual
@@ -583,7 +643,7 @@ HeRo002 tells us what to [expect](https://github.com/kivy/buildozer/issues/1290)
 
 The store requires that apps are submitted as an [app bundle](https://developer.android.com/guide/app-bundle).
 
-Buildozer does not currently build .aab files. There is [work in progress](https://github.com/kivy/python-for-android/pull/2467) to implement this feature in p4a. This is **work in progress**, if you try to use it expect surprises and be able to support yourself.  
+Buildozer does not currently build .aab files. There is [work in progress](https://github.com/kivy/python-for-android/pull/2467) to implement this feature in p4a and in [Buildozer](https://github.com/kivy/buildozer/pull/1356). This is **work in progress**, if you try to use it expect surprises and be able to support yourself.  
 
 The following is a summary of a workaround posted on [Google Groups.](https://groups.google.com/g/kivy-users/c/LmoegwYuEEk/m/II-wuO-nAgAJ) This workaround only applies to single architecture bundles, there is no workaround for multi architecture bundles. [Because architecture specific Kivy app code is in the apk in `assets/private.mp3`, but in .aab `assets` are architecture independent. A resolution would require renaming private.mp3 for each archicture, and the app picking the right one for the device.] 
 
@@ -605,7 +665,6 @@ If Buildozer was run on a virtual machine:
 1) copy `<project>/.buildozer/android/platform/build-arm64-v8a/dists/<app_name>__arm64-v8a/` to a desktop and open that in Android Studio.
 
 2) Android Studio will tell you the SDK tools path is wrong, and ask to fix it; do this.
-
 
 # Appendix A : Using adb
 
