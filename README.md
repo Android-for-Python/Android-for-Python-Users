@@ -62,6 +62,7 @@ Revised 2021/09/02
   * [64-bit instead of 32-bit](#64-bit-instead-of-32-bit)
   * [No module named '_Socket'](#no-module-named-_socket)
   * [weakly-referenced object](#weakly-referenced-object)
+  * [OpenCV requires Android SDK Tools](#opencv-requires-android-sdk-tools)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
@@ -593,6 +594,15 @@ This almost always due to a known issue in `kivy==1.11.1` with `Python >= 3.8`
 
 The fix for this case is to [use the current Kivy](#requirements).
 
+In any other case this issue can be hard to find. The programmer is assuming an object can be reused, and the garbage collector is assuming it will not be reused. One way to create this error is to assume some third party api is not stateful, when infact it does have state. 
+
+## OpenCV requires Android SDK Tools
+
+`Android SDK Tools: OpenCV requires Android SDK Tools revision 14 or newer.`
+
+Yes, but OpenCV also requires Android SDK Tools revision **30 or older** (I assume it is 30). Buildozer currently uses 31 and this revision does not contain the tools that the OpenCV build expects. Hence the misleading error message, which should be `OpenCV requires Android SDK Tools revision 30 or older.`. 
+
+It is possible to address this with a patch to `~/.buildozer` to include the older tools as described in [this thread](https://github.com/kivy/buildozer/issues/1144). 
 
 
 # Resources
