@@ -67,7 +67,7 @@ Revised 2021/09/02
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
   * [Other Resources](#other-resources)
-- [Android Stores](#android-stores)
+- [Release Builds](#release-builds)
 - [Appendix A : Using adb](#appendix-a--using-adb)
 - [Appendix B : Using an emulator](#appendix-b--using-an-emulator)
 - [Appendix C : Locally modifying a recipe](#appendix-c--locally-modifying-a-recipe)
@@ -636,7 +636,7 @@ There are **a lot of useful features** to be found at these links:
 
 [https://github.com/Kulothungan16/Example-Kivy-Apps](https://github.com/Kulothungan16/Example-Kivy-Apps)
 
-# Android Stores
+# Release Builds
 
 The following depends on using an in [development version of Buildozer](https://github.com/kivy/buildozer/pull/1356), which will have to be reinstalled as the code changes.
 
