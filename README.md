@@ -665,7 +665,7 @@ Build a release apk or aab with:
 buildozer android release
 ```
 
-To install an .aab locally use [Bundletool]((#appendix-f--install-bundletool), in place of adb. 
+To install an .aab locally use [Bundletool](#appendix-f--install-bundletool), in place of adb. 
 
 Sign the .aab or .apk. [The instructions are here](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
 
