@@ -67,14 +67,13 @@ Revised 2021/09/02
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
   * [Other Resources](#other-resources)
-- [Android Store](#android-store)
-  * [How to create a Release APK](#how-to-create-a-release-apk)
-  * [How to create a Release Bundle (.aab)](#how-to-create-a-release-bundle-aab)
+- [Android Stores](#android-stores)
 - [Appendix A : Using adb](#appendix-a--using-adb)
 - [Appendix B : Using an emulator](#appendix-b--using-an-emulator)
 - [Appendix C : Locally modifying a recipe](#appendix-c--locally-modifying-a-recipe)
 - [Appendix D : Debugging on WSL](#appendix-d--debugging-on-wsl)
 - [Appendix E : Copying from private storage](#appendix-e--copying-from-private-storage)
+- [Appendix F : Install Bundletool](#appendix-f--install-bundletool)
 
 # Introduction
 
@@ -637,44 +636,39 @@ There are **a lot of useful features** to be found at these links:
 
 [https://github.com/Kulothungan16/Example-Kivy-Apps](https://github.com/Kulothungan16/Example-Kivy-Apps)
 
-# Android Store
+# Android Stores
 
-## How to create a Release APK
+The following depends on using an in [development version of Buildozer](https://github.com/kivy/buildozer/pull/1356), which will have to be reinstalled as the code changes.
 
-[The instructions are here](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
+```
+pip3 install git+https://github.com/misl6/buildozer.git@feat/aab-support
+```
 
-Always build with the latest api and arm64-v8a when building for the Store.
+After this install for each project you must:
+```
+buildozer appclean
+```
 
-Apparently one can upload an armeabi-v7a apk to the play store, but you must first upload an arm64-v8a version of the app.
+In `buildozer.spec` set `p4a.branch = develop`. If you dont do this, the error is of the form `FileNotFoundError: ......... project.properties`.
 
-HeRo002 tells us what to [expect](https://github.com/kivy/buildozer/issues/1290).
+**Important, this applies to debug and release builds**. The Buildozer `android.arch` option has been replaced by `android.archs` to specify one or more architectures. **The previous `android.arch` is ignored. A debug build of an existing `buildozer.spec` will default to `android.archs = arm64-v8a, armeabi-v7a`, which will produce a multi architecture apk**, this will take twice as long to build and may not install using adb. **If using an existing `buildozer.spec` appends an 's' to `android.arch` so it becomes `android.archs`.**
 
-## How to create a Release Bundle (.aab)
+For a release build the output file format (apk, aab) is specified in `buildozer.spec`, the default is aab. This option is ignored for a debug build.
 
-The store requires that apps are submitted as an [app bundle](https://developer.android.com/guide/app-bundle).
+```
+android.release_artifact = aab 
+```
 
-Buildozer does not currently build .aab files. There is [work in progress](https://github.com/kivy/python-for-android/pull/2467) to implement this feature in p4a and in [Buildozer](https://github.com/kivy/buildozer/pull/1356). This is **work in progress**, if you try to use it expect surprises and be able to support yourself.  
+Build a release apk or aab with:
 
-The following is a summary of a workaround posted on [Google Groups.](https://groups.google.com/g/kivy-users/c/LmoegwYuEEk/m/II-wuO-nAgAJ) This workaround only applies to single architecture bundles, there is no workaround for multi architecture bundles. [Because architecture specific Kivy app code is in the apk in `assets/private.mp3`, but in .aab `assets` are architecture independent. A resolution would require renaming private.mp3 for each archicture, and the app picking the right one for the device.] 
+```
+buildozer android release
+```
 
-Basically the workaround specifies part of `project/.buildozer` as an Android Studio project, and lets Android Studio do the work (virtual machine users, also read the two extra items below):
+To install an .aab locally use [Bundletool]((#appendix-f--install-bundletool), in place of adb. 
 
-1) In Android Studio `File->Open <project>/.buildozer/android/platform/build-arm64-v8a/dists/<app_name>__arm64-v8a/`
+Sign the .aab or .apk. [The instructions are here](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
 
-2) If Android Studio complains about a Build Tools version edit `<app_name>__arm64-v8/build.gradle` and change `BuildToolsVersion 31.0.0-rc2`  to `31.0.0.rc3` (or whatever is current).
-
-3) If Android Studio offers a Gradle plugin update (perhaps to `4.2.0`) then accept this update. This results in using Gradle 6.7.1 (in my case).
-
-4) Additional step [from](https://discord.com/channels/423249981340778496/712344698559397895/877601658102751252) "Set android.enableUncompressedNativeLibs=false into my gradle.properties file" 
-
-5) Go to `Build->Generate Signed Bundle or APK`, select `Bundle` and follow the steps.
-
-
-If Buildozer was run on a virtual machine:
-
-1) copy `<project>/.buildozer/android/platform/build-arm64-v8a/dists/<app_name>__arm64-v8a/` to a desktop and open that in Android Studio.
-
-2) Android Studio will tell you the SDK tools path is wrong, and ask to fix it; do this.
 
 # Appendix A : Using adb
 
@@ -748,6 +742,8 @@ Replace RECIPE_NAME with whatever recipe you are changing:
 
 # Appendix D : Debugging on WSL
 
+As an alternative to copying the apk from the WSL file system to the main Windows file system, and running adb in Windows, one can use two copies of adb as described here. 
+
 The easiest way to get adb is to install Android Studio for both Linux Subsystem (WSL) and Windows of same *Android Debug Bridge version*, use `adb --version` command to find it out
 
 
@@ -784,4 +780,31 @@ Connect the device via USB, on device enable Developer Mode and USB debugging.
 In Android Studio run `View->Tool Windows->Device File Explorer`
 In Device File Explorer go to `/data/data/org.test.example/files` or lower
 Right click the item and `Save As`
+
+# Appendix F : Install Bundletool
+
+Bundletool depends on JRE.
+
+Download bundletool-all-1.8.0.jar (or newer) from https://github.com/google/bundletool/releases . Save in someplace that is not the project directory.
+
+Simplify your life:
+
+On Linux add to `.bashrc`:
+
+```
+alias bundletool='java -jar <pathToSomeplace>/bundletool-all-1.8.0.jar'
+```
+
+On Windows create bundltool.bat containing:
+
+```
+@echo off
+java -jar <pathToSomeplace>\bundletool-all-1.8.0.jar %*
+```
+
+Then, for example:
+
+`bundletool help`
+
+`bundletool validate --bundle=Test-release-0.0.1-.aab`
 
