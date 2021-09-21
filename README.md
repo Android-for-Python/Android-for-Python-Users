@@ -651,7 +651,7 @@ buildozer appclean
 
 In `buildozer.spec` set `p4a.branch = develop`. If you dont do this, the error is of the form `FileNotFoundError: ......... project.properties`.
 
-**Important, this applies to debug and release builds**. The Buildozer `android.arch` option has been replaced by `android.archs` to specify one or more architectures. **The previous `android.arch` is ignored. A debug build of an existing `buildozer.spec` will default to `android.archs = arm64-v8a, armeabi-v7a`, which will produce a multi architecture apk**, this will take twice as long to build and may not install using adb. **If using an existing `buildozer.spec` appends an 's' to `android.arch` so it becomes `android.archs`.**
+**Important, this applies to debug and release builds**. The Buildozer `android.arch` option has been replaced by `android.archs` to specify one or more architectures. **The previous `android.arch` is ignored.** A debug build of an existing `buildozer.spec` will default to `android.archs = arm64-v8a, armeabi-v7a`, which will produce a multi architecture apk, this will take twice as long to build and may not install using adb. **If using an existing `buildozer.spec` append an 's' to `android.arch` so it becomes `android.archs`.**
 
 For a release build the output file format (apk, aab) is specified in `buildozer.spec`, the default is aab. This option is ignored for a debug build.
 
