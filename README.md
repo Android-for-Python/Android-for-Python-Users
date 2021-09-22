@@ -669,6 +669,8 @@ To install an .aab locally use [Bundletool](#appendix-f--install-bundletool), in
 
 Sign the .aab or .apk. [The instructions are here](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
 
+Here are some [very detailed signing instructions](https://gist.github.com/Guhan-SenSam/fa4ed215ef3419e7b3154de5cb71f641). 
+
 
 # Appendix A : Using adb
 
