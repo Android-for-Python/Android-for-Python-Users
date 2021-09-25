@@ -624,7 +624,7 @@ Don't rely on other sources, they can be obsolete.
 [Android for Python Examples](https://github.com/Android-for-Python/INDEX-of-Examples) contains examples of some Android features as used from Python. These examples only run on Android.
 
 ## KivAds
-[KivAds9](https://kivads.readthedocs.io/en/latest/index.html) is a Library that allows you to monetize your Kivy Apps using Google Admob. To use KivAds [minor modifications of p4a](https://github.com/Guhan-SenSam/KivAds/tree/v1.0.0#requirements) are currently required. 
+[KivAds](https://kivads.readthedocs.io/en/latest/index.html) is a Library that allows you to monetize your Kivy Apps using Google Admob. To use KivAds [minor modifications to p4a](https://github.com/Guhan-SenSam/KivAds/tree/v1.0.0#requirements) are currently required. 
 
 ## Other Resources
 
