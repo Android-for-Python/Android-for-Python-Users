@@ -642,22 +642,24 @@ There are **a lot of useful features** to be found at these links:
 
 # Release Builds
 
-The following depends on using an in [development version of Buildozer](https://github.com/kivy/buildozer/pull/1356), which will have to be reinstalled as the code changes.
+The following depends on using an [in development version of Buildozer](https://github.com/kivy/buildozer/pull/1356), which will have to be reinstalled if development introduces any changes.
 
 ```
 pip3 install git+https://github.com/misl6/buildozer.git@feat/aab-support
 ```
 
-After this install for each project you must:
+In `buildozer.spec` set `p4a.branch = develop`. If you dont do this, the error is of the form `FileNotFoundError: ......... project.properties`.
+
+This 'in development' Buildozer is [not backwards compatible](https://github.com/kivy/buildozer/pull/1356#issuecomment-923351708) with the current Buildozer. In any existing buildozer.spec `android.arch` **must** be changed to `android.archs`.
+
+After this install or changing buildozer.spec you must:
 ```
 buildozer appclean
 ```
 
-In `buildozer.spec` set `p4a.branch = develop`. If you dont do this, the error is of the form `FileNotFoundError: ......... project.properties`.
+For a release build `android.archs` can be a list of architectures. For a debug build `android.archs` **must be** a single architecture.
 
-**Important, this applies to debug and release builds**. The Buildozer `android.arch` option has been replaced by `android.archs` to specify one or more architectures. **The previous `android.arch` is ignored.** A debug build of an existing `buildozer.spec` will default to `android.archs = arm64-v8a, armeabi-v7a`, which will produce a multi architecture apk, this will take twice as long to build and may not install using adb. **If using an existing `buildozer.spec` append an 's' to `android.arch` so it becomes `android.archs`.** I consider lack of backwards compatability an [issue](https://github.com/kivy/buildozer/pull/1356#issuecomment-923351708).
-
-For a release build the output file format (apk, aab) is specified in `buildozer.spec`, the default is aab. This option is ignored for a debug build.
+For a release build the output file format (apk, aab) is specified in `buildozer.spec` using `android.release_artifact`, the default is aab. This option is ignored for a debug build which always builds an apk.
 
 ```
 android.release_artifact = aab 
