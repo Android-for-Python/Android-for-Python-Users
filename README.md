@@ -659,7 +659,7 @@ buildozer appclean
 
 For a release build `android.archs` can be a list of architectures. For a debug build `android.archs` **must be** a single architecture.
 
-For a release build the output file format (apk, aab) is specified in `buildozer.spec` using `android.release_artifact`, the default is aab. This option is ignored for a debug build which will always build an apk.
+For a release build the output file format (apk, aab) is specified in `buildozer.spec` using `android.release_artifact`, the default is aab. This option is ignored for a debug build, which will always build an apk.
 
 ```
 android.release_artifact = aab 
