@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/09/02
+Revised 2021/09/30
 
 # Table of Contents
 
