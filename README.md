@@ -517,18 +517,21 @@ SomeJavaClass = autoclass('org.XXX.YYY.SomeJavaClass')
 
 class SomewhereInMyApp(somewidget):
 
+         # instantiate the wrapper
          self.callback_instance = CallbackWrapper(self.from_java)
 
-         // pass the class to Java
+         # pass the class to Java
          SomeJavaClass(self.callback_instance)
 
+     # the method to be called
      def from_java(self, filepath):
          print(filepath)   # prints "Greetings Earthlings"
 
 
+# The wrapper implementation
 class CallbackWrapper(PythonJavaClass):
     __javacontext__ = 'app'
-    __javainterfaces__ = ['org/whereever/whatever/CallbackWrapper']
+    __javainterfaces__ = ['org/wherever/whatever/CallbackWrapper']
 
     def __init__(self, callback):
         super().__init__()
@@ -543,8 +546,8 @@ class CallbackWrapper(PythonJavaClass):
 CallbackWrapper.java
 
 ```
-package org.whereever.whatever;
-
+package org.wherever.whatever;
+// the wrapper interface
 public interface CallbackWrapper {
     public void callback_string(String filepath);
 }
@@ -555,7 +558,7 @@ The Java method generating the callback will be called from Java, depending on t
 SomeJavaClass.java
 
 ```
-import org.whereever.whatever.CallbackWrapper;
+import org.wherever.whatever.CallbackWrapper;
 
    CallbackWrapper callbackClass =  // self.callback_instance passed from Python
 
