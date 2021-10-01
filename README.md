@@ -544,6 +544,8 @@ public interface CallbackWrapper {
 }
 ```
 
+The Java method generating the callback will be called from Java, depending on the overall implementation you may need a Java wrapper to call the method and catch the result. Extra Java wrapper or not, call the Python like this:
+
 SomeWhereElseInMyApp.java
 
 ```
