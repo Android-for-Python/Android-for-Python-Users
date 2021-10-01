@@ -536,7 +536,7 @@ class CallbackWrapper(PythonJavaClass):
             self.callback(filepath)
 ```
 
-CallbackWrapper.java:
+CallbackWrapper.java
 
 ```
 package org.whereever.whatever;
