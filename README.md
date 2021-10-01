@@ -512,6 +512,8 @@ You are going to have to write some Java, get over it.
 In Python:
 
 ```
+from jnius import PythonJavaClass, java_method
+
 class SomewhereInMyApp(somewidget):
 
       self.callback_instance = CallbackWrapper(self.from_java)
