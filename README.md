@@ -50,7 +50,7 @@ Revised 2021/09/02
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
     + [Pyjnius Challenges](#pyjnius-challenges)
-    + [Callbacks with a Java Abstract Class](#callbacks-with-a-java-abstract-class)
+    + [Calling Python from Java](#calling-python-from-java)
   * [Android Notifications](#android-notifications)
 - [Kivy Related Topics](#kivy-related-topics)
   * [Layout](#layout)
@@ -501,19 +501,60 @@ One thing to watch out for is you will be using two garbage collectors working o
 
 Python for Android builds an apk with a minimum device api. Importing Java modules can invalidate this minimum. Check the [Added in API level field](https://developer.android.com/reference/android/provider/MediaStore.Downloads) in the class or method reference documentation.
 
-### Callbacks with a Java Abstract Class.
+### Calling Python from Java
 
-Pyjnius allows us to call Java from Python, calling Python from Java is achived by overriding the Java class implementation in Python using `PythonJavaClass`. However we cannot do this if the Java class is abstract, in this case we implement the derived class in Java and pass the Python callback inside a Java wrapper class with a `PythonJavaClass` implememntation.
+The following illustrates calling a Python method (here called `from_java()`) from Java. In the example there is one argument which is a string. Java sees the method as having a different name, in this case `callback_string()`.
 
-The steps are outlined below, with links to an example in cameraxf.
+The technique relies on passing the method inside a wrapper class. The Java class `interface` is defined in Java. And the Java class `implementation` is defined in Python.
 
-- Create a [Java wrapper interface class](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/camerax_src/org/kivy/camerax/CallbackWrapper.java), the class contains the Java callback method prototypes.
+In Python:
 
-- Create a [Python implementation](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py#L118) of the wrapper class as a subclass of `PythonJavaClass`. Note that the Python class has the Python callback method as an initialization parameter, the Java interface did not have this. 
+```
+class SomewhereInMyApp(somewidget):
 
-- Create the [listener derived from the abstract class](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/camerax_src/org/kivy/camerax/ImageSavedCallback.java) as usual. Except it has the wrapper class as an initialization parameter, so it can call the wrapper's callback method(s).
+      self.callback_instance = CallbackWrapper(self.from_java)
 
-- [In Python](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/camerax.py#L354-L356) instantiate the wrapper with a reference to the Python callback method as an parameter. In Python instantiate the listener implementing the abstract class with a reference to the wrapper as an parameter. In Python instantiate the Java functionality with it's listener as a parameter.
+      def from_java(self, filepath):
+          print(filepath)   # prints "Greetings Earthlings"
+
+
+class CallbackWrapper(PythonJavaClass):
+    __javacontext__ = 'app'
+    __javainterfaces__ = ['org/whereever/whatever/CallbackWrapper']
+
+    def __init__(self, callback):
+        super().__init__()
+        self.callback = callback
+
+    @java_method('(Ljava/lang/String;)V')        
+    def callback_string(self, filepath):
+        if self.callback:
+            self.callback(filepath)
+```
+
+CallbackWrapper.java:
+
+```
+package org.whereever.whatever;
+
+public interface CallbackWrapper {
+    public void callback_string(String filepath);
+}
+```
+
+SomeWhereElseInMyApp.java
+
+```
+import org.whereever.whatever.CallbackWrapper;
+
+   callbackClass =  // self.callback_instance passed from Python
+
+   // This would be from some Java method, and not a static string.
+   String javaCallBackResult = "Greetings Earthlings";
+
+   // At last, the actual Java callback
+   callbackClass.callback_string(javaCallBackResult);
+``
 
 ## Android Notifications
 
