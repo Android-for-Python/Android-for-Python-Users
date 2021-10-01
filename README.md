@@ -553,7 +553,7 @@ SomeWhereElseInMyApp.java
 ```
 import org.whereever.whatever.CallbackWrapper;
 
-   callbackClass =  // self.callback_instance passed from Python
+   CallbackWrapper callbackClass =  // self.callback_instance passed from Python
 
    // This would be the result of some Java callback, and not a static string.
    String javaCallBackResult = "Greetings Earthlings";
