@@ -512,11 +512,15 @@ You are going to have to write some Java, get over it.
 In Python:
 
 ```
-from jnius import PythonJavaClass, java_method
+from jnius import autoclass, PythonJavaClass, java_method
+SomeJavaClass = autoclass('org.XXX.YYY.SomeJavaClass')
 
 class SomewhereInMyApp(somewidget):
 
       self.callback_instance = CallbackWrapper(self.from_java)
+
+      // pass the class to Java
+      SomeJavaClass(self.callback_instance)
 
       def from_java(self, filepath):
           print(filepath)   # prints "Greetings Earthlings"
