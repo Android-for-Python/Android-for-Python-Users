@@ -569,7 +569,7 @@ import org.wherever.whatever.CallbackWrapper;
    callbackClass.callback_string(javaCallBackResult);
 ```
 
-If the Java class specifying the callback is `abstract`, you **must** provide an implementation in Java.
+If the Java class specifying the callback is `abstract`, you **must** provide an `implementation` in Java.
 
 
 ## Android Notifications
