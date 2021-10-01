@@ -571,6 +571,7 @@ import org.wherever.whatever.CallbackWrapper;
 
 If the Java class specifying the callback is `abstract`, you **must** provide an `implementation` in Java.
 
+The Java is added to the project using the `android.add_src` option in `buildozer.spec`.
 
 ## Android Notifications
 
