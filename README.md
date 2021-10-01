@@ -503,7 +503,7 @@ Python for Android builds an apk with a minimum device api. Importing Java modul
 
 ### Calling Python from Java
 
-The following illustrates calling a Python method ( here called `from_java()`) from Java. In the example there is one argument which is a string. Java sees the method as having a different name, in this case `callback_string()`.
+The following illustrates calling a Python method ( here called `from_java()`) from Java. In the example there is one argument which is a string. Java sees the method as having a different name, in this case `callback_string()`. 
 
 The technique relies on passing the method inside a wrapper class. The `interface` of the wrapper class is defined in Java. And the `implementation` of this wrapper class is defined in Python. The wrapper class is initialized with the Python method to be called. Java calls a method inside an the same instance of the same wrapper class. 
 
@@ -517,13 +517,13 @@ SomeJavaClass = autoclass('org.XXX.YYY.SomeJavaClass')
 
 class SomewhereInMyApp(somewidget):
 
-      self.callback_instance = CallbackWrapper(self.from_java)
+         self.callback_instance = CallbackWrapper(self.from_java)
 
-      // pass the class to Java
-      SomeJavaClass(self.callback_instance)
+         // pass the class to Java
+         SomeJavaClass(self.callback_instance)
 
-      def from_java(self, filepath):
-          print(filepath)   # prints "Greetings Earthlings"
+     def from_java(self, filepath):
+         print(filepath)   # prints "Greetings Earthlings"
 
 
 class CallbackWrapper(PythonJavaClass):
