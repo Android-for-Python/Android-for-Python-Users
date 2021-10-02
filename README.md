@@ -500,11 +500,11 @@ Note: some documentation examples are obsolete. If you see '.renpy.' as a sub fi
 
 The `autoclass()` method add significant latency during the app start. If the app contains more than perhaps a dozen `autoclass()` calls you will probably notice the extra app startup time.
 
-The way to address this is to create a Java file that references the Java classes that were referenced with autoclass(). The reference your Java class with `autoclass()`. A Java file is included in the project using Buildozer's `android.add_src`. If your Java file is located at `<project>/src/org/me/myproject/my.java` then use `android.add_src = src` .
+The way to address this is to create a Java file that references the Java classes that were referenced with autoclass(). Then reference your Java class with `autoclass()`. A Java file is included in the project using Buildozer's `android.add_src`. If your Java file is located at `<project>/src/org/me/myproject/my.java` then use `android.add_src = src` .
 
 ### Java Abstract Classes
 
-It is not possible to import Java `abstract` classes or methods, as they have no `implementation` (abstract and implementation are Java keywords). And it it is not possible to provide the implementation in Python. You must find or write the implementation in Java and import that new class.
+It is not possible to import Java `abstract` classes or methods, as they have no `implementation` (abstract and implementation are Java keywords). And it it is not possible to provide the implementation in Python. You must write the implementation in Java and import that new class.
 
 ### Pyjnius Memory Management
 
