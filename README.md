@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/09/30
+Revised 2021/10/01
 
 # Table of Contents
 
@@ -49,7 +49,10 @@ Revised 2021/09/30
   * [Plyer](#plyer)
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
-    + [Pyjnius Challenges](#pyjnius-challenges)
+    + [Pyjnius Performance](#pyjnius-performance)
+    + [Java Abstract Classes](#java-abstract-classes)
+    + [Pyjnius Memory Management](#pyjnius-memory-management)
+    + [Java Api Versions](#java-api-versions)
     + [Calling Python from Java](#calling-python-from-java)
   * [Android Notifications](#android-notifications)
 - [Kivy Related Topics](#kivy-related-topics)
@@ -489,15 +492,44 @@ from android import mActivity
     mActivity.getContentResolver() 
 ```
 
-It is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py).
+It is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). Tou will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format).
 
 Note: some documentation examples are obsolete. If you see '.renpy.' as a sub field in an autoclass argument replace it with '.kivy.'.
 
-### Pyjnius Challenges
+### Pyjnius Performance
 
-It is not possible to import Java *abstract* classes, as they have no *implementation* (abstract and implementation are Java keywords). And it it is not possible to provide the implementation in Python. You must find or write the implementation in Java and import that new class.
+The `autoclass()` method add significant latency during the app start. If the app contains more than perhaps a dozen `autoclass()` calls you will probably notice the extra app startup time.
 
-One thing to watch out for is you will be using two garbage collectors working on the same heap, but they don't know each other's boundaries. Python may free a local reference to a Java object because it cant see that the object is used. Obviously this will cause the app to crash in an ugly way. So use class variables, as in the example above, to indicate persistence to the Python garbage collector.
+The way to address this is to create a Java file that references the Java classes that were referenced with autoclass(). The reference your Java class with `autoclass()`. A Java file is included in the project using Buildozer's `android.add_src`. If your Java file is located at `<project>/src/org/me/myproject/my.java` then use `android.add_src = src` .
+
+### Java Abstract Classes
+
+It is not possible to import Java `abstract` classes or methods, as they have no `implementation` (abstract and implementation are Java keywords). And it it is not possible to provide the implementation in Python. You must find or write the implementation in Java and import that new class.
+
+### Pyjnius Memory Management
+
+You will be using two garbage collectors working on the same heap, but they don't know each other's boundaries. Python may free a local reference to a Java object because it cant see that the object is used. Obviously this will cause the app to crash in an ugly way. So use class variables, as shown below, to indicate persistence to the Python garbage collector.
+
+```
+    ###### DONT DO THIS ####
+    def foobar(self):
+        # instance a Java class
+        request = DownloadManagerRequest(uri)
+        # call a method in that class
+        request.setNotificationVisibility(visibility)    
+```
+```
+    ###### DO THIS ####
+    def foobar(self):
+        # instance a Java class
+        self.request = DownloadManagerRequest(uri)
+        # call a method in that class
+        self.request.setNotificationVisibility(visibility)
+        # Tell the Python garbage collector this will not be reused
+        self.request = None
+```
+
+### Java Api Versions
 
 Python for Android builds an apk with a minimum device api. Importing Java modules can invalidate this minimum. Check the [Added in API level field](https://developer.android.com/reference/android/provider/MediaStore.Downloads) in the class or method reference documentation.
 
@@ -507,20 +539,20 @@ The following illustrates calling a Python method ( here called `from_java()`) f
 
 The technique relies on passing the method inside a wrapper class. The `interface` of the wrapper class is defined in Java. And the `implementation` of this wrapper class is defined in Python. The wrapper class is initialized with the Python method to be called. Java calls a method inside an the same instance of the same wrapper class. 
 
-You are going to have to write some Java, get over it.
+You are going to have to write some Java, get over it. To comprehend the following code fragments; read from top to bottom, then follow the path of the string from bottom to top.
 
 In Python:
 
 ```
 from jnius import autoclass, PythonJavaClass, java_method
-SomeJavaClass = autoclass('org.XXX.YYY.SomeJavaClass')
+SomeJavaClass = autoclass('org.wherever.whatever.SomeJavaClass')
 
 class SomewhereInMyApp(somewidget):
 
          # instantiate the wrapper
          self.callback_instance = CallbackWrapper(self.from_java)
 
-         # pass the class to Java
+         # pass the class instance to Java
          SomeJavaClass(self.callback_instance)
 
      # the method to be called
@@ -553,25 +585,31 @@ public interface CallbackWrapper {
 }
 ```
 
-The Java method generating the callback will be called from Java, depending on the overall implementation you may need a Java wrapper to call the method and catch the result. Extra Java wrapper or not, call the Python like this:
+The Java method generating the callback will be called from Java. The same Java need to reference the `CallbackWrapper` instance. Depending on the overall implementation you may need a Java wrapper to call the method and catch the result. Extra Java wrapper or not, call the Python like this:
 
 SomeJavaClass.java
 
 ```
 import org.wherever.whatever.CallbackWrapper;
 
-   CallbackWrapper callbackClass =  // self.callback_instance passed from Python
+class SomeJavaClass() {
+
+   CallbackWrapper callbackClass;
+   
+   public SomeJavaClass(CallbackWrapper wrapper) {
+       // self.callback_instance passed from Python
+       CallbackWrapper callbackClass = wrapper;
+   }
 
    // This would be the result of some Java callback, and not a static string.
    String javaCallBackResult = "Greetings Earthlings";
 
    // At last, the actual Java callback
    callbackClass.callback_string(javaCallBackResult);
+
+}
 ```
-
-If the Java class specifying the callback is `abstract`, you **must** provide an `implementation` in Java.
-
-The Java is added to the project using the `android.add_src` option in `buildozer.spec`.
+Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer.spec` set `android.add_src = src` .
 
 ## Android Notifications
 
