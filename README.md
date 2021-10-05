@@ -646,7 +646,7 @@ The App's `on_stop()` method is not always called, use `on_pause()` to save stat
 For flowers that are maintained add them to your buildozer.spec like this:
 `requirements = python3, kivy==2.0.0, kivy_garden.xcamera`. For flowers that are not maintained copy the code to your project and edit so that it builds.
 
-There is a `#garden_requirements =` field in buildozer.spec, as far as I know this is legacy code and should be ignored.
+There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated in the Buildozer 'master' and should not be used with any version of Buildozer.
 
 # Cryptic Error Messages
 
