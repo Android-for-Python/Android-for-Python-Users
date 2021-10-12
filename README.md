@@ -748,6 +748,11 @@ In `buildozer.spec` set `p4a.branch = develop`. If you dont do this, the error i
 
 This 'in development' Buildozer is [not backwards compatible](https://github.com/kivy/buildozer/pull/1356#issuecomment-923351708) with the current Buildozer. In any existing buildozer.spec `android.arch` **must** be changed to `android.archs`.
 
+The Android Store requires that apps be build with a minimum API level of 30. Set
+```
+android.api = 31
+```
+
 After this install, or changing buildozer.spec you must:
 ```
 buildozer appclean
