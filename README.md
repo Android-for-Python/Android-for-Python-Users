@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/10/01
+Revised 2021/10/24
 
 # Table of Contents
 
@@ -272,9 +272,6 @@ There is no magic universal buildozer.spec, its configuration depends on the fun
 This must contain exctly one period (.) surrounded by alpha numeric characters, do not use any other special characters. Anthing else will cause a Gradle fail.
 
 ### requirements
-
-The current Buildozer default version for Kivy is obsolete, change it to 
-`requirements = python3,kivy==2.0.0`
 
 #### requirements basics
 
