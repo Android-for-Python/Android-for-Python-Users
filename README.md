@@ -744,13 +744,15 @@ The following depends on using an [in development version of Buildozer](https://
 pip3 install git+https://github.com/misl6/buildozer.git@feat/aab-support
 ```
 
-In `buildozer.spec` set `p4a.branch = develop`. If you dont do this, the error is of the form `FileNotFoundError: ......... project.properties`.
+In `buildozer.spec` set:
 
-This 'in development' Buildozer is [not backwards compatible](https://github.com/kivy/buildozer/pull/1356#issuecomment-923351708) with the current Buildozer. In any existing buildozer.spec `android.arch` **must** be changed to `android.archs`.
+`p4a.branch = develop`
 
-The Android Store requires that apps be build with a minimum API level of 30. Set
+If you do not do this, you will get this error message: `This buildozer version requires a python-for-android version with AAB (Android App Bundle) support.`.
+
+The Android Store requires that apps be built with a minimum API level of 30. Set
 ```
-android.api = 31
+android.api = 30
 ```
 
 After this install, or changing buildozer.spec you must:
@@ -758,12 +760,18 @@ After this install, or changing buildozer.spec you must:
 buildozer appclean
 ```
 
-For a release build `android.archs` can be a list of architectures. For a debug build `android.archs` **must be** a single architecture.
+To generate a multi-architecture apk or aab, `android.arch` becomes a list of architectures. 
 
-For a release build the output file format (apk, aab) is specified in `buildozer.spec` using `android.release_artifact`, the default is aab. This option is ignored for a debug build, which will always build an apk.
+An earlier version of Buildozer supporting aab required changing `android.arch` to `android.archs`, this is no longer required. However the future plan is to depreciate `.arch` in favor of `.archs`. 
 
 ```
-android.release_artifact = aab 
+android.arch = armeabi-v7a, arm64-v8a
+```
+
+A debug build always builds an `.apk`. A release build creates an `.aab` as a default. You can create a release `.apk` by setting:
+
+```
+android.release_artifact = apk
 ```
 
 Build a release apk or aab with:
