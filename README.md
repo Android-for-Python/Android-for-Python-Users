@@ -762,7 +762,7 @@ buildozer appclean
 
 To generate a multi-architecture apk or aab, `android.arch` becomes a list of architectures. 
 
-An earlier version of Buildozer supporting aab required changing `android.arch` to `android.archs`, this is no longer required. However the future plan is to depreciate `.arch` in favor of `.archs`. 
+An earlier version of Buildozer supporting aab required changing `android.arch` to `android.archs`, this is no longer required. However you can use `.archs` and in the future `.arch` will be depreciated in favor of `.archs`. 
 
 ```
 android.arch = armeabi-v7a, arm64-v8a
