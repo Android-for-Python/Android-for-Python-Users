@@ -489,7 +489,7 @@ from android import mActivity
     mActivity.getContentResolver() 
 ```
 
-It is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). Tou will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format).
+It is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format).
 
 Note: some documentation examples are obsolete. If you see '.renpy.' as a sub field in an autoclass argument replace it with '.kivy.'.
 
