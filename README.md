@@ -922,3 +922,9 @@ Then, for example:
 
 `bundletool validate --bundle=Test-release-0.0.1-.aab`
 
+To install a `.aab` to a locally connected device use bundletool:
+
+```
+bundletool build-apks --mode universal --bundle bin/myapp-0.0.1-armeabi-v7a_arm64-v8a-release.aab --output ./app.apk
+bundletool install-multi-apks --apks app.apk
+```
