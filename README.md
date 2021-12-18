@@ -3,7 +3,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2021/10/24
+Revised 2021/12/18
 
 # Table of Contents
 
@@ -323,7 +323,7 @@ Some recipe names are not the same as the class name. For example:
 
 Some imports have more than one of the above cases. To determine a package's dependencies look in requirements.txt recursively. For example for `pyrebase` start with [requirements.txt](https://github.com/thisbejim/Pyrebase/blob/master/requirements.txt) to see the dependencies, there are six. The first is `requests`, this one is easy because its dependencies are listed earlier in this section. For the others recur. If you miss one it will show up as a `ModuleNotFoundError` at run time. It is not hard, just stop whining and do the work. For example for `pyrebase` we get:
 
-`import pyrebase` needs `requirements = python3, kivy==2.0.0, pyrebase, requests, urllib3, chardet, idna, gcloud, oauth2client, requests-toolbelt, protobuf_cpp, python-jwt, pycryptodome, httplib2, pyparsing, pyasn1, pyasn1_modules, rsa, jwcrypto, cryptography`
+`import pyrebase` needs `requirements = python3, kivy==2.0.0, pyrebase, requests, urllib3, chardet, idna, gcloud, oauth2client, requests-toolbelt, protobuf_cpp, python-jwt, pycryptodome, httplib2, pyparsing, pyasn1, pyasn1_modules, rsa, jwcrypto, cryptography, deprecated, wrapt`
 
 Anybody got any more examples I could add here?
 
