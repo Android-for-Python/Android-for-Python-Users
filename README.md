@@ -61,6 +61,7 @@ Revised 2022-01-03
   * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
 - [Cryptic Error Messages](#cryptic-error-messages)
+  * [No module named 'msvcrt'](#no-module-named-msvcrt)
   * [Aidl not found](#aidl-not-found)
   * [64-bit instead of 32-bit](#64-bit-instead-of-32-bit)
   * [No module named '_Socket'](#no-module-named-_socket)
@@ -648,6 +649,21 @@ For flowers that are maintained add them to your buildozer.spec like this:
 There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated in the Buildozer 'master' and should not be used with any version of Buildozer.
 
 # Cryptic Error Messages
+
+## No module named 'msvcrt'
+
+`No module named 'msvcrt'` and `No module named '_posixsubprocess'`
+
+Newer versions of setuptools break the p4a build tools.
+
+`pip3 list | grep setuptools` will show a version >= 60
+
+The workaround requires that you are using a venv.
+
+```
+pip3 uninstall setuptools
+pip3 install setuptools==58.0.0
+```
 
 ## Aidl not found
 
