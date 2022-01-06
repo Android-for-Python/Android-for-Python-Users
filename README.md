@@ -665,6 +665,8 @@ pip3 uninstall setuptools
 pip3 install setuptools==58.0.0
 ```
 
+And `buildozer appclean`.
+
 ## Aidl not found
 
 `# Aidl not found, please install it.`
