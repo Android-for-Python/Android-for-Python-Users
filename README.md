@@ -68,7 +68,7 @@ Revised 2022-01-28
   * [No module named '_Socket'](#no-module-named-_socket)
   * [weakly-referenced object](#weakly-referenced-object)
   * [OpenCV requires Android SDK Tools](#opencv-requires-android-sdk-tools)
-  * [No such file or directory: 'ffmpeg'](no-such-file-or-directory-ffmpeg)
+  * [No such file or directory: 'ffmpeg'](#no-such-file-or-directory-ffmpeg)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
