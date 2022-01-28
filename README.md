@@ -1,9 +1,10 @@
+
 Android for Python Users
 ========================
 
 *An unofficial Users' Guide*
 
-Revised 2022-01-03
+Revised 2022-01-28
 
 # Table of Contents
 
@@ -755,10 +756,10 @@ There are **a lot of useful features** to be found at these links:
 
 # Release Builds
 
-The following depends on using an [in development version of Buildozer](https://github.com/kivy/buildozer/pull/1356), which will have to be reinstalled if development introduces any changes.
+The following depends on using the master (as of 2022/01/28) version of Buildozer.
 
 ```
-pip3 install git+https://github.com/misl6/buildozer.git@feat/aab-support
+pip3 install git+https://github.com/kivy/buildozer.git
 ```
 
 In `buildozer.spec` set:
@@ -779,8 +780,6 @@ buildozer appclean
 
 To generate a multi-architecture apk or aab, `android.arch` becomes a list of architectures. 
 
-An earlier version of Buildozer supporting aab required changing `android.arch` to `android.archs`, this is no longer required. However you can use `.archs` and in the future `.arch` will be depreciated in favor of `.archs`. 
-
 ```
 android.arch = armeabi-v7a, arm64-v8a
 ```
@@ -790,6 +789,7 @@ A debug build always builds an `.apk`. A release build creates an `.aab` as a de
 ```
 android.release_artifact = apk
 ```
+Note that `release_artifact` will not be in buildozer.spec unless this file was generated with the version of Buildozer specified at the start of this section.
 
 Build a release apk or aab with:
 
