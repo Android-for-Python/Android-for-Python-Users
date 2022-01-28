@@ -68,6 +68,7 @@ Revised 2022-01-28
   * [No module named '_Socket'](#no-module-named-_socket)
   * [weakly-referenced object](#weakly-referenced-object)
   * [OpenCV requires Android SDK Tools](#opencv-requires-android-sdk-tools)
+  * [No such file or directory: 'ffmpeg'](no-such-file-or-directory-ffmpeg)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
@@ -80,6 +81,7 @@ Revised 2022-01-28
 - [Appendix D : Debugging on WSL](#appendix-d--debugging-on-wsl)
 - [Appendix E : Copying from private storage](#appendix-e--copying-from-private-storage)
 - [Appendix F : Install Bundletool](#appendix-f--install-bundletool)
+- [Appendix G : Modifying p4a](#appendix-g--modifying-p4a)
 
 # Introduction
 
@@ -716,8 +718,13 @@ In any other case this issue can be hard to find. The programmer is assuming an 
 
 Yes, but OpenCV also requires Android SDK Tools revision **30 or older** (I assume it is 30). Buildozer currently uses 31 and this revision does not contain the tools that the OpenCV build expects. Hence the misleading error message, which should be `OpenCV requires Android SDK Tools revision 30 or older.`. 
 
-It is possible to address this with a patch to `~/.buildozer` to include the older tools as described in [this thread](https://github.com/kivy/buildozer/issues/1144). 
+It is possible to address this with a patch to `~/.buildozer` to include the older tools as described in [this thread](https://github.com/kivy/buildozer/issues/1144).
 
+## No such file or directory: 'ffmpeg'
+
+Occurs when the app is using subprocess() to run ffmpeg. 
+
+There is no ffmpeg executable. You have to build it for ARM. The recipe builds a library, not an executable. After building the executable, copy it to the working directory. Android does not allow installing to the usual desktop directories.
 
 # Resources
 
@@ -948,3 +955,24 @@ To install a `.aab` to a locally connected device use bundletool:
 bundletool build-apks --mode universal --bundle bin/myapp-0.0.1-armeabi-v7a_arm64-v8a-release.aab --output ./app.apk
 bundletool install-multi-apks --apks app.apk
 ```
+
+# Appendix G : Modifying p4a
+
+Buildozer clones p4a and places a copy in `<project>/.buildozer`. Do not try modifying this, this is Buildozer's database - you don't control what happens there.
+
+Make a local copy of [p4a](https://github.com/kivy/python-for-android), but **not** in the `<project>` directory. In buildozer.spec specify where the local copy is located:
+
+```
+p4a.source_dir = /someplace/python-for-android-develop
+```
+
+Modify the local copy in a way that makes you happy. This will be cloned into `<project>/.buildozer` so remember to `appclean` after changes.
+
+As an alternative to making changes locally, you can reference changes saved on GitHub. The fork must be 'public' on Github. For example if you have a p4a fork on GitHub:
+
+```
+p4a.fork = YourGitHubName
+```
+
+
+
