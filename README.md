@@ -766,6 +766,7 @@ There are **a lot of useful features** to be found at these links:
 The following depends on using the master (as of 2022/01/28) version of Buildozer.
 
 ```
+pip3 uninstall buildozer
 pip3 install git+https://github.com/kivy/buildozer.git
 ```
 
