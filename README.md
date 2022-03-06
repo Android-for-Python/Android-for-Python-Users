@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-01-28
+Revised 2022-03-06
 
 # Table of Contents
 
@@ -26,7 +26,6 @@ Revised 2022-01-28
 - [App Permissions](#app-permissions)
 - [Buildozer and p4a](#buildozer-and-p4a)
   * [Install](#install)
-  * [UC Browser Interaction](#uc-browser-interaction)
   * [Changing buildozer.spec](#changing-buildozerspec)
   * [Some buildozer.spec options](#some-buildozerspec-options)
     + [package.domain](#packagedomain)
@@ -202,7 +201,7 @@ A notification icon will be created in the task bar.
 
 The lifetime of the service's Python script is usually determined by an infinite loop, if this is the case the lifetime of the service is determined by the lifetime of the app. A service started by a Kivy app executes while the app is either in the foreground or paused, and like a Python subprocess stops when the app stops. An app stops when it is removed from the list of currently started apps. This lifetime is different from the lifetime of a Java service which is persistent.
 
-A service can be killed at any time by Android if it requires the resources. Generally a background service is more likely to be killed than a foreground service. Extend the lifetime using [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart) which forces a service to restart when it stops (set to False when comanding the service to stop). If you use auto restart you must use `kivy==master`. With [kivy==2.0.0](https://github.com/kivy/kivy/pull/7508), the Kivy app which started the service and which has since stopped will hang with a black screen when it is restarted and the service is still running.
+A service can be killed at any time by Android if it requires the resources. Generally a background service is more likely to be killed than a foreground service. Extend the lifetime using [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart) which forces a service to restart when it stops (set to False when comanding the service to stop). 
 
 ## Service Performance
 
@@ -234,6 +233,17 @@ Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL,
 
 [Install documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), RTFM, really.
 
+That said, there has not been a release of Buildozer for a long time, sooner or later you are going to have to move to the master version, do it now:
+
+```
+pip3 uninstall buildozer
+pip3 install git+https://github.com/kivy/buildozer.git
+```
+A side effect of this is you will have to specify the `develop` version of p4a. After typing `buildozer init`, `buildozer.spec` set: 
+```
+p4a.branch = develop
+```
+
 **Test your Buildozer install by building (`buildozer android debug`) and running [Hello World](https://kivy.org/doc/stable/guide/basic.html#create-an-application) with the default `buildozer.spec` (create this with `buildozer init`). I know you just want to see your app run on Android, but this simple first step will provide you will a framework to address any future issues.**
 
 Errors during a Buildozer build are usually because the user:
@@ -251,10 +261,6 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 * It is run on an NTFS partition mounted on a Linux system.
 
 * There are Python style trailing comments in the buildozer.spec
-
-## UC Browser Interaction
-
-If UC Browser is installed and is scanning, the first time a Kivy app is run after its install it may be *very* slow to start. To verify this is the case look ing the debug logcat output for multiple UC Browser messages about bad video file format.
 
 ## Changing buildozer.spec
 
@@ -307,27 +313,27 @@ If you have a problem run the [debugger](#debugging).
 
 Some packages have dependencies but no requirements.txt file, the only way to resolve these is with the debugger. One example:
 
-`import requests` needs `requirements = python3,kivy==2.0.0,requests,urllib3,chardet,idna`
+`import requests` needs `requirements = python3,kivy,requests,urllib3,chardet,idna`
 
 Some Kivy widgets depend on other packages. For example:
 
-`from kivy.uix.videoplayer import VideoPlayer` needs `requirements = python3,kivy==2.0.0,ffpyplayer`
+`from kivy.uix.videoplayer import VideoPlayer` needs `requirements = python3,kivy,ffpyplayer`
 
-`from kivy.core.audio import SoundLoader`  needs `requirements = python3,kivy==2.0.0,ffpyplayer,ffpyplayer_codecs` [to play .mp3](https://github.com/Sahil-pixel/kivy-with-mp3-on-android-).
+`from kivy.core.audio import SoundLoader`  needs `requirements = python3,kivy,ffpyplayer,ffpyplayer_codecs` [to play .mp3](https://github.com/Sahil-pixel/kivy-with-mp3-on-android-).
 
 Some pip3 package names are not the same as the class name. For example:
 
-`from bs4 import BeautifulSoup` needs `requirements = python3,kivy==2.0.0,beautifulsoup4`
+`from bs4 import BeautifulSoup` needs `requirements = python3,kivy,beautifulsoup4`
 
 Some recipe names are not the same as the class name. For example:
 
-`import google.protobuf` needs `requirements = python3,kivy==2.0.0,protobuf_cpp`
+`import google.protobuf` needs `requirements = python3,kivy,protobuf_cpp`
 
 #### More complex requirements
 
 Some imports have more than one of the above cases. To determine a package's dependencies look in requirements.txt recursively. For example for `pyrebase` start with [requirements.txt](https://github.com/thisbejim/Pyrebase/blob/master/requirements.txt) to see the dependencies, there are six. The first is `requests`, this one is easy because its dependencies are listed earlier in this section. For the others recur. If you miss one it will show up as a `ModuleNotFoundError` at run time. It is not hard, just stop whining and do the work. For example for `pyrebase` we get:
 
-`import pyrebase` needs `requirements = python3, kivy==2.0.0, pyrebase, requests, urllib3, chardet, idna, gcloud, oauth2client, requests-toolbelt, protobuf_cpp, python-jwt, pycryptodome, httplib2, pyparsing, pyasn1, pyasn1_modules, rsa, jwcrypto, cryptography, deprecated, wrapt`
+`import pyrebase` needs `requirements = python3, kivy, pyrebase, requests, urllib3, chardet, idna, gcloud, oauth2client, requests-toolbelt, protobuf_cpp, python-jwt, pycryptodome, httplib2, pyparsing, pyasn1, pyasn1_modules, rsa, jwcrypto, cryptography, deprecated, wrapt`
 
 Anybody got any more examples I could add here?
 
@@ -409,7 +415,7 @@ Also try the [Xcamera widget](https://github.com/kivy-garden/xcamera) from the K
 
 The relationship between the Android keyboard and the layout is somewhat configurable with [softinput_mode](https://kivy.org/doc/stable/api-kivy.core.window.html#kivy.core.window.WindowBase.softinput_mode), consider `Window.softinput_mode = 'below_target'`.
 
-The type of keyboard can be set with `input_type` for example `TextInput(input_type = 'tel')`. Accepted values are 'text', 'number', 'url', 'mail', 'datetime', 'tel', or 'address'. Input_type requires `kivy==master` and does not work with kivy==2.0.0 .
+The type of keyboard can be set with `input_type` for example `TextInput(input_type = 'tel')`. Accepted values are 'text', 'number', 'url', 'mail', 'datetime', 'tel', or 'address'. 
 
 ## Back Button and Gesture
 
@@ -429,8 +435,6 @@ class Main(ScreenManager):
         else:           
             return False  # key event passed to Android
 ```
-
-If `kivy==master` is used `p4a.branch = develop` **must** be used, else there will be a run time error `object has no attribute 'changeKeyboard'`. `kivy==2.0.0` does not appear sensitive to `p4a.branch`.
 
 # Android Packages
 
@@ -647,7 +651,7 @@ The App's `on_stop()` method is not always called, use `on_pause()` to save stat
 [Kivy Garden](https://github.com/kivy-garden/) is a library of components ('flowers'). It is mostly not maintained. Anybody who has had a garden knows a garden needs a gardener, Kivy Garden doesn't have one. Set your expectations accordingly.
 
 For flowers that are maintained add them to your buildozer.spec like this:
-`requirements = python3, kivy==2.0.0, kivy_garden.xcamera`. For flowers that are not maintained copy the code to your project and edit so that it builds.
+`requirements = python3, kivy, kivy_garden.xcamera`. For flowers that are not maintained copy the code to your project and edit so that it builds.
 
 There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated in the Buildozer 'master' and should not be used with any version of Buildozer.
 
