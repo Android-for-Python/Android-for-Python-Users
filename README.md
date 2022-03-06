@@ -239,7 +239,7 @@ That said, there has not been a release of Buildozer for a long time, sooner or 
 pip3 uninstall buildozer
 pip3 install git+https://github.com/kivy/buildozer.git
 ```
-A side effect of this is you will have to specify the `develop` version of p4a. After typing `buildozer init`, `buildozer.spec` set: 
+A side effect of this is you will have to specify the `develop` version of p4a. After typing `buildozer init`, in `buildozer.spec` set: 
 ```
 p4a.branch = develop
 ```
