@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-03-06
+Revised 2022-04-05
 
 # Table of Contents
 
@@ -232,17 +232,6 @@ See any of the nearby examples.
 Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL, Colab, or VirtualBox to run Buildozer. Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help and in software maturity.
 
 [Install documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), RTFM, really.
-
-That said, there has not been a release of Buildozer for a long time, sooner or later you are going to have to move to the master version, do it now:
-
-```
-pip3 uninstall buildozer
-pip3 install git+https://github.com/kivy/buildozer.git
-```
-A side effect of this is you will have to specify the `develop` version of p4a. After typing `buildozer init`, in `buildozer.spec` set: 
-```
-p4a.branch = develop
-```
 
 **Test your Buildozer install by building (`buildozer android debug`) and running [Hello World](https://kivy.org/doc/stable/guide/basic.html#create-an-application) with the default `buildozer.spec` (create this with `buildozer init`). I know you just want to see your app run on Android, but this simple first step will provide you will a framework to address any future issues.**
 
@@ -653,7 +642,7 @@ The App's `on_stop()` method is not always called, use `on_pause()` to save stat
 For flowers that are maintained add them to your buildozer.spec like this:
 `requirements = python3, kivy, kivy_garden.xcamera`. For flowers that are not maintained copy the code to your project and edit so that it builds.
 
-There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated in the Buildozer 'master' and should not be used with any version of Buildozer.
+There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated and should not be used.
 
 # Cryptic Error Messages
 
@@ -767,18 +756,7 @@ There are **a lot of useful features** to be found at these links:
 
 # Release Builds
 
-The following depends on using the master (as of 2022/01/28) version of Buildozer.
-
-```
-pip3 uninstall buildozer
-pip3 install git+https://github.com/kivy/buildozer.git
-```
-
-In `buildozer.spec` set:
-
-`p4a.branch = develop`
-
-If you do not do this, you will get this error message: `This buildozer version requires a python-for-android version with AAB (Android App Bundle) support.`.
+The following depends on using Buildozer 1.3.0 or later.
 
 The Android Store requires that apps be built with a minimum API level of 30. Set
 ```
