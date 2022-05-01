@@ -676,7 +676,7 @@ Aidl is part of the Google tools. To get the tools you have to accept the Google
 
 Delete `~/.buildozer` , then `buildozer android debug` and accept the Google license agreements.
 
-## Sdkmanager-is-not-installed
+## Sdkmanager is not installed
 
 `# sdkmanager path "/home/????/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" does not exist, sdkmanager is notinstalled`
 
