@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-04-05
+Revised 2022-04-30
 
 # Table of Contents
 
@@ -63,6 +63,7 @@ Revised 2022-04-05
 - [Cryptic Error Messages](#cryptic-error-messages)
   * [No module named 'msvcrt'](#no-module-named-msvcrt)
   * [Aidl not found](#aidl-not-found)
+  * [Sdkmanager is not installed](#sdkmanager-is-not-installed)
   * [64-bit instead of 32-bit](#64-bit-instead-of-32-bit)
   * [No module named '_Socket'](#no-module-named-_socket)
   * [weakly-referenced object](#weakly-referenced-object)
@@ -357,7 +358,11 @@ Probably best not to change this from the current 19c. But if there is some reas
 
 ### android.arch
 
-Currently defaults to 32-bit ARM. For performance improvement, if you have a 64 bit device, change this to:
+Defaults to building both for ARM7 and ARM8. 
+```
+android.arch = armeabi-v7a, arm64-v8a
+```
+This is what you want when building for the Android Store. For debugging this is probably not what you want because it almost doubles the build time. Select one that matches your debug device.
 ```
 android.arch = arm64-v8a
 ```
@@ -669,7 +674,15 @@ And `buildozer appclean`.
 
 Aidl is part of the Google tools. To get the tools you have to accept the Google license agreements.
 
-Delete `~/.buildozer` , then `buildozer android debug` and accept the license agreements.
+Delete `~/.buildozer` , then `buildozer android debug` and accept the Google license agreements.
+
+## Sdkmanager-is-not-installed
+
+`# sdkmanager path "/home/????/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" does not exist, sdkmanager is notinstalled`
+
+Sdkmanager is part of the Google tools. To get the tools you have to accept the Google license agreements.
+
+Delete `~/.buildozer` , then `buildozer android debug` and accept the Google license agreements.
 
 ## 64-bit instead of 32-bit
 
