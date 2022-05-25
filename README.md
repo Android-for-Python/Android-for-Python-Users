@@ -403,7 +403,7 @@ It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but 
 
 ## Camera
 
-It is hard to get the Kivy Camera widget to work on Android, [for example](https://github.com/kivy/kivy/issues?q=is%3Aissue+is%3Aopen+camera). There are several 3rd party alternatives. Look at the [Preview widget in Camera4Kivy](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#tested-examples-and-platforms).
+It is hard to get the [Kivy Camera widget](https://kivy.org/doc/stable/api-kivy.uix.camera.html) to work on Android, [for example](https://github.com/kivy/kivy/issues?q=is%3Aissue+is%3Aopen+camera). There are several 3rd party alternatives. Look at the [Preview widget in Camera4Kivy](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#tested-examples-and-platforms).
 
 Also try the [Xcamera widget](https://github.com/kivy-garden/xcamera) from the Kivy Garden, or [kivy-anderoid-camera](https://github.com/alecvn/kivy-android-camera). For OpenCV try [Kivy-Android-Camera](https://github.com/tibssy/Kivy-Android-Camera). Also there is [Color blind camera](https://github.com/inclement/colour-blind-camera) and [zbarcam](https://github.com/kivy-garden/zbarcam). 
 
