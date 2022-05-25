@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-04-30
+Revised 2022-05-25
 
 # Table of Contents
 
@@ -33,12 +33,12 @@ Revised 2022-04-30
       - [requirements basics](#requirements-basics)
       - [Simple requirements examples](#simple-requirements-examples)
       - [More complex requirements](#more-complex-requirements)
-    + [source.include_exts](#sourceinclude-exts)
+    + [source.include_exts](#sourceinclude_exts)
     + [android.permissions](#androidpermissions)
     + [android.api](#androidapi)
     + [android.minapi](#androidminapi)
     + [android.ndk](#androidndk)
-    + [android.arch](#androidarch)
+    + [android.archs](#androidarch)
 - [Debugging](#debugging)
 - [Android Hardware](#android-hardware)
   * [Camera](#camera)
@@ -72,7 +72,7 @@ Revised 2022-04-30
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
-  * [KivAds](#kivads)
+  * [KivAds and KivMob](#kivads-and-kivmob)
   * [Other Resources](#other-resources)
 - [Release Builds](#release-builds)
 - [Appendix A : Using adb](#appendix-a--using-adb)
@@ -356,15 +356,17 @@ Python for Android enables `android.minapi = 21`.
 
 Probably best not to change this from the current 19c. But if there is some reason you really need to, 21d also appears to work.
 
-### android.arch
+### android.archs
+
+(previously android.arch)
 
 Defaults to building both for ARM7 and ARM8. 
 ```
-android.arch = armeabi-v7a, arm64-v8a
+android.archs = armeabi-v7a, arm64-v8a
 ```
 This is what you want when building for the Android Store. For debugging this is probably not what you want because it almost doubles the build time. Select one that matches your debug device.
 ```
-android.arch = arm64-v8a
+android.archs = arm64-v8a
 ```
 An install message INSTALL_FAILED_NO_MATCHING_ABIS means the apk was built for a different architecture than the phone or emulator.
 
@@ -438,9 +440,9 @@ P4a provides Android specific utilities in the android package, this is only ava
 
 ## Plyer
 
-Plyer is an OS independent api for some non-POSIX OS features. See [available features](https://github.com/kivy/plyer#supported-apis).
+Plyer is an OS independent api for some non-POSIX OS features. See [Supported APIs](https://github.com/kivy/plyer#supported-apis). **Plyer is not well maintained. Some Plyer modules work on older Android versions, but not on newer Android versions. The Supported APIs table does not reflect this. For example Camera, Speech to text, and FileChooser do not work on newer Android versions.**
 
-The [Plyer examples](https://github.com/kivy/plyer/tree/master/examples) are the documentation. Some Plyer examples work on Android but not all Android versions, for example Camera, Speech to text, Storage.
+The [Plyer examples](https://github.com/kivy/plyer/tree/master/examples) are the documentation. 
 
 The following Plyer modules require Manifest and run time [permissions](#app-permissions):
 
@@ -457,7 +459,6 @@ stt | RECORD_AUDIO
 vibrator | VIBRATE
 
 If you plan to use Plyer, and the idea of it is very appealing, first try a small test case on your target Android versions. If it does what you expect, check that all the features you need are available; as Plyer has a platform lowest common denominator design.
-
 
 ## Pyjnius
 
@@ -750,8 +751,10 @@ Don't rely on other sources, they can be obsolete.
 
 [Android for Python Examples](https://github.com/Android-for-Python/INDEX-of-Examples) contains examples of some Android features as used from Python. These examples only run on Android.
 
-## KivAds
-[KivAds](https://kivads.readthedocs.io/en/latest/index.html) is a Library that allows you to monetize your Kivy Apps using Google Admob. To use KivAds [minor modifications to p4a](https://github.com/Guhan-SenSam/KivAds/tree/v1.0.0#requirements) are currently required. 
+## KivAds and KivMob
+[KivAds](https://kivads.readthedocs.io/en/latest/index.html) is a Library that allows you to monetize your Kivy Apps using Google Admob. To use KivAds [minor modifications to p4a](https://github.com/Guhan-SenSam/KivAds/tree/v1.0.0#requirements) are currently required.
+
+[KivMob](https://github.com/MichaelStott/KivMob) is a Library that allows you to monetize your Kivy Apps using Google Admob. The documentation for `android.gradle_dependencies` needs to be [updated](https://github.com/MichaelStott/KivMob/issues/115#issuecomment-1132929035).
 
 ## Other Resources
 
@@ -767,6 +770,8 @@ There are **a lot of useful features** to be found at these links:
 
 [https://github.com/Kulothungan16/Example-Kivy-Apps](https://github.com/Kulothungan16/Example-Kivy-Apps)
 
+[https://github.com/AM-ash-OR-AM-I/Passlock](https://github.com/AM-ash-OR-AM-I/Passlock)
+
 # Release Builds
 
 The following depends on using Buildozer 1.3.0 or later.
@@ -781,10 +786,10 @@ After this install, or changing buildozer.spec you must:
 buildozer appclean
 ```
 
-To generate a multi-architecture apk or aab, `android.arch` becomes a list of architectures. 
+To generate a multi-architecture apk or aab, `android.archs` specifies a list of architectures. (The legacy `android.arch` still works, but will be removed.)
 
 ```
-android.arch = armeabi-v7a, arm64-v8a
+android.archs = armeabi-v7a, arm64-v8a
 ```
 
 A debug build always builds an `.apk`. A release build creates an `.aab` as a default. You can create a release `.apk` by setting:
