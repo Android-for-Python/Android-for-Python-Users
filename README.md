@@ -15,6 +15,9 @@ Revised 2022-05-25
   * [Meta-information](#meta-information)
 - [Android Storage](#android-storage)
   * [Private Storage](#private-storage)
+    + [App Install Directory](#app-install-directory)
+    + [App Storage Directory](#app-storage-directory)
+    + [App Cache Directory](#app-cache-directory)
   * [Shared Storage](#shared-storage)
   * [Sharing a file between apps](#sharing-a-file-between-apps)
 - [Threads and Subprocesses](#threads-and-subprocesses)
@@ -24,6 +27,8 @@ Revised 2022-05-25
   * [Service Performance](#service-performance)
   * [p4a Service Implementation](#p4a-service-implementation)
 - [App Permissions](#app-permissions)
+  * [Manifest Permissions](#manifest-permissions)
+  * [User Permissions](#user-permissions)
 - [Buildozer and p4a](#buildozer-and-p4a)
   * [Install](#install)
   * [Changing buildozer.spec](#changing-buildozerspec)
@@ -57,6 +62,10 @@ Revised 2022-05-25
   * [Android Notifications](#android-notifications)
 - [Kivy Related Topics](#kivy-related-topics)
   * [Layout](#layout)
+    + [Screen Resolution](#screen-resolution)
+    + [Screen Orientation](#screen-orientation)
+    + [Screen Aspect Ratio](#screen-aspect-ratio)
+    + [Testing Portability](#testing-portability)
   * [KivyMD](#kivymd)
   * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
@@ -91,8 +100,6 @@ For a well written app that only paints the screen, and does nothing else, build
 
 This document is not a substitute for Reading The Fine Manual [(RTFM)](https://en.wikipedia.org/wiki/RTFM). Your basic resources are [Buildozer](https://github.com/kivy/buildozer/tree/master/docs/source), [Python for Android](https://github.com/kivy/python-for-android/tree/develop/doc/source), and [Android](https://developer.android.com/guide).
 
-We assume android.api >= 29
-
 Python-for-Android is a truly amazing achievement, but there are some details to understand. The alternative is Java and the Android api, which has been shown to induce insanity in laboratory mice. 
 
 Lastly this document is my understanding as of the date above. I am not a developer in any of the Kivy sub projects (except for one PR in p4a). The document is guaranteed to be incomplete is some way, and may possibly be wrong in another way. But reading it will hopefully provide you with come context with which to read the official documentation and to experiment. Those two steps are the key to insight and understanding, which in turn is key to making your idea real.
@@ -123,37 +130,86 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 Android's view of its file system has changed a few times over the years. The result is a messy pile of jargon: local, system, internal, external, primary, secondary, scoped, all describe views of storage.
 
-However in the storage model described here storage is either *Private Storage* or *Shared Storage*. Private storage content is only visible to the app that created it, shared storage is visible to all apps. This model is valid if the build api>=29.
-
-Physically storage may be 'internal' or 'external', this is a somewhat historical view where 'external' represents the (on older devices possibly removable) sdcard. The apis referenced here all default to 'external', with 'internal' as an option.
+However in the storage model described here storage is either *Private Storage* or *Shared Storage*. **Private storage content is only visible to the app that created it, shared storage is visible to all apps**.
 
 ## Private Storage
 
-An app can perform Python file operations (read, write, shutil) on its private storage. Files in Private Storage are persistent over the life of the app, they are retained when the app is updated, and deleted when the app is uninstalled.
+An app can perform Python file operations (read, write, shutil) on its private storage. There are three usable storage location: the app install directory, the app storage directory, and the app cache directory.
 
-The location of an app's private storage is given by for example `app_storage_path()` imported as `from android.storage import app_storage_path`
+No permissions are requires to read or write an app's private storage. [More on permissions below](#app-permissions).
 
-The install directory './' is also private storage, but files do not persist between installs and updates. Only use this directory for reading data files packaged in the apk. Files saved to './' do persist between installs.
+Do not confuse private with secure, on older Android versions it is possible for other apps to read private storage. And more generally Android Studio allows inspection.
 
-Do not confuse private with secure, on older Android versions it is possible for other apps to read private storage. In this case internal storage is more secure than external storage.
+### App Install Directory
 
-No permissions are requires to read or write an app's private storage. [More on permissions below](#app-permissions)
+The install directory is `./`, files from the apk or aab can be accessed. An app update will overwrte this directory so this is not a good place to save files (though you can).
+
+### App Storage Directory
+
+Most of the time this is what you should use. 
+
+The app storage directory is persistent over the installed lifetime of the app, and is removed when the app is uninstalled. The app storage directory is accessed using:
+```
+from android.storage import app_storage_path
+
+    app_storage_directory_path = app_storage_path()
+```
+
+### App Cache Directory
+
+The app cache directory is temporary storage, the lifetime of files in this are is managed by Android.  The app storage directory is accessed using:
+```
+from android import mActivity
+
+    context = mActivity.getApplicationContext()
+    result =  context.getExternalCacheDir()
+    if result:
+        app_cache_directory_path =  str(result.toString())
+```
 
 ## Shared Storage
 
-Shared storage is visible to all apps, is persistent after an app is uninstalled. On devices running Android 10 and later shared storage is implemented as a database, you cannot access shared storage with POSIX file operations. The Kivy and KivyMD file choosers do not work, you must use the Android file picker.
+Shared storage is visible to all apps, and is persistent after an app is uninstalled.
 
-The nearby [storage example](https://github.com/Android-for-Python/Storage-Example) demonstrates the database insert(), delete(), and retrieve() operations.
+### Android Version Issues
 
-Shared storage is organized based on root directories located in Android's 'Main Storage'. They are 'Music', 'Movies', 'Pictures', 'Documents', and 'Downloads'.
+On devices running Android 10 and later shared storage is implemented as a database, you cannot access shared storage with Python file operations because there is no file path. The Kivy and KivyMD file choosers do not work, you must use the Android Chooser.
 
-On devices running Android 10 and later no permissions are requires to read or write an app's own shared storage. Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission.
+On devices with Android less than 10, shared storage is a file system and you can access file with `from android.storage import primary_external_storage_path`. But this **does not work** on devices running Android 10 or greater.
 
-On devices running Android 9 and less, for shared storage, both file access and database access are available, though the database implementation is perhaps too basic. The best choice depends on the application. The database approach enables a file share with other apps (see next section), the file system approach provides the user with the familiar hierarchy, and requires WRITE_EXTERNAL_STORAGE permission.
+On devices running Android 10 or greater shared storage is accessed via the Java MediaStore api, or the Chooser api. 
+
+### MediaStore
+
+The MediaStore is a database, not a file system. The MediaStore is organized based on multiple root directories. For example 'Music', 'Movies', 'Pictures', 'Documents', and 'Downloads'.
+
+The MediaStore is accessed by copying a file to or from private storage. Because MediaStore files have no file path that Python requires to access a file.
+
+"Are you telling me I can't ....?", I'm explaining that Android shared storage is different from our expectations, evolve or die out.
+
+### SharedStorage4Kivy
+
+An Android version independent Python api for shared storage is implemented in the package [sharedstorage4kivy](https://github.com/Android-for-Python/sharedstorage4kivy).
+
+The usage model is files can be copies to, copied from, and deleted from shared storage. For more details see the SharedStorage class documentation.
+
+Example usage is in [shared_storage_example](https://github.com/Android-for-Python/shared_storage_example). The example also demonstrates using the Android file Chooser, using the SharedStorage4Kivy Chooser class.
+
+### Permissions
+
+On devices running Android 10 and later no permissions are requires to read or write an app's own shared storage. Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission. An app cannot overwrite another app's file.
+
+There is one special case, an app cannot read another app's file in the Downloads directory, regardless of permissions.
+
+On devices running Android 9 and less, WRITE_EXTERNAL_STORAGE is required for any file writes. Or READ_EXTERNAL_STORAGE if the app only want to do shared storage reads.
 
 ## Sharing a file between apps
 
-Files in Shared Storage can be shared between apps. Either using the file picker, or the Share mechanism. See the examples: [Sending a Share](https://github.com/Android-for-Python/Share-Send-Example) and [Receiving a Share](https://github.com/Android-for-Python/Share-Receive-Example).
+Files in Shared Storage can be shared between apps. If you want to share a file first copy it to shared storage. Then send it to an Android ShareSheet. The complement operation, receiving a shared file requires copying the file to private storage so Python can access it.
+
+The androidstorage4kivy package contains a ShareSheet class that invokes an Android ShareSheet, or sends a file directly to a specific app. The latter assumes that the specific app knows how to receive files of the type sent.
+
+Examples of sending a file are in [share_send_example](https://github.com/Android-for-Python/share_send_example), and receiving a file in [share_receive_example](https://github.com/Android-for-Python/share_receive_example).
 
 # Threads and Subprocesses
 
@@ -214,17 +270,25 @@ If you want to understand the implementation of services in more detail, read th
 
 # App Permissions
 
-Android restricts access to many features. An app must declare the permissions it requires. There are two different declarations, manifest and user. User permissions are a subset of manifest permissions.
+Android restricts access to many features. An app must declare the permissions it requires. There are two different declarations, manifest and user. User permissions are a subset of manifest permissions. The [full list of permissions](https://developer.android.com/reference/android/Manifest.permission) is documented by Google. In general you must research the permissions needed by your app, resist the temptation to blindly guess.
 
-Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, READ_EXTERNAL_STORAGE, RECORD_AUDIO. The [full list is](https://developer.android.com/reference/android/Manifest.permission). Apps that scan Bluetooth or scan Wifi may require multiple permissions. In general you must research the permissions needed, resist the temptation to blindly guess.
+## Manifest permissions
+
+Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, READ_EXTERNAL_STORAGE, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions. 
 
 Python for Android always enables manifest WRITE_EXTERNAL_STORAGE permission. WRITE_EXTERNAL_STORAGE implies READ_EXTERNAL_STORAGE. [WRITE_EXTERNAL_STORAGE is never required](https://developer.android.com/training/data-storage#permissions) for devices running api >= 30.
 
-Any app manifest permission documented in that list as having "Protection level: dangerous" additionally require a user permission. The four listed above are all "dangerous". User permissions generate the dialog that Android apps present to the user, this is initiated with a `request_permissions()` call.
+## User permissions
 
-In a Kivy App `request_permissions()` may be called from the `build()` method, there can **only be one** such call in the `build()` method. If there is more than one call, no permission request will be made. `request_permissions()` **must not** be called from the `on_start()` method as this will break the Kivy Lifecycle; there will be an `on_resume()` without a prior `on_pause()`. `request_permissions()` may be called after the `on_start()` timestep has completed, but only once per timestep.
+Any app manifest permission documented as having "Protection level: dangerous" additionally requires a user permission. The four listed above are all "dangerous". User permission requests are seen as the dialog that Android apps present to the user. From Python this is initiated with a `request_permissions()` call.
 
-See any of the nearby examples.
+Many old examples show request_permissions() at the top of main.py, on newer versions of Android this will lead to unexpected behavior. Because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
+
+One easy approach is to copy [this class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior, and modify the actual permissions for your app. Then instantiate the class [like this](https://github.com/Android-for-Python/c4k_photo_example/blob/main/main.py#L52-L57), note that the App class variable delays garbage collection and it critically important.
+
+More generally in a Kivy App, the constraints in using `request_permissions()` are that it may **only** be called from the `build()` method, or from one or more timestep after `on_start()`. There can **only be one** such call in the `build()` method, or in any given timestep. Calling after on_start() simplifies the logic for handling both the 'request' case and the 'previously granted' case.
+
+Finally it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. Grant the permission from the Android Settings panel for the app.  
 
 # Buildozer and p4a
 
@@ -621,7 +685,37 @@ Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer
 
 ## Layout
 
-A portable layout is not an Android specific issue. In general for Kivy apps use [density-independent pixels](https://kivy.org/doc/stable/api-kivy.metrics.html) 'dp' to specify an absolute size, and scale-independent pixels 'sp' to specify a font.
+A portable layout must be an *elastic* layout, because on a mobile device the Kivy window is defined by the screen and the screen changes between devices.
+
+Setting widget properties such as size, size_hint, or orientation make the layout less elastic. But setting some of these layout constraints is required to achieve a particular layout, so portable layout is a balance between the two.
+
+Mobile device screen resolution (dpi), screen orientation (landscape or portrait), and screen aspect ratio all impact the portability of a layout.
+
+### Screen Resolution
+
+Screen resolution can be addressed by specifying font size in units of sp, and widget size in units of dp. See [Kivy Metrics](https://kivy.org/doc/stable/api-kivy.metrics.html).
+
+### Screen Orientation
+
+Screen orientation on a desktop defaults to landscape, and on a mobile device usually defaults to portrait, but can be landscape or both. For a mobile device the available orientation is set in buildozer.spec, `orientation` can be one of `all`, `portrait`, or `landscape`.
+
+Supporting `orientation = all` usually requires dynamically modifying layout parameters such as size, size_hint, or orientation. Do this using a Widget's `on_size()` method, and testing for orientation. [For example](https://github.com/Android-for-Python/c4k_photo_example/blob/main/applayout/photoscreen1.py#L34-L69). 
+
+### Screen Aspect Ratio
+
+Window aspect ratio on a desktop defaults to 4:3, but screen aspect ratio varies widely on mobile devices typically about 16:9 to 20:9. So a portable layout must be elastic. 
+
+A truly elastic layout has only hints, and no sizes. In practice this may not look good in all cases. So we must specify the size of some widgets, but this requires the other widgets to be more elastic.
+
+Geometry tells us there is no right answer. You can however localize issues by for example filling an AnchorLayout with a Label for background color, then centering a fixed size widget in this layout. There are probably many similar techniques, but as far as I know there is no documentation of these.
+
+### Testing Portability
+
+To test the portability of a layout using a desktop, set the required size and dpi on app start (change the numbers to whatever you want).
+```
+python3 main.py --size=420x720 --dpi=200
+```
+Manually making changes to this window size quickly explores many cases. This provides a sanity check that you really have a good layout design.
 
 ## KivyMD
 
@@ -961,6 +1055,8 @@ bundletool install-multi-apks --apks app.apk
 
 Buildozer clones p4a and places a copy in `<project>/.buildozer`. Do not try modifying this, this is Buildozer's database - you don't control what happens there.
 
+## Local Copy
+
 Make a local copy of [p4a](https://github.com/kivy/python-for-android), but **not** in the `<project>` directory. In buildozer.spec specify where the local copy is located:
 
 ```
@@ -969,10 +1065,14 @@ p4a.source_dir = /someplace/python-for-android-develop
 
 Modify the local copy in a way that makes you happy. This will be cloned into `<project>/.buildozer` so remember to `appclean` after changes.
 
-As an alternative to making changes locally, you can reference changes saved on GitHub. The fork must be 'public' on Github. For example if you have a p4a fork on GitHub:
+## From GitHub
+
+As an alternative to making changes locally, you can reference changes saved on GitHub. The fork must be 'public' on Github. For example if you have a p4a fork on GitHub under `SomeGitHubName`, and optionally some branch `some_branch`:
 
 ```
-p4a.fork = YourGitHubName
+p4a.fork = SomeGitHubName
+
+p4a.branch = some_branch
 ```
 
 
