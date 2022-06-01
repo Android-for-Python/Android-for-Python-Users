@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-05-25
+Revised 2022-05-31
 
 # Table of Contents
 
@@ -19,6 +19,10 @@ Revised 2022-05-25
     + [App Storage Directory](#app-storage-directory)
     + [App Cache Directory](#app-cache-directory)
   * [Shared Storage](#shared-storage)
+    + [Android Version Issues](#android-version-issues)
+    + [MediaStore](#mediastore)
+    + [androidstorage4kivy](#androidstorage4kivy)
+    + [Storage Permissions](#storage-permissions)
   * [Sharing a file between apps](#sharing-a-file-between-apps)
 - [Threads and Subprocesses](#threads-and-subprocesses)
 - [Android Service](#android-service)
@@ -187,15 +191,15 @@ The MediaStore is accessed by copying a file to or from private storage. Because
 
 "Are you telling me I can't ....?", I'm explaining that Android shared storage is different from our expectations, evolve or die out.
 
-### SharedStorage4Kivy
+### AndroidStorage4Kivy
 
-An Android version independent Python api for shared storage is implemented in the package [sharedstorage4kivy](https://github.com/Android-for-Python/sharedstorage4kivy).
+An Android version independent Python api for shared storage is implemented in the package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy).
 
-The usage model is files can be copies to, copied from, and deleted from shared storage. For more details see the SharedStorage class documentation.
+The usage model is, files can be copies to, copied from, and deleted from shared storage. For more details see the SharedStorage class documentation.
 
 Example usage is in [shared_storage_example](https://github.com/Android-for-Python/shared_storage_example). The example also demonstrates using the Android file Chooser, using the SharedStorage4Kivy Chooser class.
 
-### Permissions
+### Storage Permissions
 
 On devices running Android 10 and later no permissions are requires to read or write an app's own shared storage. Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission. An app cannot overwrite another app's file.
 
@@ -286,7 +290,7 @@ Many old examples show request_permissions() at the top of main.py, on newer ver
 
 One easy approach is to copy [this class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior, and modify the actual permissions for your app. Then instantiate the class [like this](https://github.com/Android-for-Python/c4k_photo_example/blob/main/main.py#L52-L57), note that the App class variable delays garbage collection and it critically important.
 
-More generally in a Kivy App, the constraints in using `request_permissions()` are that it may **only** be called from the `build()` method, or from one or more timestep after `on_start()`. There can **only be one** such call in the `build()` method, or in any given timestep. Calling after on_start() simplifies the logic for handling both the 'request' case and the 'previously granted' case.
+More generally in a Kivy App, the constraints in using `request_permissions()` are that it may **only** be called from the `build()` method, or from one or more timestep after `on_start()`. There can **only be one** such call in the `build()` method, or only one call in any given timestep. Calling after on_start() simplifies the logic for handling both the 'request' case and the 'previously granted' case.
 
 Finally it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. Grant the permission from the Android Settings panel for the app.  
 
@@ -697,7 +701,7 @@ Screen resolution can be addressed by specifying font size in units of sp, and w
 
 ### Screen Orientation
 
-Screen orientation on a desktop defaults to landscape, and on a mobile device usually defaults to portrait, but can be landscape or both. For a mobile device the available orientation is set in buildozer.spec, `orientation` can be one of `all`, `portrait`, or `landscape`.
+Screen orientation on a desktop defaults to landscape, and on a mobile device usually defaults to portrait, but can be landscape or both. For a mobile device the available orientation is set in buildozer.spec, `orientation` it can be one of `all`, `portrait`, or `landscape`.
 
 Supporting `orientation = all` usually requires dynamically modifying layout parameters such as size, size_hint, or orientation. Do this using a Widget's `on_size()` method, and testing for orientation. [For example](https://github.com/Android-for-Python/c4k_photo_example/blob/main/applayout/photoscreen1.py#L34-L69). 
 
