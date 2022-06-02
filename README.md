@@ -290,7 +290,7 @@ Many old examples show request_permissions() at the top of main.py, on newer ver
 
 One easy approach is to copy [this class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior, and modify the actual permissions for your app. Then instantiate the class [like this](https://github.com/Android-for-Python/c4k_photo_example/blob/main/main.py#L52-L57), note that the App class variable delays garbage collection and it critically important.
 
-This example shows all permissions requested at the start of app execution. Permissions can also be requsted individually when needed by the app. However a permission must not be requested while another permission request is active.
+This example shows all permissions requested at the start of app execution. Permissions can also be requsted individually when needed by the app. However a permission request must not be initiated while another permission request is active.
 
 More generally in a Kivy App, the constraints in using `request_permissions()` are that it may **only** be called from the `build()` method, or from one or more timestep after `on_start()`. There can **only be one** such call in the `build()` method, or only one call in any given timestep. Calling after on_start() simplifies the logic for handling both the 'request' case and the 'previously granted' case.
 
