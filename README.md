@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-06-01
+Revised 2022-06-05
 
 # Table of Contents
 
@@ -510,7 +510,9 @@ P4a provides Android specific utilities in the android package, this is only ava
 
 ## Plyer
 
-Plyer is an OS independent api for some non-POSIX OS features. See [Supported APIs](https://github.com/kivy/plyer#supported-apis). **Plyer is not well maintained. Some Plyer modules work on older Android versions, but not on newer Android versions. The Supported APIs table does not reflect this. For example Camera, Speech to text, and FileChooser do not work on newer Android versions.**
+Plyer is an OS independent api for some non-POSIX OS features. See [Supported APIs](https://github.com/kivy/plyer#supported-apis). **Plyer is not well maintained**.
+
+Some Plyer modules and examples work on older Android versions, but not on newer Android versions. The Supported APIs table does not reflect this. For example Camera, Speech to text, Audio, and FileChooser do not work on newer Android versions.**
 
 The [Plyer examples](https://github.com/kivy/plyer/tree/master/examples) are the documentation. 
 
@@ -703,7 +705,9 @@ Screen resolution can be addressed by specifying font size in units of sp, and w
 
 ### Screen Orientation
 
-Screen orientation on a desktop defaults to landscape, and on a mobile device usually defaults to portrait, but can be landscape or both. For a mobile device the available orientation is set in buildozer.spec, `orientation` it can be one of `all`, `portrait`, or `landscape`.
+Screen orientation on a desktop defaults to landscape, and on a mobile device usually defaults to portrait, but can be landscape or both. **Developing a layout in landscape will not provide a good layout in portrait.** Develop for your target orientation, or support both orientations as follows.  
+
+For a mobile device the available orientation is set in buildozer.spec, `orientation` it can be one of `all`, `portrait`, or `landscape`.
 
 Supporting `orientation = all` usually requires dynamically modifying layout parameters such as size, size_hint, or orientation. Do this using a Widget's `on_size()` method, and testing for orientation. [For example](https://github.com/Android-for-Python/c4k_photo_example/blob/main/applayout/photoscreen1.py#L34-L69). 
 
@@ -876,14 +880,27 @@ There are **a lot of useful features** to be found at these links:
 
 The following depends on using Buildozer 1.3.0 or later.
 
-The Android Store requires that apps be built with a minimum API level of 30. Set
-```
-android.api = 30
-```
+Setup signing *before* your release build.
 
-After this install, or changing buildozer.spec you must:
+## Setup signing
+
+The official [Android signing overview is here](https://developer.android.com/studio/publish/app-signing.html).
+
+For a Buildozer build, setting up signing consists of two steps:
+
+ - Create a key, do this once for an app. You will use `keytool` for this.
+
+ - Tell Bulldozer to sign the app using the key. You will set environment variables to pass the information about the key to Buildozer.   
+
+[Follow the Kivy signing instructions](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
+
+Here are some [very detailed signing instructions](https://gist.github.com/Guhan-SenSam/fa4ed215ef3419e7b3154de5cb71f641). 
+
+## Build the release
+
+The Android Store requires that apps be built with a minimum API level of 31. Set
 ```
-buildozer appclean
+android.api = 31
 ```
 
 To generate a multi-architecture apk or aab, `android.archs` specifies a list of architectures. (The legacy `android.arch` still works, but will be removed.)
@@ -897,7 +914,12 @@ A debug build always builds an `.apk`. A release build creates an `.aab` as a de
 ```
 android.release_artifact = apk
 ```
-Note that `release_artifact` will not be in buildozer.spec unless this file was generated with the version of Buildozer specified at the start of this section.
+
+After changing buildozer.spec you must:
+
+```
+buildozer appclean
+```
 
 Build a release apk or aab with:
 
@@ -906,11 +928,6 @@ buildozer android release
 ```
 
 To install an .aab locally use [Bundletool](#appendix-f--install-bundletool), in place of adb. 
-
-Sign the .aab or .apk. [The instructions are here](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
-
-Here are some [very detailed signing instructions](https://gist.github.com/Guhan-SenSam/fa4ed215ef3419e7b3154de5cb71f641). 
-
 
 # Appendix A : Using adb
 
