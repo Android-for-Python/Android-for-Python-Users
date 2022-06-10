@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-06-05
+Revised 2022-06-09
 
 # Table of Contents
 
@@ -73,6 +73,11 @@ Revised 2022-06-05
   * [KivyMD](#kivymd)
   * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
+- [Creating a Recipe](#creating-a-recipe)
+  * [Why a Recipe](#why-a-recipe)
+  * [P4A Recipe API](#p4a-recipe-api)
+  * [Porting Build Instructions](#porting-build-instructions)
+  * [Recipe Support](#recipe-support)
 - [Cryptic Error Messages](#cryptic-error-messages)
   * [No module named 'msvcrt'](#no-module-named-msvcrt)
   * [Aidl not found](#aidl-not-found)
@@ -134,7 +139,7 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 Android's view of its file system has changed a few times over the years. The result is a messy pile of jargon: local, system, internal, external, primary, secondary, scoped, all describe views of storage.
 
-However in the storage model described here storage is either *Private Storage* or *Shared Storage*. **Private storage content is only visible to the app that created it, shared storage is visible to all apps**.
+However in the storage model described here storage is either *Private Storage* or *Shared Storage*. **Private storage content is only visible to the app that created it, shared storage is visible to all apps. Python file operations can only be performed in Private Storage**.
 
 ## Private Storage
 
@@ -173,7 +178,7 @@ from android import mActivity
 
 ## Shared Storage
 
-Shared storage is visible to all apps, and is persistent after an app is uninstalled.
+Shared storage is visible to all apps, and is persistent after an app is uninstalled. **A portable app can not perform Python file operations on Shared Storage. Files are copied to and from Shared Storage.**
 
 ### Android Version Issues
 
@@ -361,7 +366,7 @@ The packages you add here **must be pure Python, or have a recipe** [in this lis
 
 * Locally modify an existing recipe [see Appendix C](#appendix-c--locally-modifying-a-recipe).
 
-* [Create a new recipe](https://github.com/kivy/python-for-android/blob/develop/doc/source/recipes.rst).
+* [Create a new recipe](#creating-a-recipe).
 
 * Import the functionality from Java.
 
@@ -415,7 +420,7 @@ android.permissions = INTERNET, CAMERA, READ_EXTERNAL_STORAGE
 
 The current buildozer default is 27, but should be "as high as possible". 
 ```
-android.api = 31
+android.api = 33
 ```
 
 ### android.minapi
@@ -754,6 +759,38 @@ For flowers that are maintained add them to your buildozer.spec like this:
 
 There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated and should not be used.
 
+# Creating a Recipe
+
+## Why a Recipe
+
+Some Python packages are not pure Python, they contain compiled code. This must be compiled for the specific platform.
+
+Python packages are generally distributed in a wheel, this will contain pre-compiled binaries for supported platforms. Python wheels do not support Android, so to port a package to Android is must be explicitly compiled for ARM/Android.
+
+P4a provides an api for creating package build scripts, such a script is called a "recipe". The task in creating a recipe is to port existing build instructions. To create a recipe you must understand both of these:
+
+- The p4a recipe API.
+
+- The existing build instruction for the package.
+
+## P4A Recipe API
+
+A recipe generally consists of two parts; a package build, and a package install. 
+
+The recipe api attempts to automate common cases such as Cython or `setup.py`, but likely this will not be sufficient - you will have to dig deeper.
+
+The [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/source/recipes.rst) provides an overview. Your best resource is the [examples](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes).
+
+## Porting Build Instructions
+
+Build instructions could be a `setup.py`, `a shell script`, `Make`, `CMake`, `Bazel`, or something else. These instructions may be processor or OS specific, and usually depend on the GCC tools.
+
+A port involves specifying the Android NDK supplied compiler tools (Clang and LLVM) in place of GCC tools; and patching any of the existing build scripts as necessary.
+
+## Recipe Support
+
+This is full custom work. You can't schedule this, you are finished when the surprises stop. This task is for those who consider themselves self-supporting. Requests for help usually go unanswered because nobody will have experience of that specific issue in that context.
+
 # Cryptic Error Messages
 
 ## No module named 'msvcrt'
@@ -900,7 +937,7 @@ Here are some [very detailed signing instructions](https://gist.github.com/Guhan
 
 The Android Store requires that apps be built with a minimum API level of 31. Set
 ```
-android.api = 31
+android.api = 33
 ```
 
 To generate a multi-architecture apk or aab, `android.archs` specifies a list of architectures. (The legacy `android.arch` still works, but will be removed.)
