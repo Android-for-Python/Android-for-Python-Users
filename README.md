@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-06-09
+Revised 2022-06-13
 
 # Table of Contents
 
@@ -35,19 +35,23 @@ Revised 2022-06-09
   * [User Permissions](#user-permissions)
 - [Buildozer and p4a](#buildozer-and-p4a)
   * [Install](#install)
+    + [Most Common Issues](#most-common-issues)
+    + [Non-deterministic Behavior](#nondeterministic-behavior)
   * [Changing buildozer.spec](#changing-buildozerspec)
   * [Some buildozer.spec options](#some-buildozerspec-options)
     + [package.domain](#packagedomain)
     + [requirements](#requirements)
       - [requirements basics](#requirements-basics)
-      - [Simple requirements examples](#simple-requirements-examples)
-      - [More complex requirements](#more-complex-requirements)
+      - [Find the Dependencies](#find-the-dependencies)
+      - [Kivy Widget Requirements](#kivy-widget-requirements)
+      - [Requirements Examples](#requirements-examples)
+      - [Pure Python](#pure-python)
     + [source.include_exts](#sourceinclude_exts)
     + [android.permissions](#androidpermissions)
     + [android.api](#androidapi)
     + [android.minapi](#androidminapi)
     + [android.ndk](#androidndk)
-    + [android.archs](#androidarch)
+    + [android.archs](#androidarchs)
 - [Debugging](#debugging)
 - [Android Hardware](#android-hardware)
   * [Camera](#camera)
@@ -311,19 +315,25 @@ Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL,
 
 **Test your Buildozer install by building (`buildozer android debug`) and running [Hello World](https://kivy.org/doc/stable/guide/basic.html#create-an-application) with the default `buildozer.spec` (create this with `buildozer init`). I know you just want to see your app run on Android, but this simple first step will provide you will a framework to address any future issues.**
 
+### Most Common Issues
+
 Errors during a Buildozer build are usually because the user:
 
 * Failed to [read the install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), and so failed to install a dependency.
 
 * Failed to accept the Google License Agreements.
 
+* Failed to specify requirements
+
 * Attempted to build an impure Python package.
+
+### Non-deterministic Behavior
 
 Buildozer's behavior can be non-deterministic in any of these cases:
 
 * It is run as root
 
-* It is run on an NTFS partition mounted on a Linux system.
+* It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`).
 
 * There are Python style trailing comments in the buildozer.spec
 
@@ -350,15 +360,80 @@ This must contain exctly one period (.) surrounded by alpha numeric characters, 
 
 #### requirements basics
 
-This is basically the list of pip packages and the Python version that your app depends on. On the desktop this is handled for you by `pip3 install`, at the cost of disk space. On Android there is no `pip3` so you have to do it by hand.
+This is the list of pip packages (and possibly versions) that your app imports from.
 
-Generally you can find what packages a package depends on by looking on GitHub at the package's `requirements.txt` file (if it exists). These packages must be added to requirements in buildozer.spec.   
+**In addition** Buildozer needs to know the packages your packages depend on (because there is no pip3 on Android). Determining these is [shown in the next section](#find-the-dependencies).
 
-It is important that you understand what your app depends on. The requirements list must be complete, missing one item is the most common cause of a run time crash on Android. The next most common cause is adding a package that is not pure Python or does not have a recipe.
-
-Do not add Python system modules, only packages you might install with pip3 on the desktop. Or for some recipes, other recipies whose name begins with 'lib'.
+Do not add Python system modules, only packages you might install with pip3 on the desktop. 
 
 There are some pip3 packages that are added automatically, no need to put these in requirements: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android, certifi`.
+
+#### Find the Dependencies
+
+To recursively find an *installed* package dependencies, use pipdeptree.
+
+```
+pip3 install pipdeptree
+```
+
+Use `pipdeptree -p <packagename>`, for example:
+```
+pip3 install google-cloud-firestore
+pipdeptree -p google-cloud-firestore
+```
+
+Returns a package dependency tree. It looks like this:
+```
+google-cloud-firestore==2.5.2
+  - google-api-core [required: >=1.31.5,<3.0.0dev,!=2.3.0,!=2.2.*,!=2.1.*,!=2.0.*, installed: 2.8.1]
+    - google-auth [required: >=1.25.0,<3.0dev, installed: 2.6.0]
+      - cachetools [required: >=2.0.0,<6.0, installed: 5.0.0]
+      - pyasn1-modules [required: >=0.2.1, installed: 0.2.8]
+        - pyasn1 [required: >=0.4.6,<0.5.0, installed: 0.4.8]
+      - rsa [required: >=3.1.4,<5, installed: 4.8]
+        - pyasn1 [required: >=0.1.3, installed: 0.4.8]	
+....and so on....
+```
+
+Each line is a dependency. Because it is a tree and we want a list many lines may be duplicates. Remove the version information (after and including the `[`), remove the duplicate lines, remove the newlines, and change the ` - ` to `,`. 
+
+We get the list of requirements dependencies for this package.
+
+```
+google-cloud-firestore, googxle-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, googleapis-common-protos, protobuf, requests, charset-normalizer, idna, urllib3, google-cloud-core, proto-plus
+```
+
+**However**, this technique is only as good as the package information. And exhibits platform variations. For example if this is run on Linux the `requests` dependencies `certifi, charset-normalizer, idna, urllib3` will not be listed. These missing dependencies will be found during debugging.  
+
+#### Kivy Widget Dependencies
+
+Some Kivy widgets have requirement dependencies:
+
+`kivy.network.urlrequest` needs  `requests, urllib3, charset-normalizer, idna`
+
+`kivy.uix.video` needs `ffpyplayer`
+
+`kivy.core.audio.SoundLoader` needs `ffpyplayer, ffpyplayer_codecs` 
+
+
+#### Requirements Examples
+
+For examples [see](https://github.com/Android-for-Python/INDEX-of-Examples#readme).
+
+Using the technique described above, we get the following:
+
+##### Pyrebase4
+
+requirements = python3,kivy, pyrebase4, gcloud, googleapis-common-protos, protobuf, httplib2, pyparsing, oauth2client, pyasn1, pyasn1-modules, rsa, pycryptodome, python-jwt, jws, requests, certifi, charset-normalizer, idna, urllib3, requests-toolbelt , jwcrypto, cryptography, deprecated, wrapt
+
+Run on Windows, the last four items were not determined automatically. Run on Linux the requests dependencies and were added during debugging.
+
+##### firebase_admin
+
+requirements = python3,kivy, firebase-admin, cachecontrol, msgpack, requests, certifi, charset-normalizer, idna, urllib3, google-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, pyasn1, googleapis-common-protos, protobuf, google-api-python-client, google-auth-httplib2, httplib2, pyparsing, uritemplate, google-cloud-firestore, google-cloud-core, proto-plus, google-cloud-storage, google-resumable-media, google-crc32c
+
+
+#### Pure Python
 
 The packages you add here **must be pure Python, or have a recipe** [in this list](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). If this is not the case, the options are to:
 
@@ -373,34 +448,6 @@ The packages you add here **must be pure Python, or have a recipe** [in this lis
 None of these options are trivial. That is why it said AVOID DISAPPOINTMENT in [the Wheels section above](#wheels).
 
 If you have a problem run the [debugger](#debugging).
-
-#### Simple requirements examples
-
-Some packages have dependencies but no requirements.txt file, the only way to resolve these is with the debugger. One example:
-
-`import requests` needs `requirements = python3,kivy,requests,urllib3,chardet,idna`
-
-Some Kivy widgets depend on other packages. For example:
-
-`from kivy.uix.videoplayer import VideoPlayer` needs `requirements = python3,kivy,ffpyplayer`
-
-`from kivy.core.audio import SoundLoader`  needs `requirements = python3,kivy,ffpyplayer,ffpyplayer_codecs` [to play .mp3](https://github.com/Sahil-pixel/kivy-with-mp3-on-android-).
-
-Some pip3 package names are not the same as the class name. For example:
-
-`from bs4 import BeautifulSoup` needs `requirements = python3,kivy,beautifulsoup4`
-
-Some recipe names are not the same as the class name. For example:
-
-`import google.protobuf` needs `requirements = python3,kivy,protobuf_cpp`
-
-#### More complex requirements
-
-Some imports have more than one of the above cases. To determine a package's dependencies look in requirements.txt recursively. For example for `pyrebase` start with [requirements.txt](https://github.com/thisbejim/Pyrebase/blob/master/requirements.txt) to see the dependencies, there are six. The first is `requests`, this one is easy because its dependencies are listed earlier in this section. For the others recur. If you miss one it will show up as a `ModuleNotFoundError` at run time. It is not hard, just stop whining and do the work. For example for `pyrebase` we get:
-
-`import pyrebase` needs `requirements = python3, kivy, pyrebase, requests, urllib3, chardet, idna, gcloud, oauth2client, requests-toolbelt, protobuf_cpp, python-jwt, pycryptodome, httplib2, pyparsing, pyasn1, pyasn1_modules, rsa, jwcrypto, cryptography, deprecated, wrapt`
-
-Anybody got any more examples I could add here?
 
 ### source.include_exts
 
@@ -425,11 +472,11 @@ android.api = 33
 
 ### android.minapi
 
-Python for Android enables `android.minapi = 21`.
+Python for Android enables `android.minapi = 21`. Don't decrease this.
 
 ### android.ndk
 
-Probably best not to change this from the current 19c. But if there is some reason you really need to, 21d also appears to work.
+Probably best not to change this from the current 19c. But if there is some reason you really need to, 21d mostly works.
 
 ### android.archs
 
