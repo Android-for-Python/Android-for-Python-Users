@@ -426,7 +426,7 @@ Using the technique described above, we get the following:
 
 requirements = python3,kivy, pyrebase4, gcloud, googleapis-common-protos, protobuf, httplib2, pyparsing, oauth2client, pyasn1, pyasn1-modules, rsa, pycryptodome, python-jwt, jws, requests, certifi, charset-normalizer, idna, urllib3, requests-toolbelt , jwcrypto, cryptography, deprecated, wrapt
 
-Run on Windows, the last four items were not determined automatically. Run on Linux the requests dependencies and were added during debugging.
+Run on Windows, the last four items were not determined automatically. Run on Linux the requests dependencies were missing. In both cases these were added during debugging.
 
 ##### firebase_admin
 
