@@ -403,7 +403,7 @@ We get the list of requirements dependencies for this package.
 google-cloud-firestore, googxle-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, googleapis-common-protos, protobuf, requests, charset-normalizer, idna, urllib3, google-cloud-core, proto-plus
 ```
 
-**However**, this technique is only as good as the package information. And exhibits platform variations. For example if this is run on Linux the `requests` dependencies `certifi, charset-normalizer, idna, urllib3` will not be listed. These missing dependencies will be found during debugging.  
+*However*, this technique is only as good as the package information. And exhibits platform variations. For example if this is run on Linux the `requests` dependencies `certifi, charset-normalizer, idna, urllib3` will not be listed. These missing dependencies will be found during debugging.  
 
 #### Kivy Widget Dependencies
 
