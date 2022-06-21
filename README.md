@@ -269,7 +269,7 @@ In the above we assume our App class contains a coroutine implementing some asyn
 ```
     async def some_async_behavior(self):
 ```
-
+Note that the app will not exit until `some_async_behavior()` completes.
 
 # Android Service
 
