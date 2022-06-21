@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-06-13
+Revised 2022-06-20
 
 # Table of Contents
 
@@ -24,7 +24,10 @@ Revised 2022-06-13
     + [androidstorage4kivy](#androidstorage4kivy)
     + [Storage Permissions](#storage-permissions)
   * [Sharing a file between apps](#sharing-a-file-between-apps)
-- [Threads and Subprocesses](#threads-and-subprocesses)
+- [Threads, Subprocess, and asyncio](#threads-subprocess-and-asyncio)
+  * [Threads](#threads)
+  * [Subprocess](#subprocess)
+  * [asyncio](#asyncio)
 - [Android Service](#android-service)
   * [Specifying a Service](#specifying-a-service)
   * [Service Lifetime](#service-lifetime)
@@ -224,13 +227,45 @@ The androidstorage4kivy package contains a ShareSheet class that invokes an Andr
 
 Examples of sending a file are in [share_send_example](https://github.com/Android-for-Python/share_send_example), and receiving a file in [share_receive_example](https://github.com/Android-for-Python/share_receive_example).
 
-# Threads and Subprocesses
+# Threads, Subprocess, and asyncio
+
+## Threads
 
 Threads are available. Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
 
-The Python subprocess depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commands which of course are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and run from `subprocess.Popen` have app only permission. 
+## Subprocess
+
+The Python subprocess depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commands which of course are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and when run from `subprocess.Popen` have app only permission. 
 
 There is no `python3` executable, Python's `sys.executable` is empty. To run a Python script in a new process, we use an Android Service.
+
+## asyncio
+
+The basic code is the same on both a desktop and on mobile. However on Android certion IO operations may be prohibited before `on_start()` has completed. The app should disable coroutine IO operations until start has completed.
+
+Without special handling Kivy and asyncio would block one another, so we must start a Kivy app as an asyncio coroutine. We normally start a Kivy app with:
+
+```
+ExampleApp().run()
+```
+
+The Kivy App class defines a coroutine `async_run()` which starts Kivy, so instead of the above we start the Kivy app with:
+
+```
+async def main(app):
+    await asyncio.gather(app.async_run('asyncio'),   # starts Kivy
+                         app.some_async_behavior(),  # starts other coroutine
+                         return_exceptions = True)
+app = ExampleApp()
+asyncio.run(main(app))
+```
+
+Here we assume our App class contains the coroutine implementing the async behavior:
+
+```
+    async def some_async_behavior(self):
+```
+
 
 # Android Service
 
@@ -409,7 +444,7 @@ google-cloud-firestore, googxle-api-core, google-auth, cachetools, pyasn1-module
 
 Some Kivy widgets have requirement dependencies:
 
-`kivy.network.urlrequest` needs  `requests, urllib3, charset-normalizer, idna`
+`kivy.network.urlrequest` needs  `requests, urllib3, charset-normalizer, idna, certifi`
 
 `kivy.uix.video` needs `ffpyplayer`
 
