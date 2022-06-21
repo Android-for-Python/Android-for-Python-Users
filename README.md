@@ -262,14 +262,14 @@ app = ExampleApp()
 asyncio.run(main(app))
 ```
 
-This works because the Kivy App class defines a coroutine `async_run()` which starts Kivy. This example assumes Python >= 3.7.
+This works because the Kivy App class defines a coroutine `async_run()` which starts Kivy. This example assumes Python >= 3.7, most Kivy asyncio examples are written for earlier version of Python.
 
 In the above we assume our App class contains a coroutine implementing some async behavior:
 
 ```
     async def some_async_behavior(self):
 ```
-Note that the app will not exit until `some_async_behavior()` completes.
+Note that on a desktop the app will not exit until `some_async_behavior()` completes.
 
 # Android Service
 
