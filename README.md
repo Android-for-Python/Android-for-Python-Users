@@ -264,7 +264,7 @@ asyncio.run(main(app))
 
 This works because the Kivy App class defines a coroutine `async_run()` which starts Kivy.
 
-In the above we assume our App class contains a coroutine implementing the async behavior:
+In the above we assume our App class contains a coroutine implementing some async behavior:
 
 ```
     async def some_async_behavior(self):
