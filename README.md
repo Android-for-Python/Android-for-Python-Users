@@ -241,7 +241,7 @@ There is no `python3` executable, Python's `sys.executable` is empty. To run a P
 
 ## asyncio
 
-The basic code is the same on both a desktop and on mobile. However on Android certion IO operations may be prohibited before `on_start()` has completed. The app should disable coroutine IO operations until start has completed.
+The basic code is the same on both a desktop and on mobile. However on Android certain IO operations may be prohibited before `on_start()` has completed. The app should disable coroutine IO operations until start has completed.
 
 Without special handling Kivy and asyncio would block one another, so we must start a Kivy app as an asyncio coroutine. We normally start a Kivy app with:
 
