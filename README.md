@@ -251,7 +251,7 @@ We normally start a Kivy app with:
 ExampleApp().run()
 ```
 
-A Kivy app that interacts with asyncio we can start with:
+A Kivy app that interacts with asyncio can be started with:
 
 ```
 async def main(app):
