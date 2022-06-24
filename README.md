@@ -339,7 +339,7 @@ For Android a simple implementation of `async_lifecycle()` might be:
 
 ```
 
-Note that on a desktop this code will not exit, because `async_lifecycle()` never completes (this doesn't matter on Android). To additionally support exit on the desktop:
+Note that on a desktop this code will not exit, because `async_lifecycle()` never completes (this doesn't matter on Android because we handled the `on_pause` case). To additionally support exit on the desktop:
 
 ```python
     # in __init__()
