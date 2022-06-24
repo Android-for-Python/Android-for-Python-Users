@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-06-20
+Revised 2022-06-23
 
 # Table of Contents
 
@@ -24,7 +24,7 @@ Revised 2022-06-20
     + [androidstorage4kivy](#androidstorage4kivy)
     + [Storage Permissions](#storage-permissions)
   * [Sharing a file between apps](#sharing-a-file-between-apps)
-- [Threads, Subprocess, and asyncio](#threads-subprocess-and-asyncio)
+- [Concurrency](#concurrency)
   * [Threads](#threads)
   * [Subprocess](#subprocess)
   * [asyncio](#asyncio)
@@ -227,11 +227,37 @@ The androidstorage4kivy package contains a ShareSheet class that invokes an Andr
 
 Examples of sending a file are in [share_send_example](https://github.com/Android-for-Python/share_send_example), and receiving a file in [share_receive_example](https://github.com/Android-for-Python/share_receive_example).
 
-# Threads, Subprocess, and asyncio
+# Concurrency
 
 ## Threads
 
-Threads are available. Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads. Threads must be truly asynchronous to the UI thread, so do not join() in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use Clock_schedule_once().
+Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads.
+
+Threads must be truly asynchronous to the UI thread, so do not use `join()` in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use the `@mainthread` decorator, for example:
+
+```
+from threading import Thread
+from kivy.clock import mainthread
+
+    def run_some_function_in_thread(self, arg0):
+        # note the value of args is a tuple,
+        # it always contains at least one comma
+        Thread(target=self.some_function, args = (arg0_val,), daemon=True).start()
+
+    def some_function(self, arg0):
+        # the behavior goes here, creating some result
+        result = 'greetings earthlings'
+        # sync a *copy* of the result with the Kivy UI thread
+        self.make_thread_safe(str(result))
+
+    @mainthread
+    def make_thread_safe(self, text):
+        # assign to some UI widget
+        self.label.text = text
+```
+
+A daemon thread will exit when the app exits, providing all threads running at app exit are also daemon threads. Failure to always specify a daemon thread may cause an app to exit in a delayed way.
+
 
 ## Subprocess
 
@@ -241,9 +267,7 @@ There is no `python3` executable, Python's `sys.executable` is empty. To run a P
 
 ## asyncio
 
-The basic code is the same on both a desktop and on mobile. However on Android certain IO operations may be prohibited before `on_start()` has completed. The app should disable coroutine IO operations until start has completed.
-
-Without special handling Kivy and asyncio would block one another on a single task OS like Android or iOS, and have OS dependent behavior on a multitasking OS. So we always start a Kivy app that interacts with asyncio as an asyncio coroutine.
+Without special handling Kivy and asyncio would block one another on a single task OS like Android or iOS, and have OS dependent behavior on a multitasking OS. So we always start a Kivy app that interacts with asyncio as an asyncio coroutine. For portability the async loop must mimic the Kivy lifecycle.
 
 We normally start a Kivy app with:
 
@@ -251,25 +275,92 @@ We normally start a Kivy app with:
 ExampleApp().run()
 ```
 
-A Kivy app that interacts with asyncio can be started with:
+A Kivy app that runs concurrently with asyncio can be started with:
 
 ```
 async def main(app):
-    await asyncio.gather(app.async_run('asyncio'),   # starts Kivy
-                         app.some_async_behavior(),  # starts other coroutine
-                         return_exceptions = True)
+    await asyncio.gather(app.async_run('asyncio'),  # starts Kivy
+                         app.async_lifecycle(),     # starts other coroutine
+                         return_exceptions = True)  # for debugging
 app = ExampleApp()
 asyncio.run(main(app))
 ```
 
 This works because the Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This example assumes Python >= 3.7, most Kivy asyncio examples are written for earlier versions of Python.
 
-In the above we assume our App class contains a coroutine implementing some async behavior:
+On Android an async loop that uses IO can only be active when the Kivy clock is ticking, and after any required user permissions have been granted. On the desktop an async loop must be explicitly terminated `on_stop()`.
+
+For Android a simple implementation of `async_lifecycle()` might be:
 
 ```
+    def __init__(self):
+        super().__init__()
+        self.kivy_clock_running = False
+
+    # Kivy lifecycle
+
+    def on_start(self):
+        # see AndroidPermissions example referenced in "User permissions"
+        self.dont_gc = AndroidPermissions(self.start_app)  
+
+    def start_app(self):
+        self.dont_gc = None
+        self.kivy_clock_running = True
+
+    def on_pause(self):
+        self.kivy_clock_running = False
+
+    def on_resume(self):
+        self.kivy_clock_running = True
+
+    # Coroutines
+
+    async def async_lifecycle(self):
+        while True:  # assume recurring async behavior
+            await self.kivy_clocking()
+            await self.some_async_behavior()
+
+    async def kivy_clocking(self):
+        while not self.kivy_clock_running:
+            await asyncio.sleep(1/30)
+
     async def some_async_behavior(self):
+        # Catch any I/O exceptions
+        try:
+            # Replace with your async behavior
+            # proxy for latency of your async behavior
+            await asyncio.sleep(5) 
+            # proxy for your async behavior result
+            self.label.text = 'greetings earthlings'  
+        except:
+            # Handle if you want to.
+            pass	    
+
 ```
-Note that on a desktop the app will not exit until `some_async_behavior()` completes.
+
+Note that on a desktop this code will not exit, because `async_lifecycle()` never completes (this doesn't matter on Android). To additionally support exit on the desktop:
+
+```
+    # in __init__()
+        self.kivy_running = True	
+
+    def on_stop(self):
+        self.kivy_running = False
+
+    async def async_lifecycle(self):
+        while self.kivy_running:   # assuming a recurring async behavior
+            await self.kivy_clocking()
+            tasks = [asyncio.create_task(self.some_async_behavior()),
+                     asyncio.create_task(self.kivy_stopped())]
+            await next(asyncio.as_completed(tasks))
+            for task in tasks:
+                if not task.done():
+                    task.cancel()
+
+    async def kivy_stopped(self):
+        while self.kivy_running:
+            await asyncio.sleep(1/30)
+```
 
 # Android Service
 
@@ -336,9 +427,18 @@ Any app manifest permission documented as having "Protection level: dangerous" a
 
 Many old examples show request_permissions() at the top of main.py, on newer versions of Android this will lead to unexpected behavior. Because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
 
-One easy approach is to copy [this class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior, and modify the actual permissions for your app. Then instantiate the class [like this](https://github.com/Android-for-Python/c4k_photo_example/blob/main/main.py#L52-L57), note that the App class variable delays garbage collection and it critically important.
+One easy approach is to copy [the `AndroidPermissions` class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior, and modify the actual permissions for your app. Then instantiate the class like this:
+```
+    def on_start(self):
+        self.dont_gc = AndroidPermissions(self.start_app)  
 
-This example shows all permissions requested at the start of app execution. Permissions can also be requsted individually when needed by the app. However a permission request must not be initiated while another permission request is active.
+    def start_app(self):
+        self.dont_gc = None
+```
+
+Note that the App class variable `dont_gc` delays garbage collection and it critically important.
+
+That example shows all permissions requested at the start of app execution. Permissions can also be requsted individually when needed by the app. However a permission request must not be initiated while another permission request is active.
 
 More generally in a Kivy App, the constraints in using `request_permissions()` are that it may **only** be called from the `build()` method, or from one or more timestep after `on_start()`. There can **only be one** such call in the `build()` method, or only one call in any given timestep. Calling after on_start() simplifies the logic for handling both the 'request' case and the 'previously granted' case.
 
