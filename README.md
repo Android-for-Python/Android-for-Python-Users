@@ -843,7 +843,7 @@ class CallbackWrapper(PythonJavaClass):
 
 CallbackWrapper.java
 
-```python
+```java
 package org.wherever.whatever;
 // the wrapper interface
 public interface CallbackWrapper {
