@@ -165,7 +165,7 @@ The install directory is `./`, files from the apk or aab can be accessed. An app
 Most of the time this is what you should use. 
 
 The app storage directory is persistent over the installed lifetime of the app, and is removed when the app is uninstalled. The app storage directory is accessed using:
-```
+```python
 from android.storage import app_storage_path
 
     app_storage_directory_path = app_storage_path()
@@ -174,7 +174,7 @@ from android.storage import app_storage_path
 ### App Cache Directory
 
 The app cache directory is temporary storage, the lifetime of files in this are is managed by Android.  The app storage directory is accessed using:
-```
+```python
 from android import mActivity
 
     context = mActivity.getApplicationContext()
@@ -272,13 +272,13 @@ Without special handling Kivy and asyncio would block one another on a single ta
 
 We normally start a Kivy app with:
 
-```
+```python
 ExampleApp().run()
 ```
 
 A Kivy app that runs concurrently with asyncio can be started with:
 
-```
+```python
 async def main(app):
     await asyncio.gather(app.async_run('asyncio'),  # starts Kivy
                          app.async_lifecycle(),     # starts other coroutine
@@ -293,7 +293,7 @@ On Android an async loop that uses IO can only be active when the Kivy clock is 
 
 For Android a simple implementation of `async_lifecycle()` might be:
 
-```
+```python
     def __init__(self):
         super().__init__()
         self.kivy_clock_running = False
@@ -341,7 +341,7 @@ For Android a simple implementation of `async_lifecycle()` might be:
 
 Note that on a desktop this code will not exit, because `async_lifecycle()` never completes (this doesn't matter on Android). To additionally support exit on the desktop:
 
-```
+```python
     # in __init__()
         self.kivy_running = True	
 
@@ -372,13 +372,13 @@ There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy
 ## Specifying a Service 
 
 If the context of Kivy, an Android service is a python script. The script has a file name and we give the service some name; these are declared in `buildozer.spec` (here `the_service.py` is the name of the script, and `Worker` is the name we give the service *which must be a valid Java class name*). 
-```
+```python
 # (list) List of service to declare
 services = Worker:the_service.py
 ```
 
 We start the service from an app using the service name, with a standard prefix:
-```
+```python
 from android import mActivity
 context =  mActivity.getApplicationContext()
 SERVICE_NAME = str(context.getPackageName()) + '.Service' + 'Worker'
@@ -389,7 +389,7 @@ self.service.start(mActivity,'')
 `SERVICE_NAME` is the name of a Java class implementing the service, which in turn executes the `the_service.py`.
 
 A [foreground service](https://developer.android.com/guide/components/foreground-services) is specified in buildozer.spec with: 
-```
+```python
 # (list) List of service to declare
 services = Worker:the_service.py:foreground
 
@@ -429,7 +429,7 @@ Any app manifest permission documented as having "Protection level: dangerous" a
 Many old examples show request_permissions() at the top of main.py, on newer versions of Android this will lead to unexpected behavior. Because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
 
 One easy approach is to copy [the `AndroidPermissions` class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior, and modify the actual permissions for your app. Then instantiate the class like this:
-```
+```python
     def on_start(self):
         self.dont_gc = AndroidPermissions(self.start_app)  
 
@@ -680,7 +680,7 @@ The type of keyboard can be set with `input_type` for example `TextInput(input_t
 A back button/gesture can be detected with a test for key == 27, as shown in the [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/source/apis.rst#handling-the-back-button). The key handler **must** return a boolean.
 
 Android 10 and up require that the back button/gesture can return the app to the Android home screen, therefore there must be a state in the app where back button/gesture is not consumed by the app. For example if the back button/gesture transitions between Kivy screens, from the "main" screen the app can on a back event go to the Android home screen:
-```
+```python
 class Main(ScreenManager):
     def __init__(self, **kwargs): 
         super().__init__(**kwargs)
@@ -749,7 +749,7 @@ Then use this to write code with Python syntax and semantics, and Java class sem
 
 In addition `android.mActivity` gives access to some Android state that may be used by the Android API. For example:
 
-```
+```python
 from android import mActivity
 
     mActivity.getWindowManager()
@@ -776,7 +776,7 @@ It is not possible to import Java `abstract` classes or methods, as they have no
 
 You will be using two garbage collectors working on the same heap, but they don't know each other's boundaries. Python may free a local reference to a Java object because it cant see that the object is used. Obviously this will cause the app to crash in an ugly way. So use class variables, as shown below, to indicate persistence to the Python garbage collector.
 
-```
+```python
     ###### DONT DO THIS ####
     def foobar(self):
         # instance a Java class
@@ -784,7 +784,7 @@ You will be using two garbage collectors working on the same heap, but they don'
         # call a method in that class
         request.setNotificationVisibility(visibility)    
 ```
-```
+```python
     ###### DO THIS ####
     def foobar(self):
         # instance a Java class
@@ -809,7 +809,7 @@ You are going to have to write some Java, get over it. To comprehend the followi
 
 In Python:
 
-```
+```python
 from jnius import autoclass, PythonJavaClass, java_method
 SomeJavaClass = autoclass('org.wherever.whatever.SomeJavaClass')
 
@@ -843,7 +843,7 @@ class CallbackWrapper(PythonJavaClass):
 
 CallbackWrapper.java
 
-```
+```python
 package org.wherever.whatever;
 // the wrapper interface
 public interface CallbackWrapper {
@@ -855,7 +855,7 @@ The Java method generating the callback will be called from Java. The same Java 
 
 SomeJavaClass.java
 
-```
+```java
 import org.wherever.whatever.CallbackWrapper;
 
 class SomeJavaClass() {
