@@ -235,14 +235,15 @@ Kivy executes on the 'UI thread', Android requires that this thread is always re
 
 Threads must be truly asynchronous to the UI thread, so do not use `join()` in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use the `@mainthread` decorator, for example:
 
-```
+```python
 from threading import Thread
 from kivy.clock import mainthread
 
     def run_some_function_in_thread(self, arg0):
         # note the value of args is a tuple,
         # it always contains at least one comma
-        Thread(target=self.some_function, args = (arg0_val,), daemon=True).start()
+        Thread(target=self.some_function, args = (arg0_val,),
+               daemon=True).start()
 
     def some_function(self, arg0):
         # the behavior goes here, creating some result
