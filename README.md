@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-06-23
+Revised 2022-06-27
 
 # Table of Contents
 
@@ -94,6 +94,7 @@ Revised 2022-06-23
   * [weakly-referenced object](#weakly-referenced-object)
   * [OpenCV requires Android SDK Tools](#opencv-requires-android-sdk-tools)
   * [No such file or directory: 'ffmpeg'](#no-such-file-or-directory-ffmpeg)
+  * [Unsupported class file major version 62](#unsupported-class-file-major-version-62)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
@@ -1064,6 +1065,16 @@ It is possible to address this with a patch to `~/.buildozer` to include the old
 Occurs when the app is using subprocess() to run ffmpeg. 
 
 There is no ffmpeg executable. You have to build it for ARM. The recipe builds a library, not an executable. After building the executable, copy it to the working directory. Android does not allow installing to the usual desktop directories.
+
+## Unsupported class file major version 62
+
+`[DEBUG]:          General error during semantic analysis: Unsupported class file major version 62 `
+
+Version 62 Is Java 18. Error is probably due to added some jar built with Java 18. This is not going to work.
+
+Don't try updating your Java to 18 you will break gradle.
+
+For p4a master, you need a jar built with 13 (or perhaps 11, or possibly 15) and have that Java version installed.
 
 # Resources
 
