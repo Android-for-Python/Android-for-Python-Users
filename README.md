@@ -1072,7 +1072,7 @@ There is no ffmpeg executable. You have to build it for ARM. The recipe builds a
 
 Version 62 Is Java 18. Error is probably due to an added jar built with Java 18. This is not going to work.
 
-The Java version used by p4a is the version required for gradle version used. For p4a master, you need a jar built with Java 13 (or perhaps 11, or possibly 15) and have that Java version installed.
+The Java version used by p4a is the version required for the gradle version used. For p4a master, you need a jar built with Java 13 (or perhaps 11, or possibly 15) and have that Java version installed.
 
 # Resources
 
