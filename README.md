@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-06-27
+Revised 2022-07-10
 
 # Table of Contents
 
