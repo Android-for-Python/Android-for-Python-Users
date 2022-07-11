@@ -1149,7 +1149,7 @@ In buildozer.spec set [android.api](#androidapi) to 33.
 
 Things to check:
 
-A hidden directory (the name start with a period) in the project path will cause this failure. This is a tool error.
+A hidden directory (the name starts with a period) in the project path will cause this failure. This is a tool error.
 
 An app build error, try `python3 -m compileall main.py` to check for errors.
 
