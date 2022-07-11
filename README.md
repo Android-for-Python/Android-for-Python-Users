@@ -95,6 +95,10 @@ Revised 2022-06-27
   * [OpenCV requires Android SDK Tools](#opencv-requires-android-sdk-tools)
   * [No such file or directory: 'ffmpeg'](#no-such-file-or-directory-ffmpeg)
   * [Unsupported class file major version 62](#unsupported-class-file-major-version-62)
+  * [Permission denied: '/storage/emulated/0/...'](#permission-denied-storageemulated0)
+  * [ModuleNotFoundError: No module named 'PIL'](#modulenotfounderror-no-module-named-pil)
+  * [Requested API target 27 is not available](#requested-api-target-27-is-not-available)
+  * [BUILD FAILURE: No main.py(o)](#build-failure-no-mainpyo)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
@@ -119,7 +123,9 @@ This document is not a substitute for Reading The Fine Manual [(RTFM)](https://e
 
 Python-for-Android is a truly amazing achievement, but there are some details to understand. The alternative is Java and the Android api, which has been shown to induce insanity in laboratory mice. 
 
-Lastly this document is my understanding as of the date above. I am not a developer in any of the Kivy sub projects (except for one PR in p4a). The document is guaranteed to be incomplete is some way, and may possibly be wrong in another way. But reading it will hopefully provide you with come context with which to read the official documentation and to experiment. Those two steps are the key to insight and understanding, which in turn is key to making your idea real.
+Lastly this document is my understanding as of the date above. I am not a developer in any of the Kivy sub projects (except for a few PRs). I have created a suite of [Android orientated examples](https://github.com/Android-for-Python/INDEX-of-Examples).
+
+The document is guaranteed to be incomplete is some way, and may possibly be wrong in another way. But reading it will hopefully provide you with come context with which to read the official documentation and to experiment. Those two steps are the key to insight and understanding, which in turn is key to making your idea real.
 
 # What is Different about Android?
 
@@ -281,20 +287,25 @@ We normally start a Kivy app with:
 ExampleApp().run()
 ```
 
-A Kivy app that runs concurrently with asyncio can be started with:
+Depending on asyncio usage, Kivy can either be started inside an asyncio loop to enable local asyncio loops:
+
+```python
+asyncio.run(ExampleApp().async_run('asyncio'))
+```
+
+The Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This example assumes Python >= 3.7, most Kivy asyncio examples are written for earlier versions of Python.
+
+Or a Kivy app that runs concurrently with an asyncio loop can be started with:
 
 ```python
 async def main(app):
     await asyncio.gather(app.async_run('asyncio'),  # starts Kivy
                          app.async_lifecycle(),     # starts other coroutine
                          return_exceptions = True)  # for debugging
-app = ExampleApp()
-asyncio.run(main(app))
+asyncio.run(main(ExampleApp()))
 ```
 
-This works because the Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This example assumes Python >= 3.7, most Kivy asyncio examples are written for earlier versions of Python.
-
-On Android an async loop that uses IO can only be active when the Kivy clock is ticking, and after any required user permissions have been granted. On the desktop an async loop must be explicitly terminated `on_stop()`.
+In the second case, on Android an async loop that uses IO can only be active when the Kivy clock is ticking, and after any required user permissions have been granted. On the desktop an async loop must be explicitly terminated `on_stop()`.
 
 For Android a simple implementation of `async_lifecycle()` might be:
 
@@ -468,19 +479,19 @@ Errors during a Buildozer build are usually because the user:
 
 * Failed to accept the Google License Agreements.
 
-* Failed to specify requirements
+* Failed to correctly specify requirements.
 
-* Attempted to build an impure Python package.
+* Failed to check if there is a recipe for an impure Python package.
 
 ### Non-deterministic Behavior
 
 Buildozer's behavior can be non-deterministic in any of these cases:
 
-* It is run as root
+* It is run as root.
 
-* It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`).
+* It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`). Because some Python packages implement OS specific behavior based on the disk root name.
 
-* There are Python style trailing comments in the buildozer.spec
+* There are Python style trailing comments in the buildozer.spec file. Comment characters must be the first character on a line in the buildozer.spec file.
 
 ## Changing buildozer.spec
 
@@ -697,6 +708,25 @@ class Main(ScreenManager):
             return True   # key event consumed by app
         else:           
             return False  # key event passed to Android
+	                  # (but you probably want the code below here)
+```
+
+On an Android back gesture/button, by default Kivy **incorrectly** stops the app and leaves it in the app list. The correct behavior would be to pause the app. The workaround is:
+
+```python
+from kivy.utils import platform
+from android import mActivity
+
+    def keyboard(self,window,key,*args):
+        if key == 27 and platform == 'android':	
+    	    mActivity.moveTaskToBack(True)
+            return True 
+```
+
+If you wish to stop the app and remove it from the app list, use:
+
+```python
+            mActivity.finishAndRemoveTask()
 ```
 
 # Android Packages
@@ -1073,6 +1103,55 @@ There is no ffmpeg executable. You have to build it for ARM. The recipe builds a
 Version 62 Is Java 18. Error is probably due to an added jar built with Java 18. This is not going to work.
 
 The Java version used by p4a is the version required for the gradle version used. For p4a master, you need a jar built with Java 13 (or perhaps 11, or possibly 15) and have that Java version installed.
+
+## Permission denied: '/storage/emulated/0/...'
+
+`PermissionError: [Errno 13] Permission denied: '/storage/emulated/0/org.test.x' - Kivy on android write and save file`
+
+This occurs on devices running Android 10 or higher. What was once known as "external strorage" is now "shared storage", and is a database not a file system. The app's "local storage" is now "private storage", private storage is still a file system. See the [Android Storage](#android-storage) section.
+
+App file operations should occur in private storage. If you want to share the file then it must be 'copied' from private to shared storage, this requires a database 'create' operation.
+
+The package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy) contains a `copy_to_shared()` method that implements the database create. Sample usage is [here](https://github.com/Android-for-Python/shared_storage_example/blob/main/main.py).
+
+## ModuleNotFoundError: No module named 'PIL'
+
+`ModuleNotFoundError: No module named 'PIL'`
+
+The most common cases are:
+
+Either 'pillow' was not specified in buildozer.spec [requirements](#requirements), in which case it must be added.
+
+Or buildozer has been run with root permissions. Running Buildozer as root is known to cause [non deterministic behavior](#non-deterministic-behavior), this is one example. 
+
+Simply running buildozer as user is not sufficent to fix the issue. Before running buildozer with user permissions you must first cleanup the corrupted state.
+
+```
+cd <project directory>
+sudo rm -rf .buildozer 
+sudo rm -rf ~/.buildozer
+# and if either of these exist:
+sudo rm -rf /.buildozer 
+sudo rm -rf ~/.gradle   
+```
+
+Check also that your project files are owned by a user, and not by root.
+
+## Requested API target 27 is not available
+
+`[ERROR]:   Build failed: Requested API target 27 is not available, install it with the SDK android tool.`
+
+In buildozer.spec set [android.api](#androidapi) to 33.
+
+## BUILD FAILURE: No main.py(o)
+
+`BUILD FAILURE: No main.py(o) found in your app directory`
+
+Things to check:
+
+A hidden directory (the name start with a period) in the project path. This is a tool error.
+
+An app build error, try `python3 -m compileall main.py` to check for errors.
 
 # Resources
 
