@@ -301,7 +301,7 @@ Kivy is constructed of routines not of co-routines, the rules for calling co-rou
 
 For portability the asyncio usage must mimic the Kivy lifecycle. Generally async IO calls must only occur while the Kivy clock is running.
 
-An app will terminate when **both** loops terminate. One loop may terminate before the other, the app code must handle these cases. Generall try/except is the way to do this, alternatively use Kivy lifecycle state.
+An app will terminate when **both** loops terminate. One loop may terminate before the other, the app code must handle any cases that arise due to the app design. Generally try/except is the way to do this, alternatively use Kivy lifecycle state.
 
 ### more complex asyncio usage
 
