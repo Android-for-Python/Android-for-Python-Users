@@ -279,7 +279,9 @@ There is no `python3` executable, Python's `sys.executable` is empty. To run a P
 
 ## asyncio
 
-Without special handling Kivy and asyncio would block one another on a single task OS like Android or iOS, and have OS dependent behavior on a multitasking OS. So we always start a Kivy app that interacts with asyncio as an asyncio coroutine. For portability the async loop must mimic the Kivy lifecycle.
+### basic asyncio usage
+
+Without special handling Kivy and asyncio would block one another on a single task OS like Android or iOS, and have OS dependent behavior on a multitasking OS. So we always start a Kivy app that interacts with asyncio as an asyncio coroutine. 
 
 We normally start a Kivy app with:
 
@@ -287,15 +289,25 @@ We normally start a Kivy app with:
 ExampleApp().run()
 ```
 
-Depending on asyncio usage, Kivy can either be started inside an asyncio loop to enable local asyncio loops:
+For basic asyncio usage we start Kivy with:
 
 ```python
 asyncio.run(ExampleApp().async_run('asyncio'))
 ```
 
-The Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This example assumes Python >= 3.7, most Kivy asyncio examples are written for earlier versions of Python.
+The Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This starts two interleaved event loops, Kivy and asyncio.
 
-Or a Kivy app that runs concurrently with an asyncio loop can be started with:
+Kivy is constructed of routines not of co-routines, the rules for calling co-routines from routines apply. This means Kivy abstractions such as bind or properties use routines not co-routines.
+
+For portability the asyncio usage must mimic the Kivy lifecycle. Generally async IO calls must only occur while the Kivy clock is running.
+
+An app will terminate when **both** loops terminate. One loop may terminate before the other, you code must handle these cases. Generall try/except is the way to do this, alternatively use Kivy lifecycle state.
+
+### more complex asyncio usage
+
+The following describes controling asyncio state based on Kivy lifecycle state. 
+
+A Kivy app that runs concurrently with an asyncio loop can be started with:
 
 ```python
 async def main(app):
@@ -305,7 +317,7 @@ async def main(app):
 asyncio.run(main(ExampleApp()))
 ```
 
-In the second case, on Android an async loop that uses IO can only be active when the Kivy clock is ticking, and after any required user permissions have been granted. On the desktop an async loop must be explicitly terminated `on_stop()`.
+On Android an async loop that uses IO can only be active when the Kivy clock is ticking, and after any required user permissions have been granted. On the desktop an async loop must be explicitly terminated `on_stop()`.
 
 For Android a simple implementation of `async_lifecycle()` might be:
 
