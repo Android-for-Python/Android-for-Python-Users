@@ -295,7 +295,7 @@ For basic asyncio usage we start Kivy with:
 asyncio.run(ExampleApp().async_run('asyncio'))
 ```
 
-The Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This starts two interleaved event loops, Kivy and asyncio.
+The Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This starts two interleaved event loops, a Kivy routine loop and an asyncio co-routine loop.
 
 Kivy is constructed of routines not of co-routines, the rules for calling co-routines from routines apply. This means Kivy abstractions such as bind or properties use routines not co-routines.
 
