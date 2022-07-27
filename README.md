@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-07-10
+Revised 2022-07-26
 
 # Table of Contents
 
@@ -303,7 +303,7 @@ For portability the asyncio usage must mimic the Kivy lifecycle. Generally async
 
 An app will terminate when **both** loops terminate. One loop may terminate before the other, the app code must handle any cases that arise due to the app design. Generally try/except is the way to do this, alternatively use Kivy lifecycle state.
 
-### more complex asyncio usage
+### lifecycle asyncio usage
 
 The following describes controling asyncio state based on Kivy lifecycle state. 
 
