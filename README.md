@@ -1069,7 +1069,7 @@ The build process included the wrong binary file.
 
 You can check this by changing arch from `armeabi-v7a` to `arm64-v8a`, `buildozer appclean`, and rebuild you will get a different error. This will say failed to link an x86_64 object, which is a more informative message.
 
-The cause is an x86_64 binary from PyPl was used; because there is a requirements specification error in buildozer.spec
+The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
 
 One of the app requirements needs a recipe (or needs to be specified differently).
 
@@ -1081,7 +1081,7 @@ In this case the requirements for OpenCV is incorrectly specified, it should be 
 
 The build process included the wrong binary file.
 
-The cause is an x86_64 binary from PyPl was used; because there is a requirements specification error in buildozer.spec
+The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
 
 One of the app requirements needs a recipe (or needs to be specified differently).
 
