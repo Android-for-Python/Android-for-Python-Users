@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-07-26
+Revised 2022-08-04
 
 # Table of Contents
 
@@ -90,6 +90,7 @@ Revised 2022-07-26
   * [Aidl not found](#aidl-not-found)
   * [Sdkmanager is not installed](#sdkmanager-is-not-installed)
   * [64-bit instead of 32-bit](#64-bit-instead-of-32-bit)
+  * [EM_X86_64 instead of EM_AARCH64](#em_x86_64-instead-of-em_aarch64)
   * [No module named '_Socket'](#no-module-named-_socket)
   * [weakly-referenced object](#weakly-referenced-object)
   * [OpenCV requires Android SDK Tools](#opencv-requires-android-sdk-tools)
@@ -644,7 +645,7 @@ Python for Android enables `android.minapi = 21`. Don't decrease this.
 
 ### android.ndk
 
-Probably best not to change this from the current 19c. But if there is some reason you really need to, 21d mostly works.
+The current default is 23b. You can increase this, but not decrease it. Increasing this may create issues.
 
 ### android.archs
 
@@ -1070,9 +1071,19 @@ You can check this by changing arch from `armeabi-v7a` to `arm64-v8a`, `buildoze
 
 The cause is an x86_64 binary from PyPl was used; because there is a requirements specification error in buildozer.spec
 
-One of your requirements needs a recipe (or needs to be specified differently).
+One of the app requirements needs a recipe (or needs to be specified differently).
 
 In this case the requirements for OpenCV is incorrectly specified, it should be `opencv` because that is the recipe name.
+
+## EM_X86_64 instead of EM_AARCH64
+
+`ImportError: dlopen failed: "<something>/_python_bundle/site-packages/pylsqpack/_binding.so" is for EM_X86_64 (62) instead of EM_AARCH64 (183)`
+
+The build process included the wrong binary file.
+
+The cause is an x86_64 binary from PyPl was used; because there is a requirements specification error in buildozer.spec
+
+One of the app requirements needs a recipe (or needs to be specified differently).
 
 ## No module named '_Socket'
 
