@@ -1077,7 +1077,7 @@ In this case the requirements for OpenCV is incorrectly specified, it should be 
 
 ## EM_X86_64 instead of EM_AARCH64
 
-`ImportError: dlopen failed: "<something>/_python_bundle/site-packages/pylsqpack/_binding.so" is for EM_X86_64 (62) instead of EM_AARCH64 (183)`
+`ImportError: dlopen failed: "<something>/_python_bundle/site-packages/<somepackage>/_binding.so" is for EM_X86_64 (62) instead of EM_AARCH64 (183)`
 
 The build process included the wrong binary file.
 
