@@ -1053,7 +1053,7 @@ And `buildozer appclean`.
 
 Aidl is part of the Google tools. To get the tools you have to accept the Google license agreements.
 
-Delete `~/.buildozer` and `<project/.buildozer`, then `buildozer android debug` and **accept the Google license agreements**.
+Delete `~/.buildozer` and `<project>/.buildozer`, then `buildozer android debug` and **accept the Google license agreements**.
 
 ## Sdkmanager is not installed
 
