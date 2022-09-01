@@ -1022,6 +1022,8 @@ Build instructions could be a `setup.py`, `a shell script`, `Make`, `CMake`, `Ba
 
 A port involves specifying the Android NDK supplied compiler tools (Clang and LLVM) in place of GCC tools; and patching any of the existing build scripts as necessary.
 
+For background reading the [Build System Maintainers Guide](https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md) provides some perspective of the Android build tools. 
+
 ## Recipe Support
 
 This is full custom work. You can't schedule this, you are finished when the surprises stop. This task is for those who consider themselves self-supporting. Requests for help usually go unanswered because nobody will have experience of that specific issue in that context.
@@ -1051,7 +1053,7 @@ And `buildozer appclean`.
 
 Aidl is part of the Google tools. To get the tools you have to accept the Google license agreements.
 
-Delete `~/.buildozer` , then `buildozer android debug` and accept the Google license agreements.
+Delete `~/.buildozer` and `<project/.buildozer`, then `buildozer android debug` and **accept the Google license agreements**.
 
 ## Sdkmanager is not installed
 
