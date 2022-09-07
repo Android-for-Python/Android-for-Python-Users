@@ -100,7 +100,7 @@ Revised 2022-09-06
   * [ModuleNotFoundError: No module named 'PIL'](#modulenotfounderror-no-module-named-pil)
   * [Requested API target 27 is not available](#requested-api-target-27-is-not-available)
   * [BUILD FAILURE: No main.py(o)](#build-failure-no-mainpyo)
-  * [/usr/bin/gzip: 1: ELF : not found](usrbingzip-1-ELF-not-found)
+  * [/usr/bin/gzip: 1: ELF : not found](usrbingzip-1-elf--not-found)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
