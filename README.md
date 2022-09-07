@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-08-04
+Revised 2022-09-06
 
 # Table of Contents
 
@@ -100,6 +100,7 @@ Revised 2022-08-04
   * [ModuleNotFoundError: No module named 'PIL'](#modulenotfounderror-no-module-named-pil)
   * [Requested API target 27 is not available](#requested-api-target-27-is-not-available)
   * [BUILD FAILURE: No main.py(o)](#build-failure-no-mainpyo)
+  * [/usr/bin/gzip: 1: ELF : not found](usrbingzip-1-ELF-not-found)
 - [Resources](#resources)
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
@@ -1177,6 +1178,14 @@ Things to check:
 A hidden directory (the name starts with a period) in the project path will cause this failure. This is a tool error.
 
 An app build error, try `python3 -m compileall main.py` to check for errors.
+
+## /usr/bin/gzip: 1: ELF : not found
+
+`/usr/bin/gzip: 1: ELF : not found`
+
+This is due to regressive behavior in WSL 1, [ref](https://askubuntu.com/questions/1417255/trying-to-unzip-a-tgz-in-wsl-but-get-elf-not-found-error).
+
+The fix is to upgrade to WSL 2.
 
 # Resources
 
