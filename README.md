@@ -1185,6 +1185,8 @@ An app build error, try `python3 -m compileall main.py` to check for errors.
 
 This is due to regressive behavior in WSL 1, [ref](https://askubuntu.com/questions/1417255/trying-to-unzip-a-tgz-in-wsl-but-get-elf-not-found-error).
 
+Check the current WSL version at the Windows Command prompt with `wsl -l -v`.
+
 The fix is to upgrade to WSL 2.
 
 # Resources
