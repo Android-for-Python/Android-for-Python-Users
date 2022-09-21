@@ -848,6 +848,8 @@ You will be using two garbage collectors working on the same heap, but they don'
 
 Python for Android builds an apk with a minimum device api. Importing Java modules can invalidate this minimum. Check the [Added in API level field](https://developer.android.com/reference/android/provider/MediaStore.Downloads) in the class or method reference documentation.
 
+And if the app includes an `.aar` file, check that the version of Java used to build the aar is not newer than the version of OpenJDK you installed for Buildozer. If the aar is built with a newer Java you will get an error message similar to [this](#unsupported-class-file-major-version-62).
+
 ### Calling Python from Java
 
 The following illustrates calling a Python method ( here called `from_java()`) from Java. In the example there is one argument which is a string. Java sees the method as having a different name, in this case `callback_string()`. 
