@@ -1126,7 +1126,7 @@ There is no ffmpeg executable. You have to build it for ARM. The recipe builds a
 
 `[DEBUG]:          General error during semantic analysis: Unsupported class file major version 62 `
 
-Version 62 Is Java 18. Error is probably due to an added jar built with Java 18. This is not going to work.
+Version 62 Is Java 18. Error is probably due to an added aar built with Java 18. This is not going to work.
 
 The Java version used by p4a is the version required for the gradle version used. For p4a master, this can be any version between openJDK-11 and 17, the install instructions suggest 17.
 
