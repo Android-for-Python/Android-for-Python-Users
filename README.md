@@ -401,13 +401,13 @@ There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy
 
 ## Specifying a Service 
 
-If the context of Kivy, an Android service is a python script. The script has a file name and we give the service some name; these are declared in `buildozer.spec` (here `the_service.py` is the name of the script, and `Worker` is the name we give the service *which must be a valid Java class name*). 
+In the context of Kivy, an Android service is a python script. The script has a file name and we give the service some name; these are declared in `buildozer.spec` (in the code below `the_service.py` is the name of the script, and `Worker` is the name we give the service *which must be a valid Java class name*). 
 ```python
 # (list) List of service to declare
 services = Worker:the_service.py
 ```
 
-We start the service from an app using the service name, with a standard prefix:
+We start the service from an app using the fully qualified service name, which is the app package name, with '.Service' and the service name appended:
 ```python
 from android import mActivity
 context =  mActivity.getApplicationContext()
