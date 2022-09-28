@@ -91,6 +91,8 @@ Revised 2022-09-27
   * [KivAds and KivMob](#kivads-and-kivmob)
   * [Other Resources](#other-resources)
 - [Release Builds](#release-builds)
+  * [Setup signing](#setup-signing)
+  * [Build the release](#build-the-release)
 - [Appendix A : Using adb](#appendix-a--using-adb)
 - [Appendix B : Using an emulator](#appendix-b--using-an-emulator)
 - [Appendix C : Locally modifying a recipe](#appendix-c--locally-modifying-a-recipe)
