@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-09-06
+Revised 2022-09-27
 
 # Table of Contents
 
@@ -31,7 +31,7 @@ Revised 2022-09-06
 - [Android Service](#android-service)
   * [Specifying a Service](#specifying-a-service)
   * [Service Lifetime](#service-lifetime)
-  * [Service Performance](#service-performance)
+  * [Service Notifications](#service-notifications)
   * [p4a Service Implementation](#p4a-service-implementation)
 - [App Permissions](#app-permissions)
   * [Manifest Permissions](#manifest-permissions)
@@ -85,7 +85,20 @@ Revised 2022-09-06
   * [P4A Recipe API](#p4a-recipe-api)
   * [Porting Build Instructions](#porting-build-instructions)
   * [Recipe Support](#recipe-support)
-- [Cryptic Error Messages](#cryptic-error-messages)
+- [Resources](#resources)
+  * [Read the Fine Manual](#read-the-fine-manual)
+  * [Android for Python](#android-for-python)
+  * [KivAds and KivMob](#kivads-and-kivmob)
+  * [Other Resources](#other-resources)
+- [Release Builds](#release-builds)
+- [Appendix A : Using adb](#appendix-a--using-adb)
+- [Appendix B : Using an emulator](#appendix-b--using-an-emulator)
+- [Appendix C : Locally modifying a recipe](#appendix-c--locally-modifying-a-recipe)
+- [Appendix D : Debugging on WSL](#appendix-d--debugging-on-wsl)
+- [Appendix E : Copying from private storage](#appendix-e--copying-from-private-storage)
+- [Appendix F : Install Bundletool](#appendix-f--install-bundletool)
+- [Appendix G : Modifying p4a](#appendix-g--modifying-p4a)
+- [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages)
   * [No module named 'msvcrt'](#no-module-named-msvcrt)
   * [Aidl not found](#aidl-not-found)
   * [Sdkmanager is not installed](#sdkmanager-is-not-installed)
@@ -101,19 +114,6 @@ Revised 2022-09-06
   * [Requested API target 27 is not available](#requested-api-target-27-is-not-available)
   * [BUILD FAILURE: No main.py(o)](#build-failure-no-mainpyo)
   * [/usr/bin/gzip: 1: ELF : not found](#usrbingzip-1-elf--not-found)
-- [Resources](#resources)
-  * [Read the Fine Manual](#read-the-fine-manual)
-  * [Android for Python](#android-for-python)
-  * [KivAds and KivMob](#kivads-and-kivmob)
-  * [Other Resources](#other-resources)
-- [Release Builds](#release-builds)
-- [Appendix A : Using adb](#appendix-a--using-adb)
-- [Appendix B : Using an emulator](#appendix-b--using-an-emulator)
-- [Appendix C : Locally modifying a recipe](#appendix-c--locally-modifying-a-recipe)
-- [Appendix D : Debugging on WSL](#appendix-d--debugging-on-wsl)
-- [Appendix E : Copying from private storage](#appendix-e--copying-from-private-storage)
-- [Appendix F : Install Bundletool](#appendix-f--install-bundletool)
-- [Appendix G : Modifying p4a](#appendix-g--modifying-p4a)
 
 # Introduction
 
@@ -395,14 +395,15 @@ Note that on a desktop this code will not exit, because `async_lifecycle()` neve
 
 # Android Service
 
-An [Android Service](https://developer.android.com/guide/components/services) is somewhat equivalent to a Python subprocess, in that it can perform operations in the background. An Android service has asynchronous execution and an independent memory space, and may execute on a different core. In the Python context we create an Android service that can emulate a Python subprocess, this emulation does not have the lifetime of a true Android service.
+An [Android Service](https://developer.android.com/guide/components/services) performs operations that are not related to the UI. In the context of Kivy, an Android service is a Python script.
 
 There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy_service_osc), and [Mutli-Service Example](https://github.com/Android-for-Python/Multi-Service-Example). OSC is a good package for message passing between app and service. However it is not designed for passing large datas, consider using the file system in this case. OSC requires INTERNET permission.
 
 ## Specifying a Service 
 
-In the context of Kivy, an Android service is a python script. The script has a file name and we give the service some name; these are declared in `buildozer.spec` (in the code below `the_service.py` is the name of the script, and `Worker` is the name we give the service *which must be a valid Java class name*). 
-```python
+We assign the service a name, and associate this with script file name in `buildozer.spec`. *The service name must be a valid Java class name.* In the sample below `the_service.py` is the name of the script, and `Worker` is the name we give the service.
+
+```
 # (list) List of service to declare
 services = Worker:the_service.py
 ```
@@ -410,33 +411,87 @@ services = Worker:the_service.py
 We start the service from an app using the fully qualified service name, which is the app package name, with '.Service' and the service name appended:
 ```python
 from android import mActivity
-context =  mActivity.getApplicationContext()
-SERVICE_NAME = str(context.getPackageName()) + '.Service' + 'Worker'
-self.service = autoclass(SERVICE_NAME)
-self.service.start(mActivity,'')
+
+   def start_service(self, name):
+       context =  mActivity.getApplicationContext()
+       service_name = str(context.getPackageName()) + '.Service' + name
+       service = autoclass(service_name)
+       service.start(mActivity,'')   # starts or re-initializes a service
+       return service
+
+   self.start_service('Worker') # starts a service
 ```
 
-`SERVICE_NAME` is the name of a Java class implementing the service, which in turn executes the `the_service.py`.
+`service_name` is the name of a Java class implementing the service, which in turn executes the file `the_service.py`.
 
-A [foreground service](https://developer.android.com/guide/components/foreground-services) is specified in buildozer.spec with: 
+Most documentation and examples show stopping a service like this (assuming the class variables have been previously set):
+
 ```python
+   # This does not work with a sticky foreground service
+   self.service.stop(self.mActivity)
+```
+
+As explained in the next section this does not work with a sticky foreground service. The general way to stop a service is to re-initialize the service then immediately stop it:
+
+```python
+   # a general way to stop a service
+   # re-initializes then stops the service
+   self.start_service('Worker').stop(mActivity)
+```
+
+When debugging, the default Python filter excludes any print statments in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
+
+
+## Service Lifetime
+
+The lifetime of the service is limited by the service type. Three types of service are avilabile, the difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
+
+There is an api for restarting a service killed by the OS [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart). This is only meaningful with a background service, in this case it is probably better to use a foreground service.
+
+### Background Service
+
+A background service is generally short lived as defined by the OS, it is specified in buildozer.spec with:
+
+```
+# (list) List of service to declare
+services = Worker:the_service.py
+```
+
+### Foreground Service
+
+A foreground service's lifetime is no longer than it's app lifetime, when the app stops (not pauses) the service stops. A foreground service is specified in buildozer.spec with:
+
+```
 # (list) List of service to declare
 services = Worker:the_service.py:foreground
 
 # (list) Permissions
 android.permissions = FOREGROUND_SERVICE
 ```
-A notification icon will be created in the task bar. 
+A notification icon may be created in the task bar, see next section.
 
-## Service Lifetime
+### Sticky Foreground Service.
 
-The lifetime of the service's Python script is usually determined by an infinite loop, if this is the case the lifetime of the service is determined by the lifetime of the app. A service started by a Kivy app executes while the app is either in the foreground or paused, and like a Python subprocess stops when the app stops. An app stops when it is removed from the list of currently started apps. This lifetime is different from the lifetime of a Java service which is persistent.
+A sticky foreground service lifetime is nominally unconstrained. An app may stopand start (not just pause) and resume communication with a sticky foreground service. **An app is responsible for terminating a sticky foreground service, specially if the service is energy intensive.** A sticky foreground service is specified in buildozer.spec with:
 
-A service can be killed at any time by Android if it requires the resources. Generally a background service is more likely to be killed than a foreground service. Extend the lifetime using [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart) which forces a service to restart when it stops (set to False when comanding the service to stop). 
+```
+# (list) List of service to declare
+services = Worker:the_service.py:foreground:sticky
 
-## Service Performance
+# (list) Permissions
+android.permissions = FOREGROUND_SERVICE
+```
+A notification icon may be created in the task bar, see next section.
 
-Like a desktop subprocess an Android Service can execute on a different core to the UI that started it, so the service can improve performance of computational tasks.
+Because an app may stop and restart while a sticky foreground service is running, the app may not contain valid dynamic information about the service. Importantly a reference to the instance of the service saved in a class variable will be `None` when the app restarts. The restart-stop code above re-initializes the service to obtain a new reference to the service so that it can be stopped.   
+
+## Service Notifications
+
+For build api < 33 a foreground service always places a notification icon in the task bar. Depending on version there may be a few second delay in the appearance of the icon, this delay is an Android 'feature' and does not indicate that the foreground service has not started.
+
+For build api >= 33 a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is requested and granted.
+
+The default icon displayed in the task bar is derived from the app icon, and for the Kivy icon it is a white circle. There is no api that will change this, or example of how to change this.  
 
 ## p4a Service Implementation
 
@@ -1031,166 +1086,6 @@ For background reading the [Build System Maintainers Guide](https://android.goog
 
 This is full custom work. You can't schedule this, you are finished when the surprises stop. This task is for those who consider themselves self-supporting. Requests for help usually go unanswered because nobody will have experience of that specific issue in that context.
 
-# Cryptic Error Messages
-
-## No module named 'msvcrt'
-
-`No module named 'msvcrt'` and `No module named '_posixsubprocess'`
-
-Newer versions of setuptools break the p4a build tools.
-
-`pip3 list | grep setuptools` will show a version >= 60
-
-The workaround requires that you are using a venv.
-
-```
-pip3 uninstall setuptools
-pip3 install setuptools==58.0.0
-```
-
-And `buildozer appclean`.
-
-## Aidl not found
-
-`# Aidl not found, please install it.`
-
-Aidl is part of the Google tools. To get the tools you have to accept the Google license agreements.
-
-Delete `~/.buildozer` and `<project>/.buildozer`, then `buildozer android debug` and **accept the Google license agreements**.
-
-## Sdkmanager is not installed
-
-`# sdkmanager path "/home/????/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" does not exist, sdkmanager is notinstalled`
-
-Sdkmanager is part of the Google tools. To get the tools you have to accept the Google license agreements.
-
-Delete `~/.buildozer` , then `buildozer android debug` and accept the Google license agreements.
-
-## 64-bit instead of 32-bit
-
-`ImportError: dlopen failed: "/data/data/org.test.myapp/files/app/_python_bundle/site-packages/cv2/cv2.so" is 64-bit instead of 32-bit`
-
-The build process included the wrong binary file.
-
-You can check this by changing arch from `armeabi-v7a` to `arm64-v8a`, `buildozer appclean`, and rebuild you will get a different error. This will say failed to link an x86_64 object, which is a more informative message.
-
-The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
-
-One of the app requirements needs a recipe (or needs to be specified differently).
-
-In this case the requirements for OpenCV is incorrectly specified, it should be `opencv` because that is the recipe name.
-
-## EM_X86_64 instead of EM_AARCH64
-
-`ImportError: dlopen failed: "<something>/_python_bundle/site-packages/<somepackage>/_binding.so" is for EM_X86_64 (62) instead of EM_AARCH64 (183)`
-
-The build process included the wrong binary file.
-
-The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
-
-One of the app requirements needs a recipe (or needs to be specified differently).
-
-## No module named '_Socket'
-
-`Module not found error: No module named '_Socket'`
-
-Occurs with some VMs (just Colab?) in response to `buildozer android deploy run`
-
-Because in most cases you can't `deploy run` from a VM because the VM can't see the physical USB port.
-
-Copy the `.apk` to the desktop, and [use adb](#appendix-a--using-adb).
-
-## weakly-referenced object
-
-`ReferenceError: weakly-referenced object no longer exists`
-
-This almost always due to a known issue in `kivy==1.11.1` with `Python >= 3.8`
-
-The fix for this case is to [use the current Kivy](#requirements).
-
-In any other case this issue can be hard to find. The programmer is assuming an object can be reused, and the garbage collector is assuming it will not be reused. One way to create this error is to assume some third party api is not stateful, when infact it does have state. 
-
-## OpenCV requires Android SDK Tools
-
-`Android SDK Tools: OpenCV requires Android SDK Tools revision 14 or newer.`
-
-Yes, but OpenCV also requires Android SDK Tools revision **30 or older** (I assume it is 30). Buildozer currently uses 31 and this revision does not contain the tools that the OpenCV build expects. Hence the misleading error message, which should be `OpenCV requires Android SDK Tools revision 30 or older.`. 
-
-It is possible to address this with a patch to `~/.buildozer` to include the older tools as described in [this thread](https://github.com/kivy/buildozer/issues/1144).
-
-## No such file or directory: 'ffmpeg'
-
-Occurs when the app is using subprocess() to run ffmpeg. 
-
-There is no ffmpeg executable. You have to build it for ARM. The recipe builds a library, not an executable. After building the executable, copy it to the working directory. Android does not allow installing to the usual desktop directories.
-
-## Unsupported class file major version 62
-
-`[DEBUG]:          General error during semantic analysis: Unsupported class file major version 62 `
-
-Version 62 Is Java 18. Error is probably due to an added aar built with Java 18. This is not going to work.
-
-The Java version used by p4a is the version required for the gradle version used. For p4a master, this can be any version between openJDK-11 and 17, the install instructions suggest 17.
-
-## Permission denied: '/storage/emulated/0/...'
-
-`PermissionError: [Errno 13] Permission denied: '/storage/emulated/0/org.test.x' - Kivy on android write and save file`
-
-This occurs on devices running Android 10 or higher. What was once known as "external strorage" is now "shared storage", and is a database not a file system. The app's "local storage" is now "private storage", private storage is still a file system. See the [Android Storage](#android-storage) section.
-
-App file operations should occur in private storage. If you want to share the file then it must be 'copied' from private to shared storage, this requires a database 'create' operation.
-
-The package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy) contains a `copy_to_shared()` method that implements the database create. Sample usage is [here](https://github.com/Android-for-Python/shared_storage_example/blob/main/main.py).
-
-## ModuleNotFoundError: No module named 'PIL'
-
-`ModuleNotFoundError: No module named 'PIL'`
-
-The most common cases are:
-
-Either 'pillow' was not specified in buildozer.spec [requirements](#requirements), in which case it must be added.
-
-Or buildozer has been run with root permissions. Running Buildozer as root is known to cause [non deterministic behavior](#non-deterministic-behavior), this is one example. 
-
-Simply running buildozer as user is not sufficent to fix the issue. Before running buildozer with user permissions you must first cleanup the corrupted state.
-
-```
-cd <project directory>
-sudo rm -rf .buildozer 
-sudo rm -rf ~/.buildozer
-# and if either of these exist:
-sudo rm -rf /.buildozer 
-sudo rm -rf ~/.gradle   
-```
-
-Check also that your project files are owned by a user, and not by root.
-
-## Requested API target 27 is not available
-
-`[ERROR]:   Build failed: Requested API target 27 is not available, install it with the SDK android tool.`
-
-In buildozer.spec set [android.api](#androidapi) to 33.
-
-## BUILD FAILURE: No main.py(o)
-
-`BUILD FAILURE: No main.py(o) found in your app directory`
-
-Things to check:
-
-A hidden directory (the name starts with a period) in the project path will cause this failure. This is a tool error.
-
-An app build error, try `python3 -m compileall main.py` to check for errors.
-
-## /usr/bin/gzip: 1: ELF : not found
-
-`/usr/bin/gzip: 1: ELF : not found`
-
-This is due to regressive behavior in WSL 1, [ref](https://askubuntu.com/questions/1417255/trying-to-unzip-a-tgz-in-wsl-but-get-elf-not-found-error).
-
-Check the current WSL version at the Windows Command prompt with `wsl -l -v`.
-
-The fix is to upgrade to WSL 2.
-
 # Resources
 
 ## Read the Fine Manual
@@ -1232,7 +1127,7 @@ There are **a lot of useful features** to be found at these links:
 
 # Release Builds
 
-The following depends on using Buildozer 1.3.0 or later.
+The following depends on using Buildozer 1.4.0 or later.
 
 Setup signing *before* your release build.
 
@@ -1451,6 +1346,166 @@ p4a.fork = SomeGitHubName
 
 p4a.branch = some_branch
 ```
+
+# Appendix H : Cryptic Error Messages
+
+## No module named 'msvcrt'
+
+`No module named 'msvcrt'` and `No module named '_posixsubprocess'`
+
+Newer versions of setuptools break the p4a build tools.
+
+`pip3 list | grep setuptools` will show a version >= 60
+
+The workaround requires that you are using a venv.
+
+```
+pip3 uninstall setuptools
+pip3 install setuptools==58.0.0
+```
+
+And `buildozer appclean`.
+
+## Aidl not found
+
+`# Aidl not found, please install it.`
+
+Aidl is part of the Google tools. To get the tools you have to accept the Google license agreements.
+
+Delete `~/.buildozer` and `<project>/.buildozer`, then `buildozer android debug` and **accept the Google license agreements**.
+
+## Sdkmanager is not installed
+
+`# sdkmanager path "/home/????/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" does not exist, sdkmanager is notinstalled`
+
+Sdkmanager is part of the Google tools. To get the tools you have to accept the Google license agreements.
+
+Delete `~/.buildozer` , then `buildozer android debug` and accept the Google license agreements.
+
+## 64-bit instead of 32-bit
+
+`ImportError: dlopen failed: "/data/data/org.test.myapp/files/app/_python_bundle/site-packages/cv2/cv2.so" is 64-bit instead of 32-bit`
+
+The build process included the wrong binary file.
+
+You can check this by changing arch from `armeabi-v7a` to `arm64-v8a`, `buildozer appclean`, and rebuild you will get a different error. This will say failed to link an x86_64 object, which is a more informative message.
+
+The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
+
+One of the app requirements needs a recipe (or needs to be specified differently).
+
+In this case the requirements for OpenCV is incorrectly specified, it should be `opencv` because that is the recipe name.
+
+## EM_X86_64 instead of EM_AARCH64
+
+`ImportError: dlopen failed: "<something>/_python_bundle/site-packages/<somepackage>/_binding.so" is for EM_X86_64 (62) instead of EM_AARCH64 (183)`
+
+The build process included the wrong binary file.
+
+The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
+
+One of the app requirements needs a recipe (or needs to be specified differently).
+
+## No module named '_Socket'
+
+`Module not found error: No module named '_Socket'`
+
+Occurs with some VMs (just Colab?) in response to `buildozer android deploy run`
+
+Because in most cases you can't `deploy run` from a VM because the VM can't see the physical USB port.
+
+Copy the `.apk` to the desktop, and [use adb](#appendix-a--using-adb).
+
+## weakly-referenced object
+
+`ReferenceError: weakly-referenced object no longer exists`
+
+This almost always due to a known issue in `kivy==1.11.1` with `Python >= 3.8`
+
+The fix for this case is to [use the current Kivy](#requirements).
+
+In any other case this issue can be hard to find. The programmer is assuming an object can be reused, and the garbage collector is assuming it will not be reused. One way to create this error is to assume some third party api is not stateful, when infact it does have state. 
+
+## OpenCV requires Android SDK Tools
+
+`Android SDK Tools: OpenCV requires Android SDK Tools revision 14 or newer.`
+
+Yes, but OpenCV also requires Android SDK Tools revision **30 or older** (I assume it is 30). Buildozer currently uses 31 and this revision does not contain the tools that the OpenCV build expects. Hence the misleading error message, which should be `OpenCV requires Android SDK Tools revision 30 or older.`. 
+
+It is possible to address this with a patch to `~/.buildozer` to include the older tools as described in [this thread](https://github.com/kivy/buildozer/issues/1144).
+
+## No such file or directory: 'ffmpeg'
+
+Occurs when the app is using subprocess() to run ffmpeg. 
+
+There is no ffmpeg executable. You have to build it for ARM. The recipe builds a library, not an executable. After building the executable, copy it to the working directory. Android does not allow installing to the usual desktop directories.
+
+## Unsupported class file major version 62
+
+`[DEBUG]:          General error during semantic analysis: Unsupported class file major version 62 `
+
+Version 62 Is Java 18. Error is probably due to an added aar built with Java 18. This is not going to work.
+
+The Java version used by p4a is the version required for the gradle version used. For p4a master, this can be any version between openJDK-11 and 17, the install instructions suggest 17.
+
+## Permission denied: '/storage/emulated/0/...'
+
+`PermissionError: [Errno 13] Permission denied: '/storage/emulated/0/org.test.x' - Kivy on android write and save file`
+
+This occurs on devices running Android 10 or higher. What was once known as "external strorage" is now "shared storage", and is a database not a file system. The app's "local storage" is now "private storage", private storage is still a file system. See the [Android Storage](#android-storage) section.
+
+App file operations should occur in private storage. If you want to share the file then it must be 'copied' from private to shared storage, this requires a database 'create' operation.
+
+The package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy) contains a `copy_to_shared()` method that implements the database create. Sample usage is [here](https://github.com/Android-for-Python/shared_storage_example/blob/main/main.py).
+
+## ModuleNotFoundError: No module named 'PIL'
+
+`ModuleNotFoundError: No module named 'PIL'`
+
+The most common cases are:
+
+Either 'pillow' was not specified in buildozer.spec [requirements](#requirements), in which case it must be added.
+
+Or buildozer has been run with root permissions. Running Buildozer as root is known to cause [non deterministic behavior](#non-deterministic-behavior), this is one example. 
+
+Simply running buildozer as user is not sufficent to fix the issue. Before running buildozer with user permissions you must first cleanup the corrupted state.
+
+```
+cd <project directory>
+sudo rm -rf .buildozer 
+sudo rm -rf ~/.buildozer
+# and if either of these exist:
+sudo rm -rf /.buildozer 
+sudo rm -rf ~/.gradle   
+```
+
+Check also that your project files are owned by a user, and not by root.
+
+## Requested API target 27 is not available
+
+`[ERROR]:   Build failed: Requested API target 27 is not available, install it with the SDK android tool.`
+
+In buildozer.spec set [android.api](#androidapi) to 33.
+
+## BUILD FAILURE: No main.py(o)
+
+`BUILD FAILURE: No main.py(o) found in your app directory`
+
+Things to check:
+
+A hidden directory (the name starts with a period) in the project path will cause this failure. This is a tool error.
+
+An app build error, try `python3 -m compileall main.py` to check for errors.
+
+## /usr/bin/gzip: 1: ELF : not found
+
+`/usr/bin/gzip: 1: ELF : not found`
+
+This is due to regressive behavior in WSL 1, [ref](https://askubuntu.com/questions/1417255/trying-to-unzip-a-tgz-in-wsl-but-get-elf-not-found-error).
+
+Check the current WSL version at the Windows Command prompt with `wsl -l -v`.
+
+The fix is to upgrade to WSL 2.
 
 
 
