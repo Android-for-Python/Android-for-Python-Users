@@ -42,6 +42,7 @@ Revised 2022-09-27
     + [Non-deterministic Behavior](#non-deterministic-behavior)
   * [Changing buildozer.spec](#changing-buildozerspec)
   * [Some buildozer.spec options](#some-buildozerspec-options)
+    + [package.name](#packagename)
     + [package.domain](#packagedomain)
     + [requirements](#requirements)
       - [requirements basics](#requirements-basics)
@@ -579,9 +580,13 @@ There is no magic universal buildozer.spec, its configuration depends on the fun
 
 [RTFM](https://github.com/kivy/buildozer/blob/master/docs/source/specifications.rst), really. And see the [KivyMD section](#kivymd).
 
+### package.name
+
+This must contain only alpha numeric characters, do not use any other characters.
+
 ### package.domain
 
-This must contain exctly one period (.) surrounded by alpha numeric characters, do not use any other special characters. Anthing else will cause a Gradle fail.
+This must contain exctly one period (.) surrounded by alpha numeric characters, do not use any other characters. Anthing else will cause a Gradle fail.
 
 ### requirements
 
