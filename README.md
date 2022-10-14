@@ -815,7 +815,7 @@ P4a provides Android specific utilities in the android package, this is only ava
 
 Plyer is an OS independent api for some non-POSIX OS features. See [Supported APIs](https://github.com/kivy/plyer#supported-apis). **Plyer is not well maintained**.
 
-Some Plyer modules and examples work on older Android versions, but not on newer Android versions. The Supported APIs table does not reflect this. For example Camera, Speech to text, Audio, and FileChooser do not work on newer Android versions.**
+**Some Plyer modules and examples work on older Android versions, but not on newer Android versions. The Supported APIs table does not reflect this. For example Camera, Speech to text, Audio, and FileChooser do not work on newer Android versions.**
 
 The [Plyer examples](https://github.com/kivy/plyer/tree/master/examples) are the documentation. 
 
