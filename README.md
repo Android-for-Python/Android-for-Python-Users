@@ -204,7 +204,7 @@ Shared storage is visible to all apps, and is persistent after an app is uninsta
 
 ### Android Version Issues
 
-On devices running Android 10 and later shared storage is implemented as a database, you cannot access shared storage with Python file operations because there is no file path. The Kivy and KivyMD file choosers do not work, you must use the Android Chooser.
+On devices running Android 10 and later or build android.api > 28 shared storage is implemented as a database, you cannot access shared storage with Python file operations because there is no file path. The Kivy and KivyMD file choosers do not work, you must use the Android Chooser.
 
 On devices with Android less than 10, shared storage is a file system and you can access file with `from android.storage import primary_external_storage_path`. But this **does not work** on devices running Android 10 or greater.
 
