@@ -58,7 +58,7 @@ Revised 2022-10-19
     + [android.ndk](#androidndk)
     + [android.archs](#androidarchs)
 - [Debugging](#debugging)
-  * [Get an Error Message](#get-an-error-messge)
+  * [Get an Error](#get-an-error)
   * [Slow App Start](#slow-app-start)
 - [Android Hardware](#android-hardware)
   * [Camera](#camera)
@@ -751,7 +751,7 @@ An install message INSTALL_FAILED_NO_MATCHING_ABIS means the apk was built for a
 
 # Debugging
 
-## Get an Error Message
+## Get an Error
 
 On the desktop your friends are the Python stack trace, and logging or print statements. It is no different on Android. To get these we [run the debugger](https://kivy.org/doc/stable/guide/android.html#debugging-your-application-on-the-android-platform).
 
