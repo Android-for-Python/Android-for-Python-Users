@@ -583,21 +583,21 @@ There is no magic universal buildozer.spec, its configuration depends on the fun
 
 Generally change as few options as possible; resist the temptation to overspecify, you will over constrain the implementation. 
 
- - If the app is for you, change the `title` and `[package.name]`(###packagename).
+ - If the app is for you, change the 'title' and '[package.name]'(###packagename).
 
- - If the app is for the store, also change `[package.domain]`(###packagedomain).
+ - If the app is for the store, also change ['package.domain'](###packagedomain).
 
- - If the app includes data files, add any necessary file extensions in [`source.include_exts`](###sourceinclude_exts).
+ - If the app includes data files, add any necessary file extensions in ['source.include_exts'](###sourceinclude_exts).
 
- - If the app uses Python packages that are normally installed with `pip3`, add these and their dependencies to [`requirements`](###requirements).
+ - If the app uses Python packages that are normally installed with 'pip3', add these and their dependencies to ['requirements'](###requirements).
 
- - You want pretty? add `presplash.filename` and `icon.filename`.
+ - You want pretty? add 'presplash.filename' and 'icon.filename'.
 
- - Add the required [Android Permissions](#app-permissions) to `android.permissions`.
+ - Add the required [Android Permissions](#app-permissions) to 'android.permissions'.
 
- - If the app is for the store you will need to increase the default [`android.api`](###androidapi)
+ - If the app is for the store you will need to increase the default ['android.api'](###androidapi)
 
- - Want to speedup debug builds? Remove one of the elements in [`android.archs`](###androidarchs)
+ - Want to speedup debug builds? Remove one of the elements in ['android.archs'](###androidarchs)
 
 There are a lots of other options about tool versions, Java, and stuff; most users can and should ignore these. 
 
