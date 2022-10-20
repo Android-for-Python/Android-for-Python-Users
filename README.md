@@ -583,9 +583,9 @@ There is no magic universal buildozer.spec, its configuration depends on the fun
 
 Generally change as few options as possible; resist the temptation to overspecify, you will over constrain the implementation. 
 
- - If the app is for you, change the `title` and [`package.name`](###packagename).
+ - If the app is for you, change the `title` and `[package.name](###packagename)`.
 
- - If the app is for the store, also change [`package.domain`](###packagedomain).
+ - If the app is for the store, also change `[package.domain](###packagedomain)`.
 
  - If the app includes data files, add any necessary file extensions in [`source.include_exts`](###sourceinclude_exts).
 
