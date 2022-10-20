@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-09-27
+Revised 2022-10-19
 
 # Table of Contents
 
@@ -41,6 +41,7 @@ Revised 2022-09-27
     + [Most Common Issues](#most-common-issues)
     + [Non-deterministic Behavior](#non-deterministic-behavior)
   * [Changing buildozer.spec](#changing-buildozerspec)
+  * [What should I change?](#what-should-i-change)
   * [Some buildozer.spec options](#some-buildozerspec-options)
     + [package.name](#packagename)
     + [package.domain](#packagedomain)
@@ -57,6 +58,8 @@ Revised 2022-09-27
     + [android.ndk](#androidndk)
     + [android.archs](#androidarchs)
 - [Debugging](#debugging)
+    + [Get an Error Message](#get-an-error-messge)
+    + [Slow App Start](#slow-app-start)
 - [Android Hardware](#android-hardware)
   * [Camera](#camera)
   * [Keyboard](#keyboard)
@@ -576,6 +579,28 @@ There may be some exceptions to this, the only one I know to be safe is one can 
 
 There is no magic universal buildozer.spec, its configuration depends on the functionality of your app. 
 
+## What should I change?
+
+Generally change as few options as possible; resist the temptation to overspecify, you will over constrain the implementation. 
+
+ - If the app is for you, change the `title` and [`package.name`](###packagename).
+
+ - If the app is for the store, also change [`package.domain`](###packagedomain).
+
+ - If the app includes data files, add any necessary file extensions in [`source.include_exts`](###sourceinclude_exts).
+
+ - If the app uses Python packages that are normally installed with `pip3`, add these and their dependencies to [`requirements`](###requirements).
+
+ - You want pretty? add `presplash.filename` and `icon.filename`.
+
+ - Add the required [Android Permissions](#app-permissions) to `android.permissions`.
+
+ - If the app is for the store you will need to increase the default [`android.api`](###androidapi)
+
+ - Want to speedup debug builds? Remove one of the elements in [`android.archs`](###androidarchs)
+
+There are a lots of other options about tool versions, Java, and stuff; most users can and should ignore these. 
+
 ## Some buildozer.spec options
 
 [RTFM](https://github.com/kivy/buildozer/blob/master/docs/source/specifications.rst), really. And see the [KivyMD section](#kivymd).
@@ -726,6 +751,8 @@ An install message INSTALL_FAILED_NO_MATCHING_ABIS means the apk was built for a
 
 # Debugging
 
+## Get an Error Message
+
 On the desktop your friends are the Python stack trace, and logging or print statements. It is no different on Android. To get these we [run the debugger](https://kivy.org/doc/stable/guide/android.html#debugging-your-application-on-the-android-platform).
 
 First connect the device via USB, on the Android device enable 'Developer Mode' and 'USB debugging'.
@@ -752,6 +779,18 @@ If you don't see an error message with the Python only messages, there is probab
 ```
 
 It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
+
+## Slow App Start
+
+On the desktop if you start a Kivy app from a desktop icon, the app is slower to start that say from an IDE. This is because Python has to start, on Android the same delay due to Python starting exists. On Android the splash screen is used to distract from this delay; the splash screen is a work around, not a cause of the delay.
+
+If your app is *unusually slow* to start it is because it is doing too much work in the `build()` and `on_start()` methods. This is your code, you can change this behavior. Common causes are monolithic `kv`, compute intensive Python in the above methods, or I/O intensive Python in the above methods. 
+
+A solution for monolithic `kv` is to have a `kv` file for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as lazy loading.
+
+Another common solution is to schedule any initial compute or I/O intensive tasks to occur after `on_start()`, either on demand or on some schedule.
+
+There may be other causes, its your code.
 
 # Android Hardware
 
