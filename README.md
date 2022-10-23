@@ -577,6 +577,8 @@ buildozer android debug
 ```
 There may be some exceptions to this, the only one I know to be safe is one can add (but not change version of, or remove) a package in the [requirements](#requirements) list without the appclean.
 
+You don't need to always do a `buildozer appclean` if you don't change buildozer.spec.
+
 There is no magic universal buildozer.spec, its configuration depends on the functionality of your app. 
 
 ## What should I change?
