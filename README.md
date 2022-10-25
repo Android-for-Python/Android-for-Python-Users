@@ -627,7 +627,7 @@ This is the list of pip packages (and possibly versions) that your app imports f
 
 Do not add Python system modules, only packages you might install with pip3 on the desktop. 
 
-There are some pip3 packages that are added automatically, no need to put these in requirements: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android, certifi`.
+There are some pip3 packages that are added automatically, no need to put these in requirements: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android`.
 
 #### Find the Dependencies
 
@@ -1561,7 +1561,7 @@ The fix is to upgrade to WSL 2.
 
 `[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate`
 
-Add certifi to requirements.
+Add `certifi` to [requirements](#requirements).
 
 ## gradlew failed!
 
