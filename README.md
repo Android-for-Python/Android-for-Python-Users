@@ -122,6 +122,7 @@ Revised 2022-10-19
   * [/usr/bin/gzip: 1: ELF : not found](#usrbingzip-1-elf--not-found)
   * [SSL: CERTIFICATE_VERIFY_FAILED](#ssl-certificate_verify_failed)
   * [gradlew failed!](#gradlew-failed)
+  * [android:exported](#androidexported)
   
 # Introduction
 
@@ -1570,3 +1571,11 @@ Add `certifi` to [requirements](#requirements).
 The Gradle error message is further up the log file. Search upwards for 'BUILD FAILED' or 'what went wrong' (without the ''), the error messages will be in this general area.
 
 Generally Gradle errors are due to an incorrect Java version, Java usage errors, missing Java files, a Java jar [built with a newer](#unsupported-class-file-major-version-62) version of Java, missing Android Java packages, or misconfigured Android resource or configuration files. Gradle does not analyze Python errors.
+
+## android:exported
+
+`[DEBUG]: android:exported needs to be explicitly specified for element <whatever>`
+
+This is a Gradle error message, it is about using an obsolete version of the Android package named in the message.
+
+You can research Android package versions at Maven https://mvnrepository.com/repos/google, and you will need a version that is compatible which whatever Python code you are using.
