@@ -120,7 +120,10 @@ Revised 2022-10-19
   * [Requested API target 27 is not available](#requested-api-target-27-is-not-available)
   * [BUILD FAILURE: No main.py(o)](#build-failure-no-mainpyo)
   * [/usr/bin/gzip: 1: ELF : not found](#usrbingzip-1-elf--not-found)
-
+  * [SSL: CERTIFICATE_VERIFY_FAILED](#ssl-certificate-verify-failed)
+  * [gradlew failed!](#gradlew-failed)
+)
+  
 # Introduction
 
 Python and Kivy are portable across operating systems because of POSIX, Python wheels, and pip. However Android is not POSIX compliant, wheels are not usually available for Android, and pip is not installed on Android. Clearly many apps won't 'just work' on Android. The document is about porting a Kivy app to Android.
@@ -1492,7 +1495,7 @@ There is no ffmpeg executable. You have to build it for ARM. The recipe builds a
 
 `[DEBUG]:          General error during semantic analysis: Unsupported class file major version 62 `
 
-Version 62 Is Java 18. Error is probably due to an added aar built with Java 18. This is not going to work.
+Version 62 Is Java 18. Error is probably due to an added jar built with Java 18. This is not going to work.
 
 The Java version used by p4a is the version required for the gradle version used. For p4a master, this can be any version between openJDK-11 and 17, the install instructions suggest 17.
 
@@ -1555,5 +1558,16 @@ Check the current WSL version at the Windows Command prompt with `wsl -l -v`.
 
 The fix is to upgrade to WSL 2.
 
+## SSL: CERTIFICATE_VERIFY_FAILED
 
+`[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate`
 
+Add certifi to requirements.
+
+## gradlew failed!
+
+`[WARNING]: ERROR: whatever/.buildozer/android/platform/build-arm64-v8a_armeabi-v7a/dists/appname/gradlew failed!`
+
+The Gradle error message is further up the log file. Search upwards for 'BUILD FAILED' or 'what went wrong' (without the ''), the error messages will be in this general area.
+
+Generally Gradle errors are due to an incorrect Java version, Java usage errors, missing Java files, a Java jar [built with a newer](#unsupported-class-file-major-version-62) version of Java, missing Android Java packages, or misconfigured Android resource or configuration files. Gradle does not analyze Python errors.
