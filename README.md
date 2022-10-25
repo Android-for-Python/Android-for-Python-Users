@@ -120,9 +120,8 @@ Revised 2022-10-19
   * [Requested API target 27 is not available](#requested-api-target-27-is-not-available)
   * [BUILD FAILURE: No main.py(o)](#build-failure-no-mainpyo)
   * [/usr/bin/gzip: 1: ELF : not found](#usrbingzip-1-elf--not-found)
-  * [SSL: CERTIFICATE_VERIFY_FAILED](#ssl-certificate-verify-failed)
+  * [SSL: CERTIFICATE_VERIFY_FAILED](#ssl-certificate_verify_failed)
   * [gradlew failed!](#gradlew-failed)
-)
   
 # Introduction
 
