@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-10-19
+Revised 2022-10-26
 
 # Table of Contents
 
@@ -410,7 +410,7 @@ There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy
 
 ## Specifying a Service 
 
-We assign the service a name, and associate this with script file name in `buildozer.spec`. *The service name must be a valid Java class name.* In the sample below `the_service.py` is the name of the script, and `Worker` is the name we give the service.
+We assign the service a name, and associate this with script file name in `buildozer.spec`. *The service name must be a valid Java class name. The first character and no other character must be upper case.* In the sample below `the_service.py` is the name of the script, and `Worker` is the name we give the service.
 
 ```
 # (list) List of service to declare
@@ -789,11 +789,13 @@ It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but 
 
 On the desktop if you start a Kivy app from a desktop icon, the app is slower to start than say from an IDE. This is because from the icon Python has to start first, on Android the same delay due to Python starting exists. On Android the splash screen is used to distract from this delay; the splash screen is a work around, not a cause of the delay.
 
-If your app is *unusually slow* to start, it is because it is doing too much work in the `build()` and `on_start()` methods. A common symptom of this is is a black screen *after* the splash screen has closed but before the app displays. This is your code, you can change this behavior. Common causes are monolithic `kv`, compute intensive Python in the above methods, or I/O intensive Python in the above methods. 
+If your app is *unusually slow* to start, it is because it is doing too much work in the `build()` and `on_start()` methods. A common symptom of this is is a black screen *after* the splash screen has closed but before the app displays. This is your code, you can change this behavior. Common causes are monolithic `kv`, compute intensive Python in the above methods, I/O intensive Python in the above methods, or too many `autoclass()` statements.
 
 A solution for monolithic `kv` is to have a `kv` *file* for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as lazy loading.
 
 Another common solution is to schedule any initial Python compute or I/O intensive tasks to occur after `on_start()`, either on demand or on some schedule.
+
+Autoclass is expensive in startup time, if you have 10 or more autoclass statements this may be significant on older devices. The solution is to throw out most of that clever Pyjnius code you spent so long perfecting, and move the code to a Java class in a .java file. Then reference your Java with one or two autoclass in the usual way. Include your Java in the build with Buildozer's `android.add_src`.
 
 There may be other causes, its your code.
 
@@ -913,13 +915,17 @@ from android import mActivity
     mActivity.getContentResolver() 
 ```
 
-It is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format).
+Add your own Java to the package using the Buildozer options `android.add_src` and `android.add_jars`, see buildozer.spec.
+
+Add AndroidX Java packages (or other Maven packages) using the Buildozer option `android.gradle_dependencies`, see buildozer.spec and [Maven AndroidX Group](https://mvnrepository.com/artifact/androidx).
+
+More challenging, it is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This implimentation is only visible in Python, Java classes cannot see it (though they can see the Java defined interface).
 
 Note: some documentation examples are obsolete. If you see '.renpy.' as a sub field in an autoclass argument replace it with '.kivy.'.
 
 ### Pyjnius Performance
 
-The `autoclass()` method add significant latency during the app start. If the app contains more than perhaps a dozen `autoclass()` calls you will probably notice the extra app startup time.
+The `autoclass()` statement adds significant latency during the app start. If the app contains more than perhaps a dozen `autoclass()` calls you will probably notice the extra app startup time.
 
 The way to address this is to create a Java file that references the Java classes that were referenced with autoclass(). Then reference your Java class with `autoclass()`. A Java file is included in the project using Buildozer's `android.add_src`. If your Java file is located at `<project>/src/org/me/myproject/my.java` then use `android.add_src = src` .
 
@@ -1578,4 +1584,4 @@ Generally Gradle errors are due to an incorrect Java version, Java usage errors,
 
 This is a Gradle error message, it is about using an obsolete version of the Android package named in the message.
 
-You can research Android package versions at Maven https://mvnrepository.com/repos/google, and you will need a version that is compatible which whatever Python code you are using.
+You can research Android package versions at [Maven](https://mvnrepository.com), and you will need a version that is compatible which whatever Python code you are using.
