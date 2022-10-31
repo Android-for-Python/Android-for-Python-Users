@@ -1599,7 +1599,7 @@ Some possibilities:
 
  - A corrupted build [try](#changing-buildozerspec). This probably it not the issue but if it is you'll save a lot of work.
 
- - Pyjnius code does not take account of two garbage collectors, [modify your code](#pyjnius-memory-management).
+ - Pyjnius code that does not take into account the use of two garbage collectors, [modify your code](#pyjnius-memory-management).
 
- - Plyer or android_permissions calls that does not occur in the 'App functions' block of the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle). Modify your code.
+ - Plyer or android_permissions calls that do not occur in the 'App functions' block of the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle). Modify your code.
 
