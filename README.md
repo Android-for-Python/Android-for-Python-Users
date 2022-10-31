@@ -1591,9 +1591,9 @@ You can research Android package versions at [Maven](https://mvnrepository.com),
 
 `DEBUG : Cause: null pointer dereference`
 
-This message is not from Python, it is from the Android run time system. Some Android api call has been corrupted. This is a memory corruption issue it may exhibit differently (or not at all) on different devices. Probably a misuse of Pyjnius, Plyer, or android_permissions.
+This message is not from Python, it is from the Android run time system. Some Android api call has been corrupted. This is a memory corruption issue it may exhibit differently (or not at all) on different devices. Probably due to a misuse of Pyjnius, Plyer, or android_permissions.
 
-Memmory issues are incredibly hard to debug, the error may or may not be local to the symptom. So removing code from the app may just move the issue, not remove the issue. That doesn't mean don't cut you app down, it means it is not sufficent to see you app work - you must also understand which code of yours broke the app.
+Memmory issues are incredibly hard to debug, the error may or may not be local to the symptom. So removing code from the app may just move the issue, not remove the issue. That doesn't mean don't cut you app down, it means it is not sufficent to see your app work - you must also understand which code of yours broke the app.
 
 Some possibilities:
 
