@@ -123,6 +123,7 @@ Revised 2022-10-26
   * [SSL: CERTIFICATE_VERIFY_FAILED](#ssl-certificate_verify_failed)
   * [gradlew failed!](#gradlew-failed)
   * [android:exported](#androidexported)
+  * [null pointer dereference](#null-pointer-dereference)
   
 # Introduction
 
@@ -1585,3 +1586,20 @@ Generally Gradle errors are due to an incorrect Java version, Java usage errors,
 This is a Gradle error message, it is about using an obsolete version of the Android package named in the message.
 
 You can research Android package versions at [Maven](https://mvnrepository.com), and you will need a version that is compatible which whatever Python code you are using.
+
+## null pointer dereference
+
+`DEBUG : Cause: null pointer dereference`
+
+This message is not from Python, it is from the Android run time system. Some Android api call has been corrupted. This is a memory corruption issue it may exhibit differently (or not at all) on different devices. Probably a misuse of Pyjnius, Plyer, or android_permissions.
+
+Memmory issues are incredibly hard to debug, the error may or may not be local to the symptom. So removing code from the app may just move the issue, not remove the issue. That doesn't mean don't cut you app down, it means it is not sufficent to see you app work - you must also understand which code of yours broke the app.
+
+Some possibilities:
+
+ - A corrupted build [try](#changing-buildozerspec). This probably it not the issue but if it is you'll save a lot of work.
+
+ - Pyjnius code does not take account of two garbage collectors, [modify your code](#pyjnius-memory-management).
+
+ - Plyer or android_permissions calls that does not occur in the 'App functions' block of the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle). Modify your code.
+
