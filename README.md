@@ -124,6 +124,7 @@ Revised 2022-10-26
   * [gradlew failed!](#gradlew-failed)
   * [android:exported](#androidexported)
   * [null pointer dereference](#null-pointer-dereference)
+  * [No module named 'android'](#no-module-named-android)
   
 # Introduction
 
@@ -1603,3 +1604,18 @@ Some possibilities:
 
  - Plyer or android_permissions calls that do not occur in the 'App functions' block of the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle). Modify your code.
 
+ - It is also possible that an [impure Python package that has no recipe](#wheels) could generate this error; though [other error messages](#em_x86_64-instead-of-em_aarch64) [or](#64-bit-instead-of-32-bit) are more likely.
+
+## No module named 'android'
+
+`ModuleNotFoundError: No module named 'android'`
+
+The android package is only available on Android.
+It depends on Android api implementations, which are only available on Android.
+Perhaps you want platform specific code:
+
+```python
+from kivy.utils import platform
+if platform == 'android':
+   # whatever
+```
