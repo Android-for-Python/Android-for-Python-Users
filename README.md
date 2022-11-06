@@ -452,7 +452,6 @@ As explained in the next section this does not work with a sticky foreground ser
 
 When debugging, the default Python filter excludes any print statments in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
 
-
 ## Service Lifetime
 
 The lifetime of the service is limited by the service type. Three types of service are avilabile, the difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
@@ -498,9 +497,9 @@ Because an app may stop and restart while a sticky foreground service is running
 
 ## Service Notifications
 
-For build api < 33 a foreground service always places a notification icon in the task bar. Depending on version there may be a few second delay in the appearance of the icon, this delay is an Android 'feature' and does not indicate that the foreground service has not started.
+For android.api < 33 a foreground service always places a notification icon in the task bar. Depending on Android device version there may be an up to 10 second delay in the appearance of the icon, this delay is an Android 'feature' and does not indicate that the foreground service has not started.
 
-For build api >= 33 a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is requested and granted.
+For android.api >= 33 a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is specified in buildozer.spec and as a run time permission. If you do not do this, app behavior will vary with device version. See the [Android documentation](https://developer.android.com/develop/ui/views/notifications/notification-permission) and [App Permissions](#app-permissions). No notification does not mean the service is not started.
 
 The default icon displayed in the task bar is derived from the app icon, and for the Kivy icon it is a white circle. There is no api that will change this, or example of how to change this.  
 
