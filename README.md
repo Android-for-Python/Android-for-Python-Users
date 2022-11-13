@@ -1629,8 +1629,10 @@ if platform == 'android':
 
 ## Hunk #1 FAILED
 
-`STDOUT:
+```
+STDOUT:
 patching file somefile
-Hunk #1 FAILED`
+Hunk #1 FAILED
+```
 
 Usually due to [version pinning](#version-pinning) a compile recipe, using a package version that must have a different compile recipe. Remove the version pin, or locally modify the recipy. 
