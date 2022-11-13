@@ -126,7 +126,7 @@ Revised 2022-10-26
   * [android:exported](#androidexported)
   * [null pointer dereference](#null-pointer-dereference)
   * [No module named 'android'](#no-module-named-android)
-  * [## Hunk #1 FAILED](#hunk-1-failed)
+  * [Hunk #1 FAILED](#hunk-1-failed)
 
 # Introduction
 
