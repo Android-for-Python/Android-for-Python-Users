@@ -47,6 +47,7 @@ Revised 2022-10-26
     + [package.domain](#packagedomain)
     + [requirements](#requirements)
       - [requirements basics](#requirements-basics)
+      - [Version pinning](#version-pinning)
       - [Find the Dependencies](#find-the-dependencies)
       - [Kivy Widget Dependencies](#kivy-widget-dependencies)
       - [Requirements Examples](#requirements-examples)
@@ -125,7 +126,8 @@ Revised 2022-10-26
   * [android:exported](#androidexported)
   * [null pointer dereference](#null-pointer-dereference)
   * [No module named 'android'](#no-module-named-android)
-  
+  * [## Hunk #1 FAILED](#hunk-1-failed)
+
 # Introduction
 
 Python and Kivy are portable across operating systems because of POSIX, Python wheels, and pip. However Android is not POSIX compliant, wheels are not usually available for Android, and pip is not installed on Android. Clearly many apps won't 'just work' on Android. The document is about porting a Kivy app to Android.
@@ -630,6 +632,12 @@ This is the list of pip packages (and possibly versions) that your app imports f
 Do not add Python system modules, only packages you might install with pip3 on the desktop. 
 
 There are some pip3 packages that are added automatically, no need to put these in requirements: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android`.
+
+#### Version pinning
+
+If a requirement is a package that requires a [recipe](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes), version pinning may result in a build error. Because a compile recipe is created for the version specified in the recipe, and may not apply to other versions if the compile model has changed.
+
+Your options are to use the default version, or [locally modify the recipe](#appendix-c--locally-modifying-a-recipe).
 
 #### Find the Dependencies
 
@@ -1618,3 +1626,11 @@ from kivy.utils import platform
 if platform == 'android':
    # whatever
 ```
+
+## Hunk #1 FAILED
+
+`STDOUT:
+patching file somefile
+Hunk #1 FAILED`
+
+Usually due to [version pinning](#version-pinning) a compile recipe, using a package version that must have a different compile recipe. Remove the version pin, or locally modify the recipy. 
