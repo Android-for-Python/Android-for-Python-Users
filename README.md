@@ -1623,7 +1623,7 @@ Perhaps you want platform specific code:
 ```python
 from kivy.utils import platform
 if platform == 'android':
-   import android
+    import android
 ```
 
 ## Hunk #1 FAILED
