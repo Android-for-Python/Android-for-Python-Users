@@ -1617,8 +1617,7 @@ Some possibilities:
 
 `ModuleNotFoundError: No module named 'android'`
 
-The android package is only available on Android.
-It depends on Android api implementations, which are only available on Android.
+The android package is only available on Android. This error occurs on a deskop, because there is no Android api implementation, this is only available on Android.
 Perhaps you want platform specific code:
 
 ```python
