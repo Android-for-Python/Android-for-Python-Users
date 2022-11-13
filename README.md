@@ -1635,4 +1635,4 @@ patching file somefile
 Hunk #1 FAILED
 ```
 
-Usually due to [version pinning](#version-pinning) a compile recipe, using a package version that must have a different compile recipe. Remove the version pin, or locally modify the recipy. 
+Usually due to [version pinning](#version-pinning) a compile recipe, using a package version that is incompatible with the compile recipe. Remove the version pin, or locally modify the recipy. 
