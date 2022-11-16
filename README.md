@@ -1629,7 +1629,7 @@ Memory issues are incredibly hard to debug, the error may or may not be local to
 
 Some possibilities:
 
- - A corrupted build [try](#changing-buildozerspec). This probably it not the issue but if it is you'll save a lot of work.
+ - A corrupted build [try an appclean](#changing-buildozerspec). This probably it not the issue but if it is you'll save a lot of work.
 
  - Pyjnius code that does not take into account the use of two garbage collectors, [modify your code](#pyjnius-memory-management).
 
