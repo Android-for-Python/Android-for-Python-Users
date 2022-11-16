@@ -1415,6 +1415,28 @@ p4a.branch = some_branch
 
 # Appendix H : Cryptic Error Messages
 
+  * [No module named 'msvcrt'](#no-module-named-msvcrt)
+  * [Aidl not found](#aidl-not-found)
+  * [Sdkmanager is not installed](#sdkmanager-is-not-installed)
+  * [64-bit instead of 32-bit](#64-bit-instead-of-32-bit)
+  * [EM_X86_64 instead of EM_AARCH64](#em_x86_64-instead-of-em_aarch64)
+  * [No module named '_Socket'](#no-module-named-_socket)
+  * [weakly-referenced object](#weakly-referenced-object)
+  * [OpenCV requires Android SDK Tools](#opencv-requires-android-sdk-tools)
+  * [No such file or directory: 'ffmpeg'](#no-such-file-or-directory-ffmpeg)
+  * [Unsupported class file major version 62](#unsupported-class-file-major-version-62)
+  * [Permission denied: '/storage/emulated/0/...'](#permission-denied-storageemulated0)
+  * [ModuleNotFoundError: No module named 'PIL'](#modulenotfounderror-no-module-named-pil)
+  * [Requested API target 27 is not available](#requested-api-target-27-is-not-available)
+  * [BUILD FAILURE: No main.py(o)](#build-failure-no-mainpyo)
+  * [/usr/bin/gzip: 1: ELF : not found](#usrbingzip-1-elf--not-found)
+  * [SSL: CERTIFICATE_VERIFY_FAILED](#ssl-certificate_verify_failed)
+  * [gradlew failed!](#gradlew-failed)
+  * [android:exported](#androidexported)
+  * [null pointer dereference](#null-pointer-dereference)
+  * [No module named 'android'](#no-module-named-android)
+  * [Hunk #1 FAILED](#hunk-1-failed)
+
 ## No module named 'msvcrt'
 
 `No module named 'msvcrt'` and `No module named '_posixsubprocess'`
@@ -1600,6 +1622,8 @@ You can research Android package versions at [Maven](https://mvnrepository.com),
 `DEBUG : Cause: null pointer dereference`
 
 This message is not from Python, it is from the Android run time system. Some Android api call has been corrupted. This is a memory corruption issue it may exhibit differently (or not at all) on different devices. Probably due to a misuse of Pyjnius, Plyer, or android_permissions.
+
+**ALERT** There is an [issue with KivyMD 1.1.1](https://github.com/kivymd/KivyMD/issues/1393) that can cause this issue, this issue does not appear to exist in KivyMD 1.0.2 .
 
 Memory issues are incredibly hard to debug, the error may or may not be local to the symptom. So removing code from the app may just move the issue, not remove the issue. That doesn't mean don't cut your app down, it means it is not sufficent to see your app work - you must also understand which code of yours broke the app.
 
