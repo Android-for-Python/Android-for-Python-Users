@@ -1203,13 +1203,15 @@ The official [Android signing overview is here](https://developer.android.com/st
 
 For a Buildozer build, setting up signing consists of two steps:
 
- - Create a key, do this once for an app. You will use `keytool` for this.
+ - Create a key, do this once for an app. You will use `keytool` for this. Save the keystore, you will need it in the future to update the app in the store.
 
  - Tell Bulldozer to sign the app using the key. You will set environment variables to pass the information about the key to Buildozer.   
 
 [Follow the Kivy signing instructions](https://github.com/kivy/kivy/wiki/Creating-a-Release-APK) but don't just follow the instructions, read all the annotated comments by HeRo002. The instructions are flawed, but in combination with the comments they are good.
 
-Here are some [very detailed signing instructions](https://gist.github.com/Guhan-SenSam/fa4ed215ef3419e7b3154de5cb71f641). 
+Here are some [very detailed signing instructions](https://gist.github.com/Guhan-SenSam/fa4ed215ef3419e7b3154de5cb71f641).
+
+If you are updating an app in the store, you **must have** the same keystore that was previously used to submit the app to the store. Check that the key values are exported (see links above) as this is how the keys are passed to Buildozer.   
 
 ## Build the release
 
