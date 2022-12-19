@@ -1664,7 +1664,9 @@ patching file somefile
 Hunk #1 FAILED
 ```
 
-Usually due to [version pinning](#version-pinning) a compile recipe, the error is due to pinning version that is incompatible with the compile recipe. Remove the version pin, or locally modify the recipy.
+Usually this is due to [version pinning](#version-pinning) a compile recipe, the error is due to pinning a version that is incompatible with the compile recipe.
+
+Remove the version pin, or locally modify the recipe.
 
 ## Kivy is too old
 
