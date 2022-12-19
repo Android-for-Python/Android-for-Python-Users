@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-10-26
+Revised 2022-12-19
 
 # Table of Contents
 
@@ -127,6 +127,7 @@ Revised 2022-10-26
   * [null pointer dereference](#null-pointer-dereference)
   * [No module named 'android'](#no-module-named-android)
   * [Hunk #1 FAILED](#hunk-1-failed)
+  * [Kivy is too old](#kivy-is-too-old)
 
 # Introduction
 
@@ -1438,6 +1439,8 @@ p4a.branch = some_branch
   * [null pointer dereference](#null-pointer-dereference)
   * [No module named 'android'](#no-module-named-android)
   * [Hunk #1 FAILED](#hunk-1-failed)
+  * [Kivy is too old](#kivy-is-too-old)
+
 
 ## No module named 'msvcrt'
 
@@ -1661,4 +1664,14 @@ patching file somefile
 Hunk #1 FAILED
 ```
 
-Usually due to [version pinning](#version-pinning) a compile recipe, the error is due to pinning version that is incompatible with the compile recipe. Remove the version pin, or locally modify the recipy. 
+Usually due to [version pinning](#version-pinning) a compile recipe, the error is due to pinning version that is incompatible with the compile recipe. Remove the version pin, or locally modify the recipy.
+
+## Kivy is too old
+
+`Exception: The version of Kivy installed on this system is too old. (You have 2.1.0, but the application requires 2.2.0)`
+
+This message comes from KivyMD.
+
+ - Either use KivyMD==1.0.2
+
+ - Or install KivyMD's custom Kivy (2.2.0.dev0), this is **not** kivy==master. Install instructions are here https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device
