@@ -1672,7 +1672,7 @@ Remove the version pin, or locally modify the recipe.
 
 `Exception: The version of Kivy installed on this system is too old. (You have 2.1.0, but the application requires 2.2.0)`
 
-This message comes from KivyMD.
+This message comes from KivyMD, and is seen on all platforms.
 
  - Either use KivyMD==1.0.2
 
