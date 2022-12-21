@@ -549,6 +549,8 @@ Finally it is normal Android behavior that if a user denies permission, it may n
 
 Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL, Colab, or VirtualBox to run Buildozer. Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help and in software maturity.
 
+**If using WSL always build in a directory on the Linux partition (somewhere under `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build on the Windows partition, this may have unpredicatable results.**
+
 [Install documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), RTFM, really.
 
 **Test your Buildozer install by building (`buildozer android debug`) and running [Hello World](https://kivy.org/doc/stable/guide/basic.html#create-an-application) with the default `buildozer.spec` (create this with `buildozer init`). I know you just want to see your app run on Android, but this simple first step will provide you will a framework to address any future issues.**
