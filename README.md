@@ -549,7 +549,7 @@ Finally it is normal Android behavior that if a user denies permission, it may n
 
 Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL, Colab, or VirtualBox to run Buildozer. Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help and in software maturity.
 
-**If using WSL always build in a directory on the Linux partition (somewhere under `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build on the Windows partition, this may have unpredicatable results.**
+**If using WSL, always build in a directory on the Linux partition (somewhere under `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build on the Windows partition (`/mnt/c/`), this may give unpredicatable results.**
 
 [Install documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), RTFM, really.
 
