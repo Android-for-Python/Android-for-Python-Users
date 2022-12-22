@@ -561,7 +561,7 @@ Some things you can do now to prevent surprises later:
 
 * [Read the install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) to re-check that all the dependencies are installed.
 
-* Re-check that requirements in buildozer.spec are fully and correctly specified.
+* Re-check that the requirements in buildozer.spec are fully and correctly specified.
 
 * Re-check that each of the requirements is either pure Python or has a recipe.
 
