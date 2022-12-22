@@ -557,15 +557,15 @@ Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL,
 
 ### Most Common Issues
 
-Errors during a Buildozer build are usually because the user:
+Some things you can do now to prevent surprises later:
 
-* Failed to [read the install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), and so failed to install a dependency.
+* [Read the install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) to re-check that all the dependencies are installed.
 
-* Failed to accept the Google License Agreements.
+* Re-check that requirements in buildozer.spec are fully and correctly specified.
 
-* Failed to correctly specify requirements.
+* Re-check that each of the requirements is either pure Python or has a recipe.
 
-* Failed to check if there is a recipe for an impure Python package.
+* The first time Buildozer is run type `y` each time you are asked to accept a Google License Agreement.
 
 ### Non-deterministic Behavior
 
