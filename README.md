@@ -526,12 +526,14 @@ Any app manifest permission documented as having "Protection level: dangerous" a
 
 Many old Kivy examples show `request_permissions()` at the top of main.py, on newer versions of Android this will lead to unexpected behavior. Because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
 
-Currently `request_permissions()` can only be called *after (not from)* `on_start()`, or from `build()`, and can only be called once per time step. Generally calling after `on_start` simplifies the app control logic for handling both the 'request' case and the 'previously granted' case.
+Currently `request_permissions()` can only be called *after (not from)* `on_start()`, or from `build()`, and can only be called once per time step. Generally calling after `on_start` simplifies the app control logic for handling both the 'request' case and the 'previously granted' case; of course the user may deny permission and the app must handle this case.
 
 ```python
-from android.permissions import request_permissions, Permission
+from android.permissions import request_permissions, check_permission, Permission
 
      request_permissions([Permission.CAMERA, Permission.RECORD_AUDIO])
+
+     ok = check_permission(Permission.READ_EXTERNAL_STORAGE)
 ```
 
 An implementation examle is the [`AndroidPermissions`](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) class which encapsulates permission behavior. You can copy this file and modify the actual permissions for your app. Then instantiate the class like this:
