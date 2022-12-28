@@ -536,7 +536,7 @@ from android.permissions import request_permissions, check_permission, Permissio
      ok = check_permission(Permission.READ_EXTERNAL_STORAGE)
 ```
 
-An implementation examle is the [`AndroidPermissions`](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) class which encapsulates permission behavior. You can copy this file and modify the actual permissions for your app. Then instantiate the class like this:
+An implementation example is the [`AndroidPermissions`](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) class which encapsulates permission behavior. You can copy this file and modify the actual permissions for your app. Then instantiate the class like this:
 
 ```python
     def on_start(self):
