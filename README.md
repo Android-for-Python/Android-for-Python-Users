@@ -534,7 +534,7 @@ from android.permissions import request_permissions, Permission
      request_permissions([Permission.CAMERA, Permission.RECORD_AUDIO])
 ```
 
-An implementation examle is [the `AndroidPermissions` class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior. You can copy this file and modify the actual permissions for your app. Then instantiate the class like this:
+An implementation examle is the [`AndroidPermissions`](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) class which encapsulates permission behavior. You can copy this file and modify the actual permissions for your app. Then instantiate the class like this:
 
 ```python
     def on_start(self):
