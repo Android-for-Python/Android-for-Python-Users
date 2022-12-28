@@ -518,30 +518,36 @@ Android restricts access to many features. An app must declare the permissions i
 
 Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, READ_EXTERNAL_STORAGE, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions. 
 
-Python for Android always enables manifest WRITE_EXTERNAL_STORAGE permission. WRITE_EXTERNAL_STORAGE implies READ_EXTERNAL_STORAGE. [WRITE_EXTERNAL_STORAGE is never required](https://developer.android.com/training/data-storage#permissions) for devices running api >= 30.
+WRITE_EXTERNAL_STORAGE is never required (https://developer.android.com/training/data-storage#permissions) for api >= 30.
 
 ## User permissions
 
-Any app manifest permission documented as having "Protection level: dangerous" additionally requires a user permission. The four listed above are all "dangerous". User permission requests are seen as the dialog that Android apps present to the user. From Python this is initiated with a `request_permissions()` call.
+Any app manifest permission documented as having "Protection level: dangerous" additionally requires a user permission. From Python this is initiated with a `request_permissions()` call. User permission requests are seen as the dialog that Android apps present to the user. Of the four manifest permissions listed above, three are "dangerous". 
 
-Many old examples show request_permissions() at the top of main.py, on newer versions of Android this will lead to unexpected behavior. Because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
+Many old Kivy examples show `request_permissions()` at the top of main.py, on newer versions of Android this will lead to unexpected behavior. Because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
 
-One easy approach is to copy [the `AndroidPermissions` class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior, and modify the actual permissions for your app. Then instantiate the class like this:
+Currently `request_permissions()` can only be called *after (not from)* `on_start()`, or from `build()`, and can only be called once per time step. Generally calling after `on_start` simplifies the app control logic for handling both the 'request' case and the 'previously granted' case.
+
+```python
+from android.permissions import request_permissions, Permission
+
+     request_permissions([Permission.CAMERA, Permission.RECORD_AUDIO])
+```
+
+An implementation examle is [the `AndroidPermissions` class](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) which encapsulates permission behavior. You can copy this file and modify the actual permissions for your app. Then instantiate the class like this:
+
 ```python
     def on_start(self):
         self.dont_gc = AndroidPermissions(self.start_app)  
 
     def start_app(self):
         self.dont_gc = None
+	# use whatever required permission
 ```
 
-Note that the App class variable `dont_gc` delays garbage collection and it critically important.
+Note that the App class variable `self.dont_gc` delays garbage collection and it critically important.
 
-That example shows all permissions requested at the start of app execution. Permissions can also be requsted individually when needed by the app. However a permission request must not be initiated while another permission request is active.
-
-More generally in a Kivy App, the constraints in using `request_permissions()` are that it may **only** be called from the `build()` method, or from one or more timestep after `on_start()`. There can **only be one** such call in the `build()` method, or only one call in any given timestep. Calling after on_start() simplifies the logic for handling both the 'request' case and the 'previously granted' case.
-
-Finally it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. Grant the permission from the Android Settings panel for the app.  
+Finally it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. In this case the user must grant the permission from the Android Settings panel for the app.  
 
 # Buildozer and p4a
 
@@ -1098,7 +1104,7 @@ Manually making changes to this window size quickly explores many cases. This pr
 
 The KivyMD widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
 
-KivyMD is in development, which means some functionality [is still changing](https://kivymd.readthedocs.io/en/latest/changelog/index.html). Next time KivyMD is downloaded the version number may be the same, but some widget may be different!
+KivyMD is in development, which means some functionality [is still changing](https://kivymd.readthedocs.io/en/latest/changelog/index.html). As a concequence the api does change with version changes, including removing parts of the api on a version change. Be certain to use the same version of KivyMD on the desktop and with Buildozer.
 
 [How to use KivyMD with Buildozer](https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-use-with-buildozer). There may be additional Buildozer settings required for KivyMD, see KivyMD's sample [buildozer.spec](https://github.com/kivymd/KivyMD/blob/master/demos/kitchen_sink/buildozer.spec).
 
