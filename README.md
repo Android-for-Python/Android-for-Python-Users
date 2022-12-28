@@ -682,16 +682,16 @@ Each line is a dependency. Because it is a tree and we want a list many lines ma
 We get the list of requirements dependencies for this package.
 
 ```
-google-cloud-firestore, googxle-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, googleapis-common-protos, protobuf, requests, charset-normalizer, idna, urllib3, google-cloud-core, proto-plus
+google-cloud-firestore, googxle-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, googleapis-common-protos, protobuf, requests, chardet, idna, urllib3, google-cloud-core, proto-plus
 ```
 
-*However*, this technique is only as good as the package information. And exhibits platform variations. For example if this is run on Linux the `requests` dependencies `certifi, charset-normalizer, idna, urllib3` will not be listed. These missing dependencies will be found during debugging.  
+*However*, this technique is only as good as the package information. And exhibits platform variations. For example if this is run on Linux the `requests` dependencies `certifi, chardet, idna, urllib3` will not be listed. These missing dependencies will be found during debugging.  
 
 #### Kivy Widget Dependencies
 
 Some Kivy widgets have requirement dependencies:
 
-`kivy.network.urlrequest` needs  `requests, urllib3, charset-normalizer, idna, certifi`
+`kivy.network.urlrequest` needs  `requests, urllib3, chardet, idna, certifi`
 
 `kivy.uix.video` needs `ffpyplayer`
 
@@ -706,13 +706,13 @@ Using the technique described above, we get the following:
 
 ##### Pyrebase4
 ```
-requirements = python3,kivy, pyrebase4, gcloud, googleapis-common-protos, protobuf, httplib2, pyparsing, oauth2client, pyasn1, pyasn1-modules, rsa, pycryptodome, python-jwt, jws, requests, certifi, charset-normalizer, idna, urllib3, requests-toolbelt , jwcrypto, cryptography, deprecated, wrapt
+requirements = python3,kivy, pyrebase4, gcloud, googleapis-common-protos, protobuf, httplib2, pyparsing, oauth2client, pyasn1, pyasn1-modules, rsa, pycryptodome, python-jwt, jws, requests, certifi, chardet, idna, urllib3, requests-toolbelt , jwcrypto, cryptography, deprecated, wrapt
 ```
 Run on Windows, the last four items were not determined automatically. Run on Linux the requests dependencies were missing. In both cases these were added during debugging.
 
 ##### firebase_admin
 ```
-requirements = python3,kivy, firebase-admin, cachecontrol, msgpack, requests, certifi, charset-normalizer, idna, urllib3, google-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, pyasn1, googleapis-common-protos, protobuf, google-api-python-client, google-auth-httplib2, httplib2, pyparsing, uritemplate, google-cloud-firestore, google-cloud-core, proto-plus, google-cloud-storage, google-resumable-media, google-crc32c
+requirements = python3,kivy, firebase-admin, cachecontrol, msgpack, requests, certifi, chardet, idna, urllib3, google-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, pyasn1, googleapis-common-protos, protobuf, google-api-python-client, google-auth-httplib2, httplib2, pyparsing, uritemplate, google-cloud-firestore, google-cloud-core, proto-plus, google-cloud-storage, google-resumable-media, google-crc32c
 ```
 
 #### Pure Python
@@ -747,7 +747,7 @@ android.permissions = INTERNET, CAMERA, READ_EXTERNAL_STORAGE
 
 ### android.api
 
-The current buildozer default is 27, but should be "as high as possible". 
+The current buildozer default is 31, but should be "as high as possible". 
 ```
 android.api = 33
 ```
@@ -758,7 +758,7 @@ Python for Android enables `android.minapi = 21`. Don't decrease this.
 
 ### android.ndk
 
-The current default is 23b. You can increase this, but not decrease it. Increasing this may create issues.
+The current default is 25b. For typical usage don't change this.
 
 ### android.archs
 
