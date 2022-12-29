@@ -504,7 +504,19 @@ For android.api < 33 a foreground service always places a notification icon in t
 
 For android.api >= 33 a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is specified in buildozer.spec and as a run time permission. If you do not do this, app behavior will vary with device version. See the [Android documentation](https://developer.android.com/develop/ui/views/notifications/notification-permission) and [App Permissions](#app-permissions). No notification does not mean the service is not started.
 
-The default icon displayed in the task bar is derived from the app icon, and for the Kivy icon it is a white circle. There is no api that will change this, or example of how to change this.  
+The default icon, and the notification title and text,can be changed by specifying three additional string arguments.
+
+```python
+  service.start(mActivity, 'icon_resource_name', 'Title', 'Text', '')
+```
+
+'icon_resource_name' is the name of an Android resource. See `android.add_resources` in `buildozer.spec`. Remember to consider icon size. For example adding icon resources from a local directory named 'res_icons':
+
+```
+android.add_resources =
+    res_icons/all_inclusive.xml:mipmap,
+    res_icons/align_vertical_top.png:drawable
+```
 
 ## p4a Service Implementation
 
@@ -870,6 +882,8 @@ If you wish to stop the app and remove it from the app list, use:
 ```python
             mActivity.finishAndRemoveTask()
 ```
+
+This has been addressed in kivy==master, where the above workarounds are not required.
 
 # Android Packages
 
