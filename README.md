@@ -519,8 +519,7 @@ android.add_resources =
 ```
 And used as:
 ```python
-    service.start('all_inclusive', 'Important News',
-                  'Suddenly, nothing happened.')
+    service.start('all_inclusive', 'Important News', 'Suddenly, nothing happened.')
 ```
 
 ## p4a Service Implementation
