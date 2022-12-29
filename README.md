@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Users' Guide*
 
-Revised 2022-12-19
+Revised 2022-12-28
 
 # Table of Contents
 
@@ -504,7 +504,7 @@ For android.api < 33 a foreground service always places a notification icon in t
 
 For android.api >= 33 a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is specified in buildozer.spec and as a run time permission. If you do not do this, app behavior will vary with device version. See the [Android documentation](https://developer.android.com/develop/ui/views/notifications/notification-permission) and [App Permissions](#app-permissions). No notification does not mean the service is not started.
 
-The default icon, and the notification title and text,can be changed by specifying three additional string arguments.
+The default icon, and the notification title and text,can be changed by specifying three additional string arguments. This requires the master version of Buildozer (1.4.1.dev0).
 
 ```python
   service.start(mActivity, 'icon_resource_name', 'Title', 'Text', '')
