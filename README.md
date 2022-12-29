@@ -1706,4 +1706,4 @@ This message comes from KivyMD, and is seen on all platforms.
 
  - Either use KivyMD==1.0.2
 
- - Or install KivyMD's custom Kivy (2.2.0.dev0), this is **not** Kivy==master whose version number is also 2.2.0.dev0 . Install instructions for the KivyMD's custom version of Kivy are here https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device
+ - Or use requirement `kivy==master`, see https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device
