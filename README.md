@@ -510,7 +510,9 @@ The default icon, and the notification title and text,can be changed by specifyi
   service.start(mActivity, 'icon_resource_name', 'Title', 'Text', '')
 ```
 
-'icon_resource_name' is the name of an Android resource. See `android.add_resources` in `buildozer.spec`. Remember to consider icon size. For example adding icon resources from a local directory named 'res_icons':
+'icon_resource_name' is the name of an Android resource. See `android.add_resources` in `buildozer.spec`. Remember to consider icon size.
+
+For example adding icon resources from a local directory named 'res_icons':
 
 ```
 android.add_resources =
