@@ -519,7 +519,7 @@ android.add_resources =
     res_icons/all_inclusive.xml:mipmap,
     res_icons/align_vertical_top.png:drawable
 ```
-And used as:
+And use one as:
 ```python
     service.start('all_inclusive', 'Important News', 'Suddenly, nothing happened.')
 ```
