@@ -52,6 +52,7 @@ Revised 2022-12-28
       - [Kivy Widget Dependencies](#kivy-widget-dependencies)
       - [Requirements Examples](#requirements-examples)
       - [Pure Python](#pure-python)
+    + [orientation](#orientation)
     + [source.include_exts](#sourceinclude_exts)
     + [android.permissions](#androidpermissions)
     + [android.api](#androidapi)
@@ -748,6 +749,25 @@ The packages you add here **must be pure Python, or have a recipe** [in this lis
 None of these options are trivial. That is why it said AVOID DISAPPOINTMENT in [the Wheels section above](#wheels).
 
 If you have a problem run the [debugger](#debugging).
+
+### orientation
+
+As of api 31 the Buildozer orientation option only sets the presplash orientation, and not the app orientation. The app orientation defaults to "all", so rotating the device rotates the app. This is different from earlier Android api versions, where the option also set the app orientation.
+
+If the app layout supports both both portrait and landscape orientations, nothing extra is required.
+
+If the app layout does not support both portrait and landscape orientations, set a specific app orientation using `KIVY_ORIENTATION`:
+```python
+import os
+os.environ["KIVY_ORIENTATION"] = "Portrait"
+```
+
+The value can contain a white space separated list of any of the following `"Portrait LandscapeLeft LandscapeRight PortraitUpsideDown"`. If you want only landscape use:
+```python
+os.environ["KIVY_ORIENTATION"] = "LandscapeLeft LandscapeRight"
+```
+
+*Some other combinations do not work as expected*, see https://github.com/kivy/python-for-android/issues/2724 . This is a known issue, the behaviour may change.
 
 ### source.include_exts
 
