@@ -170,7 +170,7 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 The view of the Android file system has changed a few times over the years. Modern Android devices use *external storage*, however the term is ambiguous as it applies to two incompatible uses cases.
 
-Storage is either *Private Storage* or *Shared Storage*. **Private storage content is only visible to the app that created it, shared storage is visible to all apps. Python file operations can only be performed in Private Storage**.
+Storage is either *Private Storage* or *Shared Storage*. **Private storage content is only visible to the app that created it, shared storage is visible to all apps. Python file operations can only be performed in Private Storage, Shared Storage is a database not a file system.**
 
 ## Private Storage
 
