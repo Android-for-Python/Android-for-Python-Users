@@ -168,9 +168,9 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 # Android Storage
 
-Android's view of its file system has changed a few times over the years. The result is a messy pile of jargon: local, system, internal, external, primary, secondary, scoped, all describe views of storage.
+The view of the Android file system has changed a few times over the years. Modern Android devices use *external storage*, however the term is ambiguous as it applies to two incompatible uses cases.
 
-However in the storage model described here storage is either *Private Storage* or *Shared Storage*. **Private storage content is only visible to the app that created it, shared storage is visible to all apps. Python file operations can only be performed in Private Storage**.
+Storage is either *Private Storage* or *Shared Storage*. **Private storage content is only visible to the app that created it, shared storage is visible to all apps. Python file operations can only be performed in Private Storage**.
 
 ## Private Storage
 
