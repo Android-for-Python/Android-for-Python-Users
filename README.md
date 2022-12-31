@@ -756,7 +756,7 @@ As of api 31 the Buildozer orientation option only sets the presplash orientatio
 
 If the app layout supports both both portrait and landscape orientations, nothing extra is required.
 
-If the app layout does not support both portrait and landscape orientations, set a specific app orientation using `KIVY_ORIENTATION`:
+If the app layout does not support both portrait and landscape orientations, set a specific app orientation using `KIVY_ORIENTATION` at the head of `main.py`:
 ```python
 import os
 os.environ["KIVY_ORIENTATION"] = "Portrait"
