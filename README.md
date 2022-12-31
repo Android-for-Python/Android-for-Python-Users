@@ -767,7 +767,7 @@ The value can contain a white space separated list of any of the following `"Por
 os.environ["KIVY_ORIENTATION"] = "LandscapeLeft LandscapeRight"
 ```
 
-*Some other combinations do not work as expected*, see https://github.com/kivy/python-for-android/issues/2724 . This is a known issue, the behaviour may change.
+*Some other combinations do not work as expected*, see https://github.com/kivy/python-for-android/issues/2724 . This is a known issue, the behavior may change.
 
 ### source.include_exts
 
