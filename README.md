@@ -869,7 +869,9 @@ Also try the [Xcamera widget](https://github.com/kivy-garden/xcamera) from the K
 
 The relationship between the Android keyboard and the layout is somewhat configurable with [softinput_mode](https://kivy.org/doc/stable/api-kivy.core.window.html#kivy.core.window.WindowBase.softinput_mode), consider `Window.softinput_mode = 'below_target'`.
 
-The type of keyboard can be set with `input_type` for example `TextInput(input_type = 'tel')`. Accepted values are 'text', 'number', 'url', 'mail', 'datetime', 'tel', or 'address'. 
+The type of keyboard can be set with `input_type` for example `TextInput(input_type = 'tel')`. Accepted values are 'text', 'number', 'url', 'mail', 'datetime', 'tel', or 'address'.
+
+The `keyboard_suggestions` property does not work on all Android devices. For a workaround see https://github.com/kivy/kivy/blob/master/kivy/uix/behaviors/focus.py#L246-L250 . 
 
 ## Back Button and Gesture
 
@@ -1724,6 +1726,6 @@ Remove the version pin, or locally modify the recipe.
 
 This message comes from KivyMD, and is seen on all platforms.
 
- - Either use KivyMD==1.0.2
+ - Either use KivyMD==1.0.2  This is probably the better choice because of this issue https://github.com/kivy/python-for-android/issues/2723
 
  - Or use requirement `kivy==master`, see https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device
