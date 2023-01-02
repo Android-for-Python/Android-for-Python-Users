@@ -243,7 +243,7 @@ Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission i
 
 There is one special case, which is different from typical desktop usage. An app cannot read another app's file in the Downloads directory, regardless of permissions.
 
-On devices running Android 9 and less, WRITE_EXTERNAL_STORAGE is required for any file writes. Or READ_EXTERNAL_STORAGE if the app only want to do shared storage reads.
+On devices running Android 9 and less, WRITE_EXTERNAL_STORAGE is required for any file writes. Or READ_EXTERNAL_STORAGE if the app only wants to do shared storage reads.
 
 ## Sharing a file between apps
 
