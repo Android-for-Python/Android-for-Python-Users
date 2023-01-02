@@ -241,7 +241,7 @@ On devices running Android 10 and later no permissions are requires to read or w
 
 Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission if android.api < 33 and READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_MEDIA_AUDIO [see](https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE) if android.api >= 33.  An app cannot overwrite another app's shared file.
 
-There is one special case, an app cannot read another app's file in the Downloads directory, regardless of permissions.
+There is one special case, which is different from typical desktop usage. An app cannot read another app's file in the Downloads directory, regardless of permissions.
 
 On devices running Android 9 and less, WRITE_EXTERNAL_STORAGE is required for any file writes. Or READ_EXTERNAL_STORAGE if the app only want to do shared storage reads.
 
@@ -539,7 +539,7 @@ Android restricts access to many features. An app must declare the permissions i
 
 Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, READ_EXTERNAL_STORAGE, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions. 
 
-WRITE_EXTERNAL_STORAGE is never required (https://developer.android.com/training/data-storage#permissions) for api >= 30.
+WRITE_EXTERNAL_STORAGE is never required for api >= 30 https://developer.android.com/training/data-storage#permissions
 
 READ_EXTERNAL_STORAGE is never required for api >= 33 https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE 
 
