@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-01-01
+Revised 2023-01-09
 
 # Table of Contents
 
@@ -1545,6 +1545,8 @@ One of the app requirements needs a recipe (or needs to be specified differently
 
 In this case the requirements for OpenCV is incorrectly specified, it should be `opencv` because that is the recipe name.
 
+If this message is `charset_normalizer` related, in Buildozer requirements set `charset-normalizer==2.1.1`.
+
 ## EM_X86_64 instead of EM_AARCH64
 
 `ImportError: dlopen failed: "<something>/_python_bundle/site-packages/<somepackage>/_binding.so" is for EM_X86_64 (62) instead of EM_AARCH64 (183)`
@@ -1554,6 +1556,8 @@ The build process included the wrong binary file.
 The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
 
 One of the app requirements needs a recipe (or needs to be specified differently).
+
+If this message is `charset-normalizer` related, in Buildozer requirements set `charset-normalizer==2.1.1`.
 
 ## No module named '_Socket'
 
