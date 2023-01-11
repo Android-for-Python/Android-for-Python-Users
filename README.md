@@ -1734,6 +1734,10 @@ Remove the version pin, or locally modify the recipe.
 
 This message comes from KivyMD, and is seen on all platforms.
 
- - Either use KivyMD==1.0.2  This is probably the better choice because of this issue https://github.com/kivy/python-for-android/issues/2723
+ - Use KivyMD==1.0.2 and Kivy==1.2.0
 
- - Or use requirement `kivy==master`, see https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device
+Background: KivyMD 1.2.0 uses a feature that is only available in the development version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature  (BoxShadow) has portability issues - it is not reliable, but Kivy 2.2.0.dev0 is development code so you might reasonably expect that. Previous to this KivMD tried to develop the same functionality and it too had portability issues, so this is clearly a challenging feature.
+
+At this time it is unclear how this will resolve, use KivyMD 1.0.2, avoid newer versions.
+
+
