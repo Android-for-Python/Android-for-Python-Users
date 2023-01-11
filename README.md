@@ -1734,7 +1734,7 @@ Remove the version pin, or locally modify the recipe.
 
 This message comes from KivyMD, and is seen on all platforms.
 
- - Use KivyMD==1.0.2 and Kivy==1.2.0
+ - Use KivyMD==1.0.2 and Kivy==2.1.0
 
 Background: KivyMD 1.2.0 uses a feature that is only available in the development version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature  (BoxShadow) has portability issues - it is not reliable, but Kivy 2.2.0.dev0 is development code so you might reasonably expect that. Previous to this KivMD tried to develop the same functionality and it too had portability issues, so this is clearly a challenging feature.
 
