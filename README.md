@@ -130,6 +130,7 @@ Revised 2023-01-13
   * [Hunk #1 FAILED](#hunk-1-failed)
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
+  * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-ltsyssymboluscore)
 
 # Introduction
 
@@ -1498,6 +1499,7 @@ p4a.branch = some_branch
   * [Hunk #1 FAILED](#hunk-1-failed)
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
+  * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-ltsyssymboluscore)
 
 
 ## No module named 'msvcrt'
@@ -1754,3 +1756,9 @@ This can be due to an interaction between WSL 1 and Clang in NDK 25b.
 Upgrade to WSL 2
 
 Ref : https://github.com/microsoft/WSL/issues/8681  https://github.com/kivy/buildozer/issues/1543
+
+## undefined macro LT_SYS_SYMBOL_USCORE
+
+`[DEBUG]:        configure.ac:215: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE`
+
+Re-check that the Buildozer dependencies are installed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
