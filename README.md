@@ -130,7 +130,7 @@ Revised 2023-01-13
   * [Hunk #1 FAILED](#hunk-1-failed)
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
-  * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-ltsyssymboluscore)
+  * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
 
 # Introduction
 
@@ -1499,7 +1499,7 @@ p4a.branch = some_branch
   * [Hunk #1 FAILED](#hunk-1-failed)
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
-  * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-ltsyssymboluscore)
+  * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
 
 
 ## No module named 'msvcrt'
