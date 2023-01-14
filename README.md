@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-01-09
+Revised 2023-01-13
 
 # Table of Contents
 
@@ -129,6 +129,7 @@ Revised 2023-01-09
   * [No module named 'android'](#no-module-named-android)
   * [Hunk #1 FAILED](#hunk-1-failed)
   * [Kivy is too old](#kivy-is-too-old)
+  * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
 
 # Introduction
 
@@ -1496,6 +1497,7 @@ p4a.branch = some_branch
   * [No module named 'android'](#no-module-named-android)
   * [Hunk #1 FAILED](#hunk-1-failed)
   * [Kivy is too old](#kivy-is-too-old)
+  * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
 
 
 ## No module named 'msvcrt'
@@ -1741,3 +1743,14 @@ Background: KivyMD 1.2.0 uses a feature that is only available in the developmen
 At this time it is unclear how this will resolve, use KivyMD 1.0.2, avoid newer versions.
 
 
+## C compiler cannot create executables
+
+`[DEBUG]:   configure: error: C compiler cannot create executables`
+
+May occur when building `libffi`.
+
+This can be due to an interaction between WSL 1 and Clang in NDK 25b.
+
+Upgrade to WSL 2
+
+Ref : https://github.com/microsoft/WSL/issues/8681  https://github.com/kivy/buildozer/issues/1543
