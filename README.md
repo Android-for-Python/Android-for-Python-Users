@@ -300,7 +300,7 @@ There is no `python3` executable, Python's `sys.executable` is empty. To run a P
 
 ## Async
 
-### basic async usage
+### Kivy async usage
 
 Python does not allow calling (async) coroutines from (traditional) routines. Kivy is constructed of routines, however Kivy has a method that allows it to be started as an async coroutine. Thus the Kivy and Async loops to not block one another, this does not mean any other Kivy routines become coroutines.
 
@@ -316,13 +316,13 @@ For basic Async usage we start Kivy with (we'll show trio later):
 asyncio.run(ExampleApp().async_run('asyncio'))
 ```
 
-Alone this does not allow us to combine routines and coroutines. An app can't directly call an async function from say a Kivy UI event such as a Button event. You can do this indirectly, the details are different for the `trio` and `asyncio` packages.
+Alone this does not allow us to combine routines and coroutines. An app can't directly call a coroutine from say a Kivy UI event such as a Button event. But an app can do this indirectly, the details are different for the `trio` and `asyncio` packages.
 
-The basic approaches are shown in the next two sections. Using `trio` a coroutine is *started* from a routine. Using `asyncio` a coroutine is *enabled* from a routine. 
+The basic approaches are shown in the next two sections, with simple examples. Using `trio` a coroutine is *started* from a routine. Using `asyncio` a coroutine is *enabled* from a routine. 
 
 ### trio
 
-Using `trio` indirectly call a coroutine from a routine by initializing the app with the `trio` event loop, and using this to call `start_soon()`. The coroutine is *started* from a routine.
+Using `trio`, indirectly call a coroutine from a routine by initializing the app with the `trio` event loop, and using this to call `start_soon()`. The coroutine is *started* from a routine.
 
 ```python
 from kivy.app import App
@@ -342,6 +342,7 @@ class ExampleApp(App):
         self.start_async_function()
 
     def start_async_function(self):
+        # routine starts coroutine
         self.nursery.start_soon(self.my_async_function)
 
     async def my_async_function(self):
@@ -355,7 +356,7 @@ class ExampleApp(App):
 async def main():
     async with trio.open_nursery() as nursery:
         app = ExampleApp(nursery)
-        await app.async_run("trio")
+        await app.async_run("trio")    # start Kivy
         nursery.cancel_scope.cancel()
 
 trio.run(main)              # note this is a reference to main
@@ -365,7 +366,7 @@ Thanks to @Hamburguesa for this one.
 
 ### asyncio
 
-Using `asyncio` indirectly, enable a coroutine from a routine by having the coroutine `await` on an `asyncio.Event` set by a routine. The coroutine is *enabled* from a routine.
+Using `asyncio`, indirectly enable a coroutine from a routine by having the coroutine `await` on an `asyncio.Event` set by a routine. The coroutine is *enabled* from a routine.
 
 ```python
 from kivy.app import App
@@ -386,6 +387,7 @@ class ExampleApp(App):
         self.started.set()
     
     async def my_async_function(self):
+        # coroutine enabled by routine
         await self.started.wait()
         print("woohooo running async function on kivy app")
         await self.another_async_function()
