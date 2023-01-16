@@ -354,8 +354,7 @@ class ExampleApp(App):
 # Start kivy app as an asynchronous task
 async def main():
     async with trio.open_nursery() as nursery:
-        app = ExampleApp(nursery)
-        await app.async_run("trio")    # start Kivy
+        await ExampleApp(nursery).async_run("trio") # start Kivy
         nursery.cancel_scope.cancel()
 
 trio.run(main)              # note this is a reference to main
