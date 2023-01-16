@@ -386,6 +386,7 @@ class ExampleApp(App):
     
     async def my_async_function(self):
         await self.started.wait()              # enables coroutine when set()
+	self.started.clear()	     # not needed here but good to know about
         print("woohooo running async function on kivy app")
         await self.another_async_function()
 
