@@ -302,7 +302,7 @@ There is no `python3` executable, Python's `sys.executable` is empty. To run a P
 
 ### Kivy async usage
 
-Python does not allow calling (async) coroutines from (traditional) routines. Kivy is constructed of routines, however Kivy has a method that allows it to be started as an async coroutine. Thus the Kivy and Async loops to not block one another, this does not mean any other Kivy routines become coroutines.
+Python does not allow calling (async) coroutines from (traditional) routines. Kivy is constructed of routines, however Kivy has a method that allows it to be started as an async coroutine. Thus the Kivy and Async loops do not block one another, this does not mean any other Kivy routines become coroutines.
 
 We normally start a Kivy app with:
 
@@ -342,8 +342,7 @@ class ExampleApp(App):
         self.start_async_function()
 
     def start_async_function(self):
-        # routine starts coroutine
-        self.nursery.start_soon(self.my_async_function)
+        self.nursery.start_soon(self.my_async_function) # starts coroutine
 
     async def my_async_function(self):
         print("woohooo running async function on kivy app")
@@ -387,8 +386,7 @@ class ExampleApp(App):
         self.started.set()
     
     async def my_async_function(self):
-        # coroutine enabled by routine
-        await self.started.wait()
+        await self.started.wait()              # enables coroutine when set()
         print("woohooo running async function on kivy app")
         await self.another_async_function()
 
