@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-01-13
+Revised 2023-01-15
 
 # Table of Contents
 
@@ -27,6 +27,7 @@ Revised 2023-01-13
 - [Concurrency](#concurrency)
   * [Threads](#threads)
   * [Subprocess](#subprocess)
+  * [trio](#trio)
   * [asyncio](#asyncio)
 - [Android Service](#android-service)
   * [Specifying a Service](#specifying-a-service)
@@ -298,11 +299,11 @@ The Python subprocess depends on having an ARM executable to run, this does not 
 
 There is no `python3` executable, Python's `sys.executable` is empty. To run a Python script in a new process, we use an Android Service.
 
-## asyncio
+## Async
 
-### basic asyncio usage
+### basic async usage
 
-Without special handling Kivy and asyncio would block one another on a single task OS like Android or iOS, and have OS dependent behavior on a multitasking OS. So we always start a Kivy app that interacts with asyncio as an asyncio coroutine. 
+Python does not allow calling (async) coroutines from (traditional) routines. Kivy is constructed of routines, however Kivy has a method that allows it to be started as an async coroutine. Thus the Kivy and Async loops to not block one another, this does not mean any other Kivy routines become coroutines.
 
 We normally start a Kivy app with:
 
@@ -310,106 +311,97 @@ We normally start a Kivy app with:
 ExampleApp().run()
 ```
 
-For basic asyncio usage we start Kivy with:
+For basic Async usage we start Kivy with (we'll show trio later):
 
 ```python
 asyncio.run(ExampleApp().async_run('asyncio'))
 ```
 
-The Kivy App class defines a *coroutine* `async_run()` which starts Kivy. This starts two interleaved event loops, a Kivy routine loop and an asyncio co-routine loop.
+Alone this does not allow us to combine routines and coroutines. An app can't directly call an async function from say a Kivy UI event such as a Button event. You can do this indirectly, the details are different for the `trio` and `asyncio` packages.
 
-Kivy is constructed of routines not of co-routines, the rules for calling co-routines from routines apply. This means Kivy abstractions such as bind or properties use routines not co-routines.
+The basic approaches are shown in the next two sections. Using `trio` a coroutine is *started* from a routine. Using `asyncio` a coroutine is *enabled* from a routine. 
 
-For portability the asyncio usage must mimic the Kivy lifecycle. Generally async IO calls must only occur while the Kivy clock is running.
+### trio
 
-An app will terminate when **both** loops terminate. One loop may terminate before the other, the app code must handle any cases that arise due to the app design. Generally try/except is the way to do this, alternatively use Kivy lifecycle state.
-
-### lifecycle asyncio usage
-
-The following describes controling asyncio state based on Kivy lifecycle state. 
-
-A Kivy app that runs concurrently with an asyncio loop can be started with:
+Using `trio` indirectly call a coroutine from a routine by initializing the app with the `trio` event loop, and using this to call `start_soon()`. The coroutine is *started* from a routine.
 
 ```python
-async def main(app):
-    await asyncio.gather(app.async_run('asyncio'),  # starts Kivy
-                         app.async_lifecycle(),     # starts other coroutine
-                         return_exceptions = True)  # for debugging
-asyncio.run(main(ExampleApp()))
-```
+from kivy.app import App
+from kivy.uix.label import Label
+import trio
 
-On Android an async loop that uses IO can only be active when the Kivy clock is ticking, and after any required user permissions have been granted. On the desktop an async loop must be explicitly terminated `on_stop()`.
-
-For Android a simple implementation of `async_lifecycle()` might be:
-
-```python
-    def __init__(self):
+class ExampleApp(App):
+    def __init__(self, nursery):
         super().__init__()
-        self.kivy_clock_running = False
+        self.nursery = nursery
 
-    # Kivy lifecycle
+    def build(self):
+        return Label(text = 'Greetings Earthlings')
 
     def on_start(self):
-        # see AndroidPermissions example referenced in "User permissions"
-        self.dont_gc = AndroidPermissions(self.start_app)  
+        print("Kivy app started")
+        self.start_async_function()
 
-    def start_app(self):
-        self.dont_gc = None
-        self.kivy_clock_running = True
+    def start_async_function(self):
+        self.nursery.start_soon(self.my_async_function)
 
-    def on_pause(self):
-        self.kivy_clock_running = False
+    async def my_async_function(self):
+        print("woohooo running async function on kivy app")
+        await self.another_async_function()
 
-    def on_resume(self):
-        self.kivy_clock_running = True
+    async def another_async_function(self):
+        print("another async function")
 
-    # Coroutines
+# Start kivy app as an asynchronous task
+async def main():
+    async with trio.open_nursery() as nursery:
+        app = ExampleApp(nursery)
+        await app.async_run("trio")
+        nursery.cancel_scope.cancel()
 
-    async def async_lifecycle(self):
-        while True:  # assume recurring async behavior
-            await self.kivy_clocking()
-            await self.some_async_behavior()
-
-    async def kivy_clocking(self):
-        while not self.kivy_clock_running:
-            await asyncio.sleep(1/30)
-
-    async def some_async_behavior(self):
-        # Catch any I/O exceptions
-        try:
-            # Replace with your async behavior
-            # proxy for latency of your async behavior
-            await asyncio.sleep(5) 
-            # proxy for your async behavior result
-            self.label.text = 'greetings earthlings'  
-        except:
-            # Handle if you want to.
-            pass	    
-
+trio.run(main)              # note this is a reference to main
 ```
 
-Note that on a desktop this code will not exit, because `async_lifecycle()` never completes (this doesn't matter on Android because we handled the `on_pause` case). To additionally support exit on the desktop:
+Thanks to @Hamburguesa for this one.
+
+### asyncio
+
+Using `asyncio` indirectly, enable a coroutine from a routine by having the coroutine `await` on an `asyncio.Event` set by a routine. The coroutine is *enabled* from a routine.
 
 ```python
-    # in __init__()
-        self.kivy_running = True	
+from kivy.app import App
+from kivy.uix.label import Label
+import asyncio
 
-    def on_stop(self):
-        self.kivy_running = False
+class ExampleApp(App):
+    
+    def __init__(self):
+        super().__init__()
+        self.started = asyncio.Event()
 
-    async def async_lifecycle(self):
-        while self.kivy_running:   # assuming a recurring async behavior
-            await self.kivy_clocking()
-            tasks = [asyncio.create_task(self.some_async_behavior()),
-                     asyncio.create_task(self.kivy_stopped())]
-            await next(asyncio.as_completed(tasks))
-            for task in tasks:
-                if not task.done():
-                    task.cancel()
+    def build(self):
+        return Label(text = 'Greetings Earthlings')
 
-    async def kivy_stopped(self):
-        while self.kivy_running:
-            await asyncio.sleep(1/30)
+    def on_start(self):
+        print("Kivy app started")
+        self.started.set()
+    
+    async def my_async_function(self):
+        await self.started.wait()
+        print("woohooo running async function on kivy app")
+        await self.another_async_function()
+
+    async def another_async_function(self):
+        print("another async function")
+        
+# Start kivy app as an asynchronous task
+async def main():
+    app = ExampleApp()
+    await asyncio.gather(app.async_run('asyncio'),  # starts Kivy
+                         app.my_async_function(),   # starts coroutine
+                         return_exceptions = True)  # for debugging
+
+asyncio.run(main())             # note this is a call of main()
 ```
 
 # Android Service
