@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-01-15
+Revised 2023-01-23
 
 # Table of Contents
 
@@ -764,7 +764,7 @@ The value can contain a white space separated list of any of the following `"Por
 os.environ["KIVY_ORIENTATION"] = "LandscapeLeft LandscapeRight"
 ```
 
-*Some other combinations do not work as expected*, see https://github.com/kivy/python-for-android/issues/2724 . This is a known issue, the behavior may change.
+**Update:** This is addressed in the development version of p4a https://github.com/kivy/python-for-android/issues/2724 , and the master version of Buildozer https://github.com/kivy/buildozer/pull/1548 .
 
 ### source.include_exts
 
@@ -1729,12 +1729,13 @@ Remove the version pin, or locally modify the recipe.
 
 This message comes from KivyMD, and is seen on all platforms.
 
+The options are:
+
  - Use KivyMD==1.0.2 and Kivy==2.1.0
 
-Background: KivyMD 1.2.0 uses a feature that is only available in the development version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature  (BoxShadow) has portability issues - it is not reliable, but Kivy 2.2.0.dev0 is development code so you might reasonably expect that. Previous to this KivMD tried to develop the same functionality and it too had portability issues, so this is clearly a challenging feature.
+ - Use KivyMD==1.1.1 and Kivy==master  (to install the Kivy master version (2.2.0.dev0) on a desktop, see the Kivy install documentation)
 
-At this time it is unclear how this will resolve, use KivyMD 1.0.2, avoid newer versions.
-
+Background: KivyMD 1.1.1 uses a feature that is only available in the master version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature (BoxShadow) has had issues - it has not been not reliable, this may be fixed now.  
 
 ## C compiler cannot create executables
 
