@@ -45,6 +45,7 @@ Revised 2023-01-23
   * [Some buildozer.spec options](#some-buildozerspec-options)
     + [package.name](#packagename)
     + [package.domain](#packagedomain)
+    + [version](#version)
     + [requirements](#requirements)
       - [requirements basics](#requirements-basics)
       - [Version pinning](#version-pinning)
@@ -646,7 +647,11 @@ This must contain only alpha numeric characters, do not use any other characters
 
 ### package.domain
 
-This must contain exctly one period (.) surrounded by alpha numeric characters, do not use any other characters. Anthing else will cause a Gradle fail.
+This must contain exactly one period `.` surrounded by alpha numeric characters, do not use any other characters. Anthing else will cause a Gradle fail.
+
+### version
+
+This must contain no more than two periods `.` surrounded by numeric characters. More than two periods will cause a Gradle fail.
 
 ### requirements
 
@@ -1659,7 +1664,13 @@ The fix is to upgrade to WSL 2.
 
 `[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate`
 
-Add `certifi` to [requirements](#requirements).
+Add `certifi` to [requirements](#requirements), and possibly explicitly specify the location of the certificate.
+
+```
+import certifi
+
+resp = request.urlopen(req, cafile=certifi.where())
+```
 
 ## gradlew failed!
 
@@ -1754,3 +1765,6 @@ Ref : https://github.com/microsoft/WSL/issues/8681  https://github.com/kivy/buil
 `[DEBUG]:        configure.ac:215: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE`
 
 Re-check that the Buildozer dependencies are installed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
+
+
+
