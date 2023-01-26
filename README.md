@@ -1746,7 +1746,7 @@ The options are:
 
  - Use KivyMD==1.1.1 and Kivy==master  (to install the Kivy master version (2.2.0.dev0) on a desktop, see the Kivy install documentation)
 
-Background: KivyMD 1.1.1 uses a feature that is only available in the master version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature (BoxShadow) has had issues - it has not been not reliable, this may be fixed now.  
+Background: KivyMD 1.1.1 uses a feature that is only available in the master version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature (BoxShadow) has had issues - it has not been reliable, this may be fixed now.  
 
 ## C compiler cannot create executables
 
