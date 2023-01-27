@@ -531,7 +531,9 @@ Android restricts access to many features. An app must declare the permissions i
 
 ## Manifest permissions
 
-Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, READ_EXTERNAL_STORAGE, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions. 
+Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, READ_EXTERNAL_STORAGE, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions.
+
+For example if the app connects to a network add INTERNET permission.
 
 WRITE_EXTERNAL_STORAGE is never required for api >= 30 https://developer.android.com/training/data-storage#permissions
 
@@ -629,7 +631,7 @@ Generally change as few options as possible; resist the temptation to overspecif
 
  - You want pretty? add `presplash.filename` and `icon.filename`.
 
- - Add the required [Android Permissions](#app-permissions) to `android.permissions`.
+ - Add the required [Android Permissions](#app-permissions) to `android.permissions`. For example if the app connects to a network add INTERNET permission. 
 
  - If the app is for the store you will need to increase the default `android.api`.
 
@@ -784,6 +786,7 @@ Research the Android permissions your app needs. For example
 ```
 android.permissions = INTERNET, CAMERA, READ_EXTERNAL_STORAGE
 ```
+If the app connects to a network you must include INTERNET permission.
 
 ### android.api
 
