@@ -137,7 +137,7 @@ Revised 2023-01-28
   * [orientation have an invalid value](#orientation-have-an-invalid-value)
   * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
   * [Could not resolve all files for configuration](#could-not-resolve-all-files-for-configuration)
-
+  * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory)
 
 
 # Introduction
@@ -1513,6 +1513,7 @@ p4a.branch = some_branch
   * [orientation have an invalid value](#orientation-have-an-invalid-value)
   * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
   * [Could not resolve all files for configuration](#could-not-resolve-all-files-for-configuration)
+  * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory)
 
 ## No module named 'msvcrt'
 
@@ -1829,4 +1830,23 @@ android.gradle_dependencies = "com.google.mlkit:face-detection:16.0.6"
 to
 `
 android.gradle_dependencies = com.google.mlkit:face-detection:16.0.6
+`
+
+## presplash-lottie: No such file or directory
+
+```
+'--presplash-lottie', "/Home/user/dir/'.pics/4.json'",
+......
+FileNotFoundError: [Errno 2] No such file or directory: "/Home/user/project/'.pics/4.json'"
+```
+
+As of Buildozer 1.5 the values of the Lottie file path option must not be in quotes. The previous approach was a security risk.
+
+Change:
+`
+android.presplash_lottie = "./pics/4.json"
+`
+to
+`
+android.presplash_lottie = ./pics/4.json
 `
