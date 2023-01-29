@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-01-23
+Revised 2023-01-28
 
 # Table of Contents
 
@@ -54,6 +54,7 @@ Revised 2023-01-23
       - [Requirements Examples](#requirements-examples)
       - [Pure Python](#pure-python)
     + [orientation](#orientation)
+    + [fullscreen](#fullscreen)
     + [source.include_exts](#sourceinclude_exts)
     + [android.permissions](#androidpermissions)
     + [android.api](#androidapi)
@@ -574,6 +575,8 @@ Finally it is normal Android behavior that if a user denies permission, it may n
 
 ## Install
 
+**The current release version of Buildozer is 1.5, by default always Buildozer uses the current release version of p4a.**
+
 Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL, Colab, or VirtualBox to run Buildozer. Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help and in software maturity.
 
 **If building on WSL, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`), as this may give unpredicatable results.**
@@ -756,22 +759,22 @@ If you have a problem run the [debugger](#debugging).
 
 ### orientation
 
-As of api 31 the Buildozer orientation option only sets the presplash orientation, and not the app orientation. The app orientation defaults to "all", so rotating the device rotates the app. This is different from earlier Android api versions, where the option also set the app orientation.
+One of `portrait`, `landscape`, `portrait-reverse`, `landscape-reverse`.
+And `landscape` is `portrait` rotated 90 degrees counter clockwise.
 
-If the app layout supports both both portrait and landscape orientations, nothing extra is required.
-
-If the app layout does not support both portrait and landscape orientations, set a specific app orientation using `KIVY_ORIENTATION` at the head of `main.py`:
-```python
-import os
-os.environ["KIVY_ORIENTATION"] = "Portrait"
+```
+orientation = landscape
 ```
 
-The value can contain a white space separated list of any of the following `"Portrait LandscapeLeft LandscapeRight PortraitUpsideDown"`. If you want only landscape use:
-```python
-os.environ["KIVY_ORIENTATION"] = "LandscapeLeft LandscapeRight"
-```
+**Note** As of 2023/01/28 a workaround for an api 31 issue, using KIVY_ORIENTATION, is no longer required.
 
-**Update:** This is addressed in the development version of p4a https://github.com/kivy/python-for-android/issues/2724 , and the master version of Buildozer https://github.com/kivy/buildozer/pull/1548 .
+### fullscreen
+
+If this value is `1` the Status Bar is not shown, defaults `0` Status Bar shown. When not shown, a swipe up/down will temporarily show the Status Bar. 
+
+```
+fullscreen = 0
+```
 
 ### source.include_exts
 
@@ -1602,7 +1605,7 @@ There is no ffmpeg executable. You have to build it for ARM. The recipe builds a
 
 Version 62 Is Java 18. Error is probably due to an added jar built with Java 18. This is not going to work.
 
-The Java version used by p4a is the version required for the gradle version used. For p4a master, this can be any version between openJDK-11 and 17, the install instructions suggest 17.
+The Java version used by p4a is the version required for the gradle version used. This can be any version between openJDK-11 and 17, the install instructions suggest 17.
 
 ## Permission denied: '/storage/emulated/0/...'
 
