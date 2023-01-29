@@ -135,6 +135,8 @@ Revised 2023-01-28
   * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
   * [all is not a valid value for orientation](#all-is-not-a-valid-value-for-orientation)
   * [orientation have an invalid value](#orientation-have-an-invalid-value)
+  * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
+  * [Could not resolve all files for configuration](#could-not-resolve-all-files-for-configuration)
 
 
 
@@ -1509,6 +1511,8 @@ p4a.branch = some_branch
   * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
   * [all is not a valid value for orientation](#all-is-not-a-valid-value-for-orientation)
   * [orientation have an invalid value](#orientation-have-an-invalid-value)
+  * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
+  * [Could not resolve all files for configuration](#could-not-resolve-all-files-for-configuration)
 
 ## No module named 'msvcrt'
 
@@ -1792,3 +1796,39 @@ must be replaced with:
 `[app] "orientation" have an invalid value`
 
 Upgrade to Buildozer 1.5
+
+## build.gradle : 79: Unexpected input: '{' 
+
+`build.gradle': 79: Unexpected input: '{' @ line 79, column 14.`
+
+As of Buildozer 1.5 the values of the gradle_dependencies option must not be in quotes. The previous approach was a security risk.
+
+For example change:
+
+`
+android.gradle_dependencies = "com.google.mlkit:face-detection:16.0.6"
+`
+to
+`
+android.gradle_dependencies = com.google.mlkit:face-detection:16.0.6
+`
+
+## Could not resolve all files for configuration
+
+```
+Could not resolve all files for configuration ':debugRuntimeClasspath'.
+[DEBUG]:           > Could not find "com.google.mlkit:face-detection:16.0.6".
+
+```
+
+As of Buildozer 1.5 the values of the gradle_dependencies option must not be in quotes. The previous approach was a security risk.
+
+In the above example change:
+
+`
+android.gradle_dependencies = "com.google.mlkit:face-detection:16.0.6"
+`
+to
+`
+android.gradle_dependencies = com.google.mlkit:face-detection:16.0.6
+`
