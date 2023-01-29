@@ -1139,7 +1139,7 @@ Screen orientation on a desktop defaults to landscape, and on a mobile device us
 
 For a mobile device the available orientation is set in buildozer.spec, `orientation` it can be one of `all`, `portrait`, or `landscape`.
 
-Supporting `orientation = all` usually requires dynamically modifying layout parameters such as size, size_hint, or orientation. Do this using a Widget's `on_size()` method, and testing for orientation. [For example](https://github.com/Android-for-Python/c4k_photo_example/blob/main/applayout/photoscreen1.py#L34-L69). 
+Supporting `orientation = <some list>` usually requires dynamically modifying layout parameters such as size, size_hint, or orientation. Do this using a Widget's `on_size()` method, and testing for orientation. [For example](https://github.com/Android-for-Python/c4k_photo_example/blob/main/applayout/photoscreen1.py#L34-L69). 
 
 ### Screen Aspect Ratio
 
