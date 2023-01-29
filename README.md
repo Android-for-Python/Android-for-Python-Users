@@ -770,7 +770,7 @@ orientation = landscape
 
 ### fullscreen
 
-If this value is `1` the Status Bar is not shown, defaults `0` Status Bar shown. When not shown, a swipe up/down will temporarily show the Status Bar. 
+If the `fullscreen` value is `1` the Status Bar is not shown; defaults to `0`, Status Bar shown. When not shown, a swipe up/down will temporarily show the Status Bar. 
 
 ```
 fullscreen = 0
