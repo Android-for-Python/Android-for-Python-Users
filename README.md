@@ -1805,13 +1805,11 @@ As of Buildozer 1.5 the values of the gradle_dependencies option must not be in 
 
 For example change:
 
-`
-android.gradle_dependencies = "com.google.mlkit:face-detection:16.0.6"
-`
+`android.gradle_dependencies = "org.tensorflow:tensorflow-lite:+",'org.tensorflow:tensorflow-lite-support:0.0.0-nightly'`
+
 to
-`
-android.gradle_dependencies = com.google.mlkit:face-detection:16.0.6
-`
+
+`android.gradle_dependencies = org.tensorflow:tensorflow-lite:+,org.tensorflow:tensorflow-lite-support:0.0.0-nightly` 
 
 ## Could not resolve all files for configuration
 
