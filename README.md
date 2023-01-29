@@ -133,6 +133,10 @@ Revised 2023-01-28
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
   * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
+  * [all is not a valid value for orientation](#all-is-not-a-valid-value-for-orientation)
+  * [orientation have an invalid value](#orientation-have-an-invalid-value)
+
+
 
 # Introduction
 
@@ -759,11 +763,12 @@ If you have a problem run the [debugger](#debugging).
 
 ### orientation
 
-One of `portrait`, `landscape`, `portrait-reverse`, `landscape-reverse`.
-And `landscape` is `portrait` rotated 90 degrees counter clockwise.
+Some combination of `portrait`, `landscape`, `portrait-reverse`, `landscape-reverse`. And `landscape` is `portrait` rotated 90 degrees counter clockwise.
+
+The previous `all` option is no longer available, use:
 
 ```
-orientation = landscape
+orientation = portrait, landscape, portrait-reverse, landscape-reverse
 ```
 
 **Note** As of 2023/01/28 a workaround for an api 31 issue, using KIVY_ORIENTATION, is no longer required.
@@ -1502,7 +1507,8 @@ p4a.branch = some_branch
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
   * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
-
+  * [all is not a valid value for orientation](#all-is-not-a-valid-value-for-orientation)
+  * [orientation have an invalid value](#orientation-have-an-invalid-value)
 
 ## No module named 'msvcrt'
 
@@ -1772,5 +1778,17 @@ Ref : https://github.com/microsoft/WSL/issues/8681  https://github.com/kivy/buil
 
 Re-check that the Buildozer dependencies are installed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
 
+## all is not a valid value for orientation
 
+`[app] "all" is not a valid value for "orientation"`
 
+As of Buildozer 1.5, in buildozer.spec
+`orientation = all`
+must be replaced with:
+`orientation = portrait, landscape, portrait-reverse, landscape-reverse`
+
+## orientation have an invalid value
+
+`[app] "orientation" have an invalid value`
+
+Upgrade to Buildozer 1.5
