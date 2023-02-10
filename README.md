@@ -138,6 +138,7 @@ Revised 2023-01-28
   * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
   * [Could not resolve all files for configuration](#could-not-resolve-all-files-for-configuration)
   * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory)
+  * [ssl module in Python is not available](ssl-module-in-python-is-not-available)
 
 
 # Introduction
@@ -1513,7 +1514,9 @@ p4a.branch = some_branch
   * [orientation have an invalid value](#orientation-have-an-invalid-value)
   * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
   * [Could not resolve all files for configuration](#could-not-resolve-all-files-for-configuration)
-  * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory)
+  * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory
+)
+  * [ssl module in Python is not available](ssl-module-in-python-is-not-available)
 
 ## No module named 'msvcrt'
 
@@ -1850,3 +1853,9 @@ to
 `
 android.presplash_lottie = ./pics/4.json
 `
+
+## ssl module in Python is not available
+
+`WARNING: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.`
+
+Re-check that the Buildozer install instructions were followed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
