@@ -139,6 +139,7 @@ Revised 2023-01-28
   * [Could not resolve all files for configuration](#could-not-resolve-all-files-for-configuration)
   * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory)
   * [ssl module in Python is not available](#ssl-module-in-python-is-not-available)
+  * [AttributeError: 'str' object has no attribute 'stdout'](#AttributeError-str-object-has-no-attribute-stdout)
 
 
 # Introduction
@@ -1517,6 +1518,7 @@ p4a.branch = some_branch
   * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory
 )
   * [ssl module in Python is not available](#ssl-module-in-python-is-not-available)
+  * [AttributeError: 'str' object has no attribute 'stdout'](#AttributeError-str-object-has-no-attribute-stdout)
 
 ## No module named 'msvcrt'
 
@@ -1859,3 +1861,17 @@ android.presplash_lottie = ./pics/4.json
 `WARNING: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.`
 
 Re-check that the Buildozer install instructions were followed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
+
+## AttributeError: 'str' object has no attribute 'stdout'
+
+```
+File ".buildozer/android/platform/python-for-android/pythonforandroid/build.py", line 35, in get_targets
+    targets = avdmanager('list', 'target').stdout.split('\n')
+AttributeError: 'str' object has no attribute 'stdout'
+```
+
+Occurs because the default behavior of the Python `sh` package changed.
+
+Workaround: in buildozer.spec set `p4a.branch = develop` then run `buildozer appclean` and rebuild.
+
+
