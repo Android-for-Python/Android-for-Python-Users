@@ -1888,4 +1888,4 @@ Error occurs when using `p4a.branch = develop` because this requires an updated 
 
 Either: use `p4a.branch = master`.
 
-Or: upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`, and `buildozer appclean`. 
+Or: upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`.
