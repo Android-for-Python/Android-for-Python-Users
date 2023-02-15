@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-01-28
+Revised 2023-02-14
 
 # Table of Contents
 
@@ -140,6 +140,7 @@ Revised 2023-01-28
   * [presplash-lottie: No such file or directory](#presplash-lottie-no-such-file-or-directory)
   * [ssl module in Python is not available](#ssl-module-in-python-is-not-available)
   * [AttributeError: 'str' object has no attribute 'stdout'](#AttributeError-str-object-has-no-attribute-stdout)
+  * [error: expression is not assignable](#error-expression-is-not-assignable)
 
 
 # Introduction
@@ -1519,6 +1520,7 @@ p4a.branch = some_branch
 )
   * [ssl module in Python is not available](#ssl-module-in-python-is-not-available)
   * [AttributeError: 'str' object has no attribute 'stdout'](#AttributeError-str-object-has-no-attribute-stdout)
+  * [error: expression is not assignable](#error-expression-is-not-assignable)
 
 ## No module named 'msvcrt'
 
@@ -1875,3 +1877,15 @@ Occurs because the default behavior of the Python `sh` package changed.
 Workaround: in buildozer.spec set `p4a.branch = develop` then run `buildozer appclean` and rebuild.
 
 
+## error: expression is not assignable
+
+```
+jnius/jnius.c:55290:5: error: expression is not assignable
+    ++Py_REFCNT(o);
+```
+
+Error occurs when using `p4a.branch = develop` because this requires an updated Cython.
+
+Either: use `p4a.branch = master`.
+
+Or: upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`, and `buildozer appclean`. 
