@@ -1766,11 +1766,13 @@ This message comes from KivyMD, and is seen on all platforms.
 
 The options are:
 
- - Use KivyMD==1.0.2 and Kivy==2.1.0
+ - Use `kivy, kivymd==1.0.2`
 
- - Use KivyMD==1.1.1 and Kivy==master  (to install the Kivy master version (2.2.0.dev0) on a desktop, see the Kivy install documentation)
+ - Use `kivy==master, https://github.com/kivymd/KivyMD/archive/master.zip`
 
-Background: KivyMD 1.1.1 uses a feature that is only available in the master version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature (BoxShadow) has had issues - it has not been reliable, this may be fixed now.  
+To install the Kivy master version (2.2.0.dev0) on a desktop, see the Kivy install documentation. See also https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-fix-a-shader-bug-on-an-android-device 
+
+Background: KivyMD 1.1.1 uses a feature that is only available in the master version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature (BoxShadow) has had issues - it has not been reliable, this may be fixed now. 
 
 ## C compiler cannot create executables
 
