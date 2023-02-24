@@ -181,9 +181,11 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 # Android Storage
 
-The view of the Android file system has changed a few times over the years. Modern Android devices use *external storage*, however the term is ambiguous as it applies to two incompatible uses cases.
+The view of the Android file system has changed a few times over the years. Modern Android devices physically use *external storage*, however the term is ambiguous as it applies to two incompatible uses cases.
 
-Storage is either *Private Storage* or *Shared Storage*. **Private Storage content is only visible to the app that created it, Shared Storage is visible to all apps. Python file operations can only be performed in Private Storage, Shared Storage is a database not a file system.**
+Storage is either *Private Storage* or *Shared Storage*. **Private Storage content is only visible to the app that created it, Shared Storage is visible to all apps. Python file operations can only be performed in Private Storage, Shared Storage is a database not a file system.** Programmers used to a only desktop file system have a hard time accepting this storage architecture.
+
+The storage architecture is summarized in the Android documentation https://developer.android.com/training/data-storage . The following subsections address storage from the point of view of a Buildozer user.
 
 ## Private Storage
 
@@ -236,7 +238,7 @@ On devices running Android 10 or greater shared storage is accessed via the Java
 
 The MediaStore is a database, not a file system. The MediaStore is organized based on multiple root directories. For example 'Music', 'Movies', 'Pictures', 'Documents', and 'Downloads'.
 
-The MediaStore is accessed by copying a file to or from private storage. Because MediaStore files have no file path that Python requires to access a file.
+The MediaStore files are accessed using a *content uri*, not a file path. Python requires a file path to access a file, not a content uri. Content uris are obtained from Android OS apis, for example in the MediaStore api.
 
 "Are you telling me I can't ....?", I'm explaining that Android shared storage is different from our expectations, evolve or die out.
 
@@ -244,7 +246,7 @@ The MediaStore is accessed by copying a file to or from private storage. Because
 
 An Android version independent Python api for shared storage is implemented in the package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy).
 
-The usage model is, files can be copies to, copied from, and deleted from shared storage. For more details see the SharedStorage class documentation.
+This package is an abstraction of the MediaStore api. The abstraction is *copy or delete*, so *files can be copies to, copied from, and deleted from shared storage*. The MediaStore api, and content uris are thus hidden. For more details see the SharedStorage class documentation.
 
 Example usage is in [shared_storage_example](https://github.com/Android-for-Python/shared_storage_example). The example also demonstrates using the Android file Chooser, using the SharedStorage4Kivy Chooser class.
 
