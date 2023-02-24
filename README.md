@@ -183,7 +183,7 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 The view of the Android file system has changed a few times over the years. Modern Android devices physically use *external storage*, however the term is ambiguous as it applies to two incompatible uses cases.
 
-Storage is either *Private Storage* or *Shared Storage*. **Private Storage content is only visible to the app that created it, Shared Storage is visible to all apps. Python file operations can only be performed in Private Storage, Shared Storage is a database not a file system.** Programmers used to a only desktop file system have a hard time accepting this storage architecture.
+Storage is either *Private Storage* or *Shared Storage*. **Private Storage content is only visible to the app that created it, Shared Storage is visible to all apps. Python file operations can only be performed in Private Storage, Shared Storage is a database not a file system.** Programmers used to only a desktop file system have a hard time accepting this storage architecture is different.
 
 The storage architecture is summarized in the Android documentation https://developer.android.com/training/data-storage . The following subsections address storage from the point of view of a Buildozer user.
 
