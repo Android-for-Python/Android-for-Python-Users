@@ -246,7 +246,7 @@ The MediaStore files are accessed using a *content uri*, not a file path. Python
 
 An Android version independent Python api for shared storage is implemented in the package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy).
 
-This package is an abstraction of the MediaStore api. The abstraction is *copy or delete*, so *files can be copies to, copied from, and deleted from shared storage*. The MediaStore api, and content uris are thus hidden. For more details see the SharedStorage class documentation.
+This package is an abstraction of the MediaStore api. The abstraction is *copy or delete*, so *files can be copies to, copied from, and deleted from shared storage*. The MediaStore api, and content uris are thus hidden. For more details see https://github.com/Android-for-Python/androidstorage4kivy#programming-model and https://github.com/Android-for-Python/androidstorage4kivy#sharedstorage-class.
 
 Example usage is in [shared_storage_example](https://github.com/Android-for-Python/shared_storage_example). The example also demonstrates using the Android file Chooser, using the SharedStorage4Kivy Chooser class.
 
