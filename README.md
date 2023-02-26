@@ -997,7 +997,7 @@ from android import mActivity
     mActivity.getContentResolver() 
 ```
 
-Add your own Java to the package using the Buildozer options `android.add_src` and `android.add_jars`, see buildozer.spec.
+Add your own Java to the package using the Buildozer options `android.add_src` and `android.add_jars`, see buildozer.spec. Java files should be organized in sub-directories reflecting the Java package hierarchy.
 
 Add AndroidX Java packages (or other Maven packages) using the Buildozer option `android.gradle_dependencies`, see buildozer.spec and [Maven AndroidX Group](https://mvnrepository.com/artifact/androidx).
 
