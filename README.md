@@ -78,7 +78,6 @@ Revised 2023-02-14
     + [Pyjnius Memory Management](#pyjnius-memory-management)
     + [Java Api Versions](#java-api-versions)
     + [Calling Python from Java](#calling-python-from-java)
-  * [Android Notifications](#android-notifications)
 - [Kivy Related Topics](#kivy-related-topics)
   * [Layout](#layout)
     + [Screen Resolution](#screen-resolution)
@@ -97,6 +96,8 @@ Revised 2023-02-14
   * [Read the Fine Manual](#read-the-fine-manual)
   * [Android for Python](#android-for-python)
   * [KivAds and KivMob](#kivads-and-kivmob)
+  * [Android Notifications](#android-notifications)
+  * [Android Billing](#android-billing)
   * [Other Resources](#other-resources)
 - [Release Builds](#release-builds)
   * [Setup signing](#setup-signing)
@@ -1122,10 +1123,6 @@ class SomeJavaClass() {
 ```
 Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer.spec` set `android.add_src = src` .
 
-## Android Notifications
-
-[Android-Notification-in-Python](https://github.com/Guhan-SenSam/Android-Notification-in-Python)
-
 # Kivy Related Topics
 
 ## Layout
@@ -1247,6 +1244,14 @@ Don't rely on other sources, they can be obsolete.
 [KivAds](https://kivads.readthedocs.io/en/latest/index.html) is a Library that allows you to monetize your Kivy Apps using Google Admob. To use KivAds [minor modifications to p4a](https://github.com/Guhan-SenSam/KivAds/tree/v1.0.0#requirements) are currently required.
 
 [KivMob](https://github.com/MichaelStott/KivMob) is a Library that allows you to monetize your Kivy Apps using Google Admob. The documentation for `android.gradle_dependencies` needs to be [updated](https://github.com/MichaelStott/KivMob/issues/115#issuecomment-1132929035).
+
+## Android Notifications
+
+[Android-Notification-in-Python](https://github.com/Guhan-SenSam/Android-Notification-in-Python)
+
+## Android Billing
+
+[In-app billing](https://github.com/shashi278/IABKivy)
 
 ## Other Resources
 
