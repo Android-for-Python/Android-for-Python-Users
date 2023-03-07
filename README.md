@@ -1269,6 +1269,8 @@ There are **a lot of useful features** to be found at these links:
 
 [https://github.com/AM-ash-OR-AM-I/Passlock](https://github.com/AM-ash-OR-AM-I/Passlock)
 
+[https://github.com/T-Dynamos/pyjnius-scripts](https://github.com/T-Dynamos/pyjnius-scripts)
+
 # Release Builds
 
 The following depends on using Buildozer 1.4.0 or later.
