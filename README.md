@@ -769,13 +769,13 @@ requirements = python3,kivy, firebase-admin, cachecontrol, msgpack, requests, ce
 
 The packages you add here **must be pure Python, or have a recipe** [in this list](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). If this is not the case, the options are to:
 
-* Rewrite the app
+* Rewrite the app using a different package.
 
-* Locally modify an existing recipe [see Appendix C](#appendix-c--locally-modifying-a-recipe).
+* Locally [modify an existing recipe](#appendix-c--locally-modifying-a-recipe).
 
 * [Create a new recipe](#creating-a-recipe).
 
-* Import the functionality from Java.
+* Import the functionality from Java using [Pyjnius](#pyjnius).
 
 None of these options are trivial. That is why it said AVOID DISAPPOINTMENT in [the Wheels section above](#wheels).
 
