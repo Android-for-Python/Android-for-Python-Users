@@ -184,7 +184,7 @@ If the "Built Distribution" contains files that end with `win32.whl`, `and64.whl
 
 If the package requires a recipe, check the list of available [recipes](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). Note that the recipe name is not always identical to the Pypi package name, for example the "opencv-python" package has a recipe named "opencv".
 
-[See also.](#requirements)
+If the package requires a recipe, and one does not exist - your app is not portable to Android without extra work. Read this summary of [your options](#pure-python).
 
 ## Meta-information
 
