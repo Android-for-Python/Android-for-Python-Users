@@ -849,17 +849,19 @@ An install message INSTALL_FAILED_NO_MATCHING_ABIS means the apk was built for a
 
 On the desktop your friends are the Python stack trace, and logging or print statements. It is no different on Android. To get these we [run the debugger](https://kivy.org/doc/stable/guide/android.html#debugging-your-application-on-the-android-platform).
 
-First connect the device via USB, on the Android device enable 'Developer Mode' and 'USB debugging'.
+First connect the Android device to a desktop via USB, on the Android device enable 'Developer Mode' and 'USB debugging'.
 
-If Buildozer was run on a virtual machine such as WSL or Colab then it may not be able to use the the physical USB port and the 'deploy run logcat' options will not work. In this case copy the `.apk` to a desktop OS, and use adb:
+If Buildozer was run on a desktop you can use it's 'deploy run logcat' to install the app on the device.
+
+If Buildozer was run on a virtual machine such as WSL or Colab then Buildozer may not be able to use the the physical USB port and the 'deploy run logcat' options will not work. In this case copy the `.apk` to a desktop OS, and use adb:
 
 ```
 adb install -r myapp-0.1-arm64-v8a-debug.apk
 ```
 
-For details on installing and using adb [see](#appendix-a--using-adb).
+For details on installing and using adb [see Appendix A](#appendix-a--using-adb).
 
-Successful adb setup is indicated by log output similar to:
+Successful adb/Buildozer configuration is indicated by log output similar to:
 ```
 List of devices attached
 0A052FDE40019P  device
