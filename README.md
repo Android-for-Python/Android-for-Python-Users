@@ -779,8 +779,6 @@ The packages you add here **must be pure Python, or have a recipe** [in this lis
 
 None of these options are trivial. That is why it said AVOID DISAPPOINTMENT in [the Wheels section above](#wheels).
 
-If you have a problem run the [debugger](#debugging).
-
 ### orientation
 
 Some combination of `portrait`, `landscape`, `portrait-reverse`, `landscape-reverse`. And `landscape` is `portrait` rotated 90 degrees counter clockwise.
