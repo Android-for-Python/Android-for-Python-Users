@@ -174,7 +174,17 @@ Apps have a lifecycle, keep to the [Kivy Lifcycle](https://kivy.org/doc/stable/g
 
 ## Wheels
 
-Some Python packages are not written in Python (are not pure-Python), they contain code that must be compiled. Pip provides pre-compiled packages for desktop OSes, but not for Android. P4a addresses this with [recipes](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes), but not all impure packages are available. AVOID DISAPPOINTMENT, check availability first. [See also.](#requirements)
+Some Python packages are not written in Python (are not pure-Python), they contain code that must be compiled. Pip provides pre-compiled packages for desktop OSes, **but not for Android**. P4a addresses this with recipes, but not all impure packages are available. AVOID DISAPPOINTMENT, check availability first. 
+
+A quick and easy way to determine if a package is pure Python is to got to the package on pypi.org, then follow the "Download Files" link, look under "Built Distribution".
+
+If the "Built Distribution" just contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and will NOT require a recipe.  
+
+If the "Built Distribution" contains files that end with `win32.whl`, `and64.whl`, `arm64.whl` or similar ([for example](https://pypi.org/project/opencv-python/#files)) then the package is NOT pure Python, and will require a recipe.
+
+If the module requires a recipe, check the list of available [recipes](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). Note that the recipe name is not always identical to the Pypi package name, for example the "opencv-python" package has a recipe named "opencv".
+
+[See also.](#requirements)
 
 ## Meta-information
 
@@ -621,7 +631,9 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 ## Changing buildozer.spec
 
-Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management*. If buildozer.spec is changed the change probably *won't* propagate into the apk on the next build. After changing the buildozer.spec file users *must* do an appclean.
+Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management*. If buildozer.spec is changed the change probably *won't* propagate into the apk on the next build.
+
+After changing the buildozer.spec file (or any of the dependencies) users *must* do an appclean.
 ```
 buildozer appclean
 buildozer android debug
