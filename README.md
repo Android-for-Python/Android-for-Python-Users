@@ -1183,6 +1183,8 @@ Manually making changes to this window size quickly explores many cases. This pr
 
 The KivyMD widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
 
+**KivyMD has moved it is now at [https://git.org.ru/KivyMD/kivymd](https://git.org.ru/KivyMD/kivymd). The previous location [https://github.com/kivymd/KivyMD](https://github.com/kivymd/KivyMD) is still there but will not be updated. The explaination is at [https://github.com/kivymd/KivyMD/blob/master/README.md#warning](https://github.com/kivymd/KivyMD/blob/master/README.md#warning).**
+
 KivyMD is in development, which means some functionality [is still changing](https://kivymd.readthedocs.io/en/latest/changelog/index.html). As a concequence the api does change with version changes, including removing parts of the api on a version change. Be certain to use the same version of KivyMD on the desktop and with Buildozer.
 
 [How to use KivyMD with Buildozer](https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-use-with-buildozer). There may be additional Buildozer settings required for KivyMD, see KivyMD's sample [buildozer.spec](https://github.com/kivymd/KivyMD/blob/master/demos/kitchen_sink/buildozer.spec).
@@ -1789,7 +1791,7 @@ Remove the version pin, or locally modify the recipe.
 
 `Exception: The version of Kivy installed on this system is too old. (You have 2.1.0, but the application requires 2.2.0)`
 
-This message comes from KivyMD, and is seen on all platforms.
+This message comes from KivyMD, and is seen on all platforms. The message may not be seen and you may see an Android crash (hidden by the Python log filter), related to graphics.
 
 The options are:
 
