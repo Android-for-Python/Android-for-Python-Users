@@ -851,16 +851,22 @@ On the desktop your friends are the Python stack trace, and logging or print sta
 
 First connect the device via USB, on the Android device enable 'Developer Mode' and 'USB debugging'.
 
-If Buildozer was run on a virtual machine such as WSL then it may not be able to use the the physical USB port and the 'deploy run logcat' options will not work. [In this case use adb instead.](#appendix-a--using-adb)
+If Buildozer was run on a virtual machine such as WSL or Colab then it may not be able to use the the physical USB port and the 'deploy run logcat' options will not work. In this case copy the `.apk` to a desktop OS, and use adb:
 
-Successful setup is indicated by log output similar to:
+```
+adb install -r myapp-0.1-arm64-v8a-debug.apk
+```
+
+For details on installing and using adb [see](#appendix-a--using-adb).
+
+Successful adb setup is indicated by log output similar to:
 ```
 List of devices attached
 0A052FDE40019P  device
 ```
 If 'List of devices attached' is followed by an empty line then the connection failed, regardless of what the Buildozer log says afterwards. Because either the device debug options are not set, or the debugger is run from a virtual machine that can't see a physical USB port.
 
-In the logcat output look for 'Traceback', what follows is a Python stack trace, which usually indicates the cause of the issue. For example:
+In the logcat output search for 'Traceback', what follows is a Python stack trace, which usually indicates the cause of the issue. For example:
 ```
 ModuleNotFoundError: No module named 'some-import-name'
 ```
