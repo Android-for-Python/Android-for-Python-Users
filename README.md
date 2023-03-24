@@ -176,9 +176,9 @@ Apps have a lifecycle, keep to the [Kivy Lifcycle](https://kivy.org/doc/stable/g
 
 Some Python packages are not written in Python (are not pure-Python), they contain code that must be compiled. Pip provides pre-compiled packages for desktop OSes, **but not for Android**. P4a addresses this with recipes, but not all impure packages are available. AVOID DISAPPOINTMENT, check availability first. 
 
-A quick and easy way to determine if a package is pure Python is to go to the package on `pypi.org` (this is where pip gets packages), then follow the "Download Files" link, look under "Built Distribution".
+A quick and easy way to determine if a package is pure Python is to go to the package on `pypi.org` (this is where pip gets wheels), then follow the "Download Files" link, look under "Built Distribution".
 
-If the "Built Distribution" just contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and WILL NOT require a recipe.  
+If the "Built Distribution" *only* contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and WILL NOT require a recipe.  
 
 If the "Built Distribution" contains files that end with `win32.whl`, `and64.whl`, `arm64.whl` or similar ([for example](https://pypi.org/project/opencv-python/#files)) then the package is not pure Python, and WILL require a recipe.
 
