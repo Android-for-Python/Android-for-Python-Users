@@ -1185,9 +1185,9 @@ The KivyMD widgets have the look and feel that Android users expect, but the Mat
 
 **KivyMD has moved it is now at [https://git.org.ru/KivyMD/kivymd](https://git.org.ru/KivyMD/kivymd). The previous location [https://github.com/kivymd/KivyMD](https://github.com/kivymd/KivyMD) is still there but will not be updated. The explaination is at [https://github.com/kivymd/KivyMD/blob/master/README.md#warning](https://github.com/kivymd/KivyMD/blob/master/README.md#warning).**
 
-KivyMD is in development, which means some functionality [is still changing](https://kivymd.readthedocs.io/en/latest/changelog/index.html). As a concequence the api does change with version changes, including removing parts of the api on a version change. Be certain to use the same version of KivyMD on the desktop and with Buildozer.
+Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the api may change with KivyMD versions.
 
-[How to use KivyMD with Buildozer](https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-use-with-buildozer). There may be additional Buildozer settings required for KivyMD, see KivyMD's sample [buildozer.spec](https://github.com/kivymd/KivyMD/blob/master/demos/kitchen_sink/buildozer.spec).
+[How to use KivyMD with Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer). However this is obsolete, you must [use kivy==master](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device).
 
 ## Kivy Lifecycle
 
