@@ -1183,11 +1183,11 @@ Manually making changes to this window size quickly explores many cases. This pr
 
 The KivyMD widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
 
-**KivyMD has moved it is now at [https://git.org.ru/KivyMD/kivymd](https://git.org.ru/KivyMD/kivymd). The previous location [https://github.com/kivymd/KivyMD](https://github.com/kivymd/KivyMD) is still there but will not be updated. The explaination is at [https://github.com/kivymd/KivyMD/blob/master/README.md#warning](https://github.com/kivymd/KivyMD/blob/master/README.md#warning).**
+**KivyMD has moved, it is now at [https://git.org.ru/KivyMD/kivymd](https://git.org.ru/KivyMD/kivymd). The previous location [https://github.com/kivymd/KivyMD](https://github.com/kivymd/KivyMD) is still there but will not be updated. The explaination is at [https://github.com/kivymd/KivyMD/blob/master/README.md#warning](https://github.com/kivymd/KivyMD/blob/master/README.md#warning).**
 
 Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the api may change with KivyMD versions.
 
-The KivyMD [instructions for Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer) are obsolete. You must [use kivy==master](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device).
+The KivyMD [instructions for Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer) are obsolete. You must [use kivy==master](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device) in `buildozer.spec` requirements.
 
 ## Kivy Lifecycle
 
