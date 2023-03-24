@@ -1187,7 +1187,7 @@ The KivyMD widgets have the look and feel that Android users expect, but the Mat
 
 Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the api may change with KivyMD versions.
 
-[How to use KivyMD with Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer). However this is obsolete, you must [use kivy==master](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device).
+The KivyMD [instructions for Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer) are obsolete. You must [use kivy==master](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device).
 
 ## Kivy Lifecycle
 
