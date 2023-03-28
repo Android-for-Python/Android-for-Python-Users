@@ -431,7 +431,7 @@ asyncio.run(main())             # note this is a call of main()
 
 An [Android Service](https://developer.android.com/guide/components/services) performs operations that are not related to the UI. In the context of Kivy, an Android service is a Python script that executes in its own process.
 
-**A service is a Python script, not a Kivy App**. You can use some functions from the Kivy package, but nothing that depends on an instantiated Kivy App class. There is no Kivy event loop (so no Clock), there is no SDL2 (so no codecs). Don't even think about instantiating a Kivy App class (there is no Window). **Most Kivy functions will not work in a stand alone Python script.**     
+**A service is a Python script, not a Kivy App**. You can use some functions from the Kivy package, but nothing that depends on an instantiated Kivy App class. There is no Kivy event loop (so no Clock), there is no SDL2 (so no codecs). Don't even think about instantiating a Kivy App class (there is no Window). **Most Kivy functions will not work in a stand alone Python script that does not contain an instantiated App.**     
 
 There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy_service_osc), and [Mutli-Service Example](https://github.com/Android-for-Python/Multi-Service-Example). OSC is a good package for message passing between app and service. However it is not designed for passing large datas, consider using the file system in this case. OSC requires INTERNET permission.
 
