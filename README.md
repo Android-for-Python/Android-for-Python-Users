@@ -178,13 +178,15 @@ Some Python packages are not written in Python (are not pure-Python), they conta
 
 A quick and easy way to determine if a package is pure Python is to go to the package on `pypi.org` (this is where pip gets wheels), then follow the "Download Files" link, and look under "Built Distribution".
 
-If the "Built Distribution" *only* contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and WILL NOT require a recipe. *Note that it is possible but unlikley that a pure Python package may contain OS specific code, or depend on OS specific apps (for example ffmpeg).* 
+If the "Built Distribution" *only* contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and WILL NOT require a recipe. 
 
 If the "Built Distribution" contains files that end with `win32.whl`, `and64.whl`, `arm64.whl` or similar ([for example](https://pypi.org/project/opencv-python/#files)) then the package is not pure Python, and WILL require a recipe.
 
 If the package requires a recipe, check the list of available [recipes](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). Note that the recipe name is not always identical to the Pypi package name, for example the "opencv-python" package has a recipe named "opencv".
 
 If the package requires a recipe, and one does not exist - your app is not portable to Android without extra work. Read this summary of [your options](#pure-python).
+
+*Note that it is possible but unlikley that a pure Python package may contain OS specific code, or depend on OS specific apps (for example ffmpeg).* 
 
 ## Meta-information
 
