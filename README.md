@@ -178,7 +178,7 @@ Some Python packages are not written in Python (are not pure-Python), they conta
 
 A quick and easy way to determine if a package is pure Python is to go to the package on `pypi.org` (this is where pip gets wheels), then follow the "Download Files" link, and look under "Built Distribution".
 
-If the "Built Distribution" *only* contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and WILL NOT require a recipe.  
+If the "Built Distribution" *only* contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and WILL NOT require a recipe. *Note that it is possible but unlikley that a pure Python package may contain OS specific code, or depend on OS specific apps (for example ffmpeg).* 
 
 If the "Built Distribution" contains files that end with `win32.whl`, `and64.whl`, `arm64.whl` or similar ([for example](https://pypi.org/project/opencv-python/#files)) then the package is not pure Python, and WILL require a recipe.
 
