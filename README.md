@@ -910,7 +910,7 @@ There may be other causes, its your code.
 
 ## Camera
 
-Use the 3rd party [Preview widget in Camera4Kivy](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#tested-examples-and-platforms).
+Use the 3rd party [Preview widget in Camera4Kivy](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#examples).
 
 It is also possible to use the OpenCV camera, one example is https://github.com/WikiGenius/SearchApp .
 
