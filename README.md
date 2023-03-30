@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-03-23
+Revised 2023-03-28
 
 # Table of Contents
 
@@ -70,6 +70,7 @@ Revised 2023-03-23
   * [Back Button and Gesture](#back-button-and-gesture)
 - [Android Packages](#android-packages)
   * [The Android package](#the-android-package)
+    + [BroadcastReceiver](#broadcastreceiver)
   * [Plyer](#plyer)
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
@@ -528,7 +529,7 @@ For android.api < 33 a foreground service always places a notification icon in t
 
 For android.api >= 33 a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is specified in buildozer.spec and as a run time permission. If you do not do this, app behavior will vary with device version. See the [Android documentation](https://developer.android.com/develop/ui/views/notifications/notification-permission) and [App Permissions](#app-permissions). No notification does not mean the service is not started.
 
-The default icon, and the notification title and text,can be changed by specifying three additional string arguments. This requires the master version of Buildozer (1.4.1.dev0).
+The default icon, and the notification title and text,can be changed by specifying three additional string arguments. 
 
 ```python
   service.start(mActivity, 'icon_resource_name', 'Title', 'Text', '')
@@ -558,7 +559,7 @@ Android restricts access to many features. An app must declare the permissions i
 
 ## Manifest permissions
 
-Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, READ_EXTERNAL_STORAGE, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions.
+Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, BLUETOOTH_SCAN, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions.
 
 For example if the app connects to a network add INTERNET permission.
 
@@ -579,7 +580,7 @@ from android.permissions import request_permissions, check_permission, Permissio
 
      request_permissions([Permission.CAMERA, Permission.RECORD_AUDIO])
 
-     ok = check_permission(Permission.READ_EXTERNAL_STORAGE)
+     ok = check_permission(Permission.RECORD_AUDIO)
 ```
 
 An implementation example is the [`AndroidPermissions`](https://github.com/Android-for-Python/c4k_photo_example/blob/main/android_permissions.py) class which encapsulates permission behavior. You can copy this file and modify the actual permissions for your app. Then instantiate the class like this:
@@ -812,10 +813,15 @@ source.include_exts = py,png,jpg,kv,atlas
 
 ### android.permissions
 
-Research the Android permissions your app needs. For example
+Research the Android permissions your app needs. List the permisions, for example:
 ```
-android.permissions = INTERNET, CAMERA, READ_EXTERNAL_STORAGE
+android.permissions = INTERNET, CAMERA, BLUETOOTH_SCAN
 ```
+Qualified permissions (only maxSdkVersion, or usesPermissionFlags) are supported by an extended syntax, for example:
+```
+android.permissions = INTERNET, CAMERA, (name=android.permission.BLUETOOTH_SCAN;usesPermissionFlags=neverForLocation)
+```
+
 If the app connects to a network you must include INTERNET permission.
 
 ### android.api
@@ -961,6 +967,14 @@ This has been addressed in kivy==master, where the above workarounds are not req
 ## The Android package
 
 P4a provides Android specific utilities in the android package, this is only available on Android. It is as they say 'self documenting', which really means there isn't any documentation. [Read the code](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes/android/src/android).
+
+One (!) such utility is:
+
+### BroadcastReceiver
+
+A Python class to receive [Android Broadcasts](https://developer.android.com/guide/components/broadcasts). There are two examples [WiFi Scanner](https://github.com/Android-for-Python/BroadcastReceiver_examples/WiFi_scanner_example) and [Bluetooth Scanner](https://github.com/Android-for-Python/BroadcastReceiver_examples/Bluetooth_scanner_example).
+
+To find a file containing a list of all the Android *system* Broadcast actions for a particular installed `android.api`: on a machine where Buildozer has been run, type `find ~/.buildozer -name broadcast_actions.txt`.
 
 ## Plyer
 
@@ -1296,8 +1310,6 @@ There are **a lot of useful features** to be found at these links:
 [https://github.com/T-Dynamos/pyjnius-scripts](https://github.com/T-Dynamos/pyjnius-scripts)
 
 # Release Builds
-
-The following depends on using Buildozer 1.4.0 or later.
 
 Setup signing *before* your release build.
 
