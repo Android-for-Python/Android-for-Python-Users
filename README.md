@@ -60,6 +60,7 @@ Revised 2023-03-28
     + [android.api](#androidapi)
     + [android.minapi](#androidminapi)
     + [android.ndk](#androidndk)
+    + [android.sdk](#androidsdk)
     + [android.archs](#androidarchs)
 - [Debugging](#debugging)
   * [Get an Error Message](#get-an-error-message)
@@ -833,11 +834,18 @@ android.api = 33
 
 ### android.minapi
 
-Python for Android enables `android.minapi = 21`. Don't decrease this.
+The current default is 21.
+For typical usage **don't change this**.
 
 ### android.ndk
 
-The current default is 25b. For typical usage don't change this.
+The current default is 25b.
+For typical usage **don't change this**.
+
+### android.sdk
+
+Is set by Buildozer to the newest supported.
+For typical usage **don't change this**.
 
 ### android.archs
 
