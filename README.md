@@ -918,11 +918,9 @@ There may be other causes, its your code.
 
 ## Camera
 
-Use the 3rd party [Preview widget in Camera4Kivy](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#examples).
+Use the 3rd party [Camera4Kivy Preview widget](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#examples).
 
-It is also possible to use the OpenCV camera, one example is https://github.com/WikiGenius/SearchApp .
-
-[Kivy Camera](https://kivy.org/doc/stable/api-kivy.uix.camera.html) does not work on newer versions of Android, [for example](https://github.com/kivy/kivy/issues?q=is%3Aissue+is%3Aopen+camera). The same is true for is derivatives such as [Xcamera](https://github.com/kivy-garden/xcamera) from the Kivy Garden.
+Other cameras do not work on newer versions of Android; including OpenCV Camera, [Kivy Camera](https://kivy.org/doc/stable/api-kivy.uix.camera.html) and its derivatives such as [Xcamera](https://github.com/kivy-garden/xcamera).
 
 ## Keyboard
 
