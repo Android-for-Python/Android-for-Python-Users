@@ -485,11 +485,11 @@ When debugging, the default Python filter excludes any print statments in the se
 
 The lifetime of the service is limited by the service type. Three types of service are avilabile, the difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
 
-There is an api for restarting a service killed by the OS [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart). This is only meaningful with a background service, in this case it is probably better to use a foreground service.
+There is an api for restarting a service killed by the OS [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart). This is only meaningful with a background service.
 
 ### Background Service
 
-A background service is generally short lived as defined by the OS, it is specified in buildozer.spec with:
+A background service is generally "short lived" as defined by the OS, its lifetime is never longer than the lifetime of the app that started it. A background service is specified in buildozer.spec with:
 
 ```
 # (list) List of service to declare
