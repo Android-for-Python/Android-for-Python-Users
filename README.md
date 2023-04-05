@@ -509,7 +509,7 @@ android.permissions = FOREGROUND_SERVICE
 ```
 A notification icon may be created in the task bar, see next section.
 
-### Sticky Foreground Service.
+### Sticky Foreground Service
 
 A sticky foreground service lifetime is nominally unconstrained. An app may stopand start (not just pause) and resume communication with a sticky foreground service. **An app is responsible for terminating a sticky foreground service, specially if the service is energy intensive.** A sticky foreground service is specified in buildozer.spec with:
 
@@ -522,7 +522,11 @@ android.permissions = FOREGROUND_SERVICE
 ```
 A notification icon may be created in the task bar, see next section.
 
-Because an app may stop and restart while a sticky foreground service is running, the app may not contain valid dynamic information about the service. Importantly a reference to the instance of the service saved in a class variable will be `None` when the app restarts. The restart-stop code above re-initializes the service to obtain a new reference to the service so that it can be stopped.   
+Because an app may stop and restart while a sticky foreground service is running, the app may not contain valid dynamic information about the service. Importantly a reference to the instance of the service saved in a class variable will be `None` when the app restarts. The restart-stop code above re-initializes the service to obtain a new reference to the service so that it can be stopped.
+
+### Bound Service
+
+There is no built-in support for a bound service.
 
 ## Service Notifications
 
