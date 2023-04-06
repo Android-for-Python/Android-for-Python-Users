@@ -912,7 +912,7 @@ If your app is *unusually slow* to start, it is because it is doing too much wor
 
 A solution for monolithic `kv` is to have a `kv` *file* for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as lazy loading.
 
-Another common solution is to schedule any initial Python compute or I/O intensive tasks to occur after `on_start()`, either on demand or on some schedule.
+Another common solution is to schedule any initial Python compute or I/O intensive tasks to occur after `on_start()`, either on demand or on some schedule. And I/O operations must *always* be implemented in a non-blocking way, for example using threading.
 
 Autoclass is expensive in startup time, if you have 10 or more autoclass statements this may be significant on older devices. The solution is to throw out most of that clever Pyjnius code you spent so long perfecting, and move the code to a Java class in a .java file. Then reference your Java with one or two autoclass in the usual way. Include your Java in the build with Buildozer's `android.add_src`.
 
