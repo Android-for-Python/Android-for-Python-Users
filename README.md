@@ -916,7 +916,7 @@ If your app is *unusually slow* to start, it is because it is doing too much wor
 - blocking I/O operations in the above methods
 - too many `autoclass()` statements
 
-A solution for monolithic `kv` is to have a `kv` *file* for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as lazy loading.
+Monolithic `kv` is an example of doing too much work in the `build()` method. A solution for monolithic `kv` is to have a `kv` *file* for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as lazy loading.
 
 Another common solution is to schedule any initial Python compute intensive, or I/O tasks to occur after `on_start()`, either on demand or on some schedule. And I/O operations must *always* be implemented in a non-blocking way, for example using threading.
 
