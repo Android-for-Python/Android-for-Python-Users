@@ -910,7 +910,7 @@ On the desktop if you start a Kivy app from a desktop icon, the app is slower to
 
 If your app is *unusually slow* to start, it is because it is doing too much work in the `__init__()`, `build()` or `on_start()` methods. A common symptom of this is is a black screen *after* the splash screen has closed but before the app displays.
 
-**This is your code, you can change this behavior.** Common causes are monolithic `kv`, compute intensive Python in the above methods, I/O operations Python in the above methods, or too many `autoclass()` statements.
+**This is your code, you can change this behavior.** Common causes are monolithic `kv`, compute intensive Python in the above methods, I/O operations in the above methods, or too many `autoclass()` statements.
 
 A solution for monolithic `kv` is to have a `kv` *file* for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as lazy loading.
 
