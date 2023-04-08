@@ -1195,7 +1195,7 @@ Screen resolution can be addressed by specifying font size in units of sp, and w
 
 Screen orientation on a desktop defaults to landscape, and on a mobile device usually defaults to portrait, but can be landscape or both. **Developing a layout in landscape will not provide a good layout in portrait.** Develop for your target orientation, or support both orientations as follows.  
 
-For a mobile device the available orientation is set in buildozer.spec, `orientation` it can be one of `all`, `portrait`, or `landscape`.
+For a mobile device the available orientation is set in buildozer.spec, `orientation` it can be some combination of `portrait`, `landscape`, `portrait-reverse`, `landscape-reverse`.
 
 Supporting `orientation = <some list>` usually requires dynamically modifying layout parameters such as size, size_hint, or orientation. Do this using a Widget's `on_size()` method, and testing for orientation. [For example](https://github.com/Android-for-Python/c4k_photo_example/blob/main/applayout/photoscreen1.py#L34-L69). 
 
