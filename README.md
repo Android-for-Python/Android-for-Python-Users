@@ -641,7 +641,7 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 ## Changing buildozer.spec
 
-Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management*. If buildozer.spec is changed the change probably *won't* propagate into the apk on the next build.
+Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management of you project options*. If does do version management of the Android NDK and SDK. If buildozer.spec is changed the change probably *won't* propagate into the apk on the next build.
 
 After changing the buildozer.spec file (or any of the dependencies) users *must* do an appclean.
 ```
@@ -652,7 +652,11 @@ There may be some exceptions to this, the only one I know to be safe is one can 
 
 You don't need to always do a `buildozer appclean` if you don't change buildozer.spec.
 
-There is no magic universal buildozer.spec, its configuration depends on the functionality of your app. 
+There is no magic universal buildozer.spec, its configuration depends on the functionality of your app.
+
+Finally Buildozer's config parser sucks:
+ - do not add Python style trailing comments (a `#` after an option).
+ - do not prefix an uncommented option with whitespace or tab.
 
 ## What should I change?
 
