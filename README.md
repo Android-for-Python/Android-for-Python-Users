@@ -633,7 +633,7 @@ Some things you can do now to prevent surprises later:
 
 Buildozer's behavior can be non-deterministic in any of these cases:
 
-* It is run as root.
+* It is run as root (but Colab is OK).
 
 * It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`). Because some Python packages implement OS specific behavior based on the disk root name.
 
