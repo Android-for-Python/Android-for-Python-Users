@@ -761,6 +761,7 @@ Some Kivy widgets have requirement dependencies:
 
 `kivy.core.audio.SoundLoader` needs `ffpyplayer, ffpyplayer_codecs` 
 
+Not a Kivy Widget, but `requests` depends on `urllib3, chardet, idna, certifi` or `urllib3, charset-normalizer==2.1.1, idna, certifi`
 
 #### Requirements Examples
 
@@ -1410,6 +1411,8 @@ Now start your app.
 
 Note that `adb` does not finish, it continues logging until it is terminated.
 
+You can also connect the device wirelessly using adb, see https://www.makeuseof.com/use-adb-over-wifi-android/  but this does not appear to work from WSL.
+
 
 # Appendix B : Using an emulator
 
@@ -1737,7 +1740,11 @@ In buildozer.spec set [android.api](#androidapi) to 33.
 
 Things to check:
 
-A hidden directory (the name starts with a period) in the project path will cause this failure. This is a tool error.
+The file containing your App class is named main.py.
+
+The project directory is the current working directory.
+
+There is no hidden directory (the name starts with a period) in the project path will cause this failure. This is a p4a error.
 
 An app build error, try `python3 -m compileall main.py` to check for errors.
 
