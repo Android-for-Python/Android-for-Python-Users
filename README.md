@@ -1966,6 +1966,7 @@ to
 `
 android.presplash_lottie = ./pics/4.json
 `
+
 And [as always appclean](#changing-buildozerspec).
 
 ## ssl module in Python is not available
