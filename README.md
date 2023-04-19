@@ -1922,7 +1922,8 @@ For example change:
 
 to
 
-`android.gradle_dependencies = org.tensorflow:tensorflow-lite:+,org.tensorflow:tensorflow-lite-support:0.0.0-nightly` 
+`android.gradle_dependencies = org.tensorflow:tensorflow-lite:+,org.tensorflow:tensorflow-lite-support:0.0.0-nightly`
+
 And [as always appclean](#changing-buildozerspec).
 
 ## Could not resolve all files for configuration
@@ -1944,6 +1945,7 @@ to
 `
 android.gradle_dependencies = com.google.mlkit:face-detection:16.0.6
 `
+
 And [as always appclean](#changing-buildozerspec).
 
 ## presplash-lottie: No such file or directory
@@ -1971,6 +1973,7 @@ And [as always appclean](#changing-buildozerspec).
 `WARNING: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.`
 
 Re-check that the Buildozer install instructions were followed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
+
 And [as always appclean](#changing-buildozerspec).
 
 ## AttributeError: 'str' object has no attribute 'stdout'
@@ -1984,6 +1987,7 @@ AttributeError: 'str' object has no attribute 'stdout'
 Occurs because the default behavior of the Python `sh` package changed.
 
 Workaround: in buildozer.spec set `p4a.branch = develop` then run `buildozer appclean` and rebuild.
+
 And [as always appclean](#changing-buildozerspec).
 
 ## error: expression is not assignable
@@ -1998,6 +2002,7 @@ Error occurs when using `p4a.branch = develop` because this requires an updated 
 Either: use `p4a.branch = master`.
 
 Or: upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`.
+
 And [as always appclean](#changing-buildozerspec).
 
 ## error: possibly undefined macro: AM_ICONV
@@ -2010,4 +2015,5 @@ Install gettext
 ```
 sudo apt-get install gettext
 ```
+
 And [as always appclean](#changing-buildozerspec).
