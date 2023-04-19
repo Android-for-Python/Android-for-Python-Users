@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-03-28
+Revised 2023-04-18
 
 # Table of Contents
 
@@ -1228,7 +1228,7 @@ The KivyMD widgets have the look and feel that Android users expect, but the Mat
 
 Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the api may change with KivyMD versions.
 
-The KivyMD [instructions for Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer) are obsolete. You must [use kivy==master](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device) in `buildozer.spec` requirements.
+The KivyMD [instructions for Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer) are updated for [KivyMD 2.1.1 with Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device).
 
 ## Kivy Lifecycle
 
@@ -1792,7 +1792,14 @@ You can research Android package versions at [Maven](https://mvnrepository.com),
 
 This message is not from Python, it is from the Android run time system. Some Android api call has been corrupted. This is a memory corruption issue it may exhibit differently (or not at all) on different devices. Probably due to a misuse of Pyjnius, Plyer, or android_permissions.
 
-**ALERT** There is an [issue with KivyMD 1.1.1](https://github.com/kivymd/KivyMD/issues/1393) that can cause this issue, this issue does not appear to exist in KivyMD 1.0.2 .
+**ALERT** There is an [issue on some devices with KivyMD 1.1.1](https://github.com/kivymd/KivyMD/issues/1393) that can cause a null pointer deference, this issue does not exist in KivyMD 1.0.2 . You will see an (unfiltered) backtrace like this:
+```
+NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/_event.so
+DEBUG   :   NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/graphics/compiler.so
+DEBUG   :   NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/graphics/instructions.so
+NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/graphics/vbo.so
+```
+[To workaround, see the instructions](https://github.com/Android-for-Python/Android-for-Python-Users#kivymd).
 
 Memory issues are incredibly hard to debug, the error may or may not be local to the symptom. So removing code from the app may just move the issue, not remove the issue. That doesn't mean don't cut your app down, it means it is not sufficent to see your app work - you must also understand which code of yours broke the app.
 
