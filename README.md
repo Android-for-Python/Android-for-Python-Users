@@ -1799,7 +1799,7 @@ DEBUG   :   NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-pac
 DEBUG   :   NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/graphics/instructions.so
 NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/graphics/vbo.so
 ```
-[To workaround, see the instructions](https://github.com/Android-for-Python/Android-for-Python-Users#kivymd).
+[To workaround, see the instructions for KivyMD 2.1.1](https://github.com/Android-for-Python/Android-for-Python-Users#kivymd).
 
 Memory issues are incredibly hard to debug, the error may or may not be local to the symptom. So removing code from the app may just move the issue, not remove the issue. That doesn't mean don't cut your app down, it means it is not sufficent to see your app work - you must also understand which code of yours broke the app.
 
