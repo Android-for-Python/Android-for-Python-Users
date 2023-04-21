@@ -144,7 +144,8 @@ Revised 2023-04-18
   * [ssl module in Python is not available](#ssl-module-in-python-is-not-available)
   * [AttributeError: 'str' object has no attribute 'stdout'](#AttributeError-str-object-has-no-attribute-stdout)
   * [error: expression is not assignable](#error-expression-is-not-assignable)
-
+  * [error: possibly undefined macro: AM_ICONV](#error-possibly-undefined-macro-am_iconv)
+  * [error: failed to read PNG](#error-failed-to-read-png)
 
 # Introduction
 
@@ -1592,7 +1593,7 @@ p4a.branch = some_branch
   * [AttributeError: 'str' object has no attribute 'stdout'](#AttributeError-str-object-has-no-attribute-stdout)
   * [error: expression is not assignable](#error-expression-is-not-assignable)
   * [error: possibly undefined macro: AM_ICONV](#error-possibly-undefined-macro-am_iconv)
-
+  * [error: failed to read PNG](#error-failed-to-read-png)
 
 ## No module named 'msvcrt'
 
@@ -2012,9 +2013,19 @@ And [as always appclean](#changing-buildozerspec).
 configure.as:109: error: possibly undefined macro: AM_ICONV
 ```
 
-Install gettext
+Install gettext or gettext-dev
 ```
 sudo apt-get install gettext
 ```
+
+And [as always appclean](#changing-buildozerspec).
+
+## error: failed to read PNG
+
+```
+ ERROR:/content/.buildozer/android/......../src/main/res/mipmap/icon.png: AAPT: error: failed to read PNG signature: file does not start with PNG signature.
+```
+
+Set `icon.filename` to a PNG file.
 
 And [as always appclean](#changing-buildozerspec).
