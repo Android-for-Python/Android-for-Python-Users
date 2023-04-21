@@ -1610,7 +1610,7 @@ pip3 uninstall setuptools
 pip3 install setuptools==58.0.0
 ```
 
-And `buildozer appclean`.
+And [as always appclean](#changing-buildozerspec).
 
 ## Aidl not found
 
@@ -1988,7 +1988,7 @@ AttributeError: 'str' object has no attribute 'stdout'
 
 Occurs because the default behavior of the Python `sh` package changed.
 
-Workaround: in buildozer.spec set `p4a.branch = develop` then run `buildozer appclean` and rebuild.
+Workaround: in buildozer.spec set `p4a.branch = develop`.
 
 And [as always appclean](#changing-buildozerspec).
 
