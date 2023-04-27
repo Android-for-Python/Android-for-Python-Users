@@ -565,7 +565,7 @@ Android restricts access to many features. An app must declare the permissions i
 
 The [full list of permissions](https://developer.android.com/reference/android/Manifest.permission) is documented by Google. In general you must research the permissions needed by your app, resist the temptation to blindly guess.
 
-Note: starting with Android api 33 the names of the shared storage permissions changed. [See](#storage-permissions).
+Note: starting with Android api 33 the names of the shared storage permissions changed. See [Storage Permissions](#storage-permissions).
 
 ## Manifest permissions
 
