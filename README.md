@@ -1882,7 +1882,11 @@ May occur when building `libffi`.
 
 This can be due to an interaction between WSL 1 and Clang in NDK 25b.
 
-Upgrade to WSL 2
+Options: 
+
+ - Upgrade to WSL 2
+
+ - Patch Clang as described here https://github.com/kivy/buildozer/issues/1543#issuecomment-1382574110 (EXPERTS ONLY)
 
 Ref : https://github.com/microsoft/WSL/issues/8681  https://github.com/kivy/buildozer/issues/1543
 
