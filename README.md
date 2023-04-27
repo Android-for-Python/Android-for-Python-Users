@@ -561,7 +561,11 @@ If you want to understand the implementation of services in more detail, read th
 
 # App Permissions
 
-Android restricts access to many features. An app must declare the permissions it requires. There are two different declarations, manifest and user. User permissions are a subset of manifest permissions. The [full list of permissions](https://developer.android.com/reference/android/Manifest.permission) is documented by Google. In general you must research the permissions needed by your app, resist the temptation to blindly guess.
+Android restricts access to many features. An app must declare the permissions it requires. There are two different declarations, manifest and user. User permissions are a subset of manifest permissions.
+
+The [full list of permissions](https://developer.android.com/reference/android/Manifest.permission) is documented by Google. In general you must research the permissions needed by your app, resist the temptation to blindly guess.
+
+Note: starting with Android api 33 the names of the shared storage permissions changed. [See](#storage-permissions).
 
 ## Manifest permissions
 
