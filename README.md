@@ -694,7 +694,7 @@ There are a lots of other options about tool versions, Java, and stuff; most use
 
 - If you find the error message but don't understand it, first look in [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages)
 
-- If you can't find a similar message in the cryptic error messages list ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (not screen shots).
+- If you can't find a similar message in [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages) ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (not screen shots).
 
 - If you are still completely clueless about `STDOUT:` and `STDERR:`, ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (not screen shots). 
 
