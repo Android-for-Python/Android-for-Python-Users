@@ -696,7 +696,7 @@ There are a lots of other options about tool versions, Java, and stuff; most use
 
 - If you can't find a similar message in the cryptic error messages list ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (not screen shots).
 
-- If you are still completely clueless about what is in `STDOUT:` and `STDERR:`, ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (not screen shots). 
+- If you are still completely clueless about `STDOUT:` and `STDERR:`, ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (not screen shots). 
 
 ## Some buildozer.spec options
 
