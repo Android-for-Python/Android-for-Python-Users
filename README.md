@@ -42,6 +42,7 @@ Revised 2023-05-06
     + [Non-deterministic Behavior](#non-deterministic-behavior)
   * [Changing buildozer.spec](#changing-buildozerspec)
   * [What should I change?](#what-should-i-change)
+  * [If Buildozer fails to compile](#if-buildozer-fails-to-compile)
   * [Some buildozer.spec options](#some-buildozerspec-options)
     + [package.name](#packagename)
     + [package.domain](#packagedomain)
@@ -62,7 +63,6 @@ Revised 2023-05-06
     + [android.ndk](#androidndk)
     + [android.sdk](#androidsdk)
     + [android.archs](#androidarchs)
-  * [If Buildozer fails to compile](#if-buildozer-fails-to-compile)
 - [Debugging](#debugging)
   * [Get an Error Message](#get-an-error-message)
   * [Slow App Start](#slow-app-start)
@@ -686,6 +686,18 @@ Generally change as few options as possible; resist the temptation to overspecif
 
 There are a lots of other options about tool versions, Java, and stuff; most users can and should ignore these. 
 
+## If Buildozer fails to compile
+
+- If Buildozer fails to compile, look for an error message in the last part of the log after `STDOUT:`. There is also a log output after `STDERR:`, this is supplemental information and generally does not contain the error message.
+
+- If you don't can't find the error message in `STDOUT:`, try looking above `STDOUT:`.
+
+- If you find the error message but don't understand it, first look in [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages)
+
+- If you can't find a similar message in the cryptic error messages list ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (not screen shots).
+
+- If you are still completely clueless about what is in `STDOUT:` and `STDERR:`, ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (not screen shots). 
+
 ## Some buildozer.spec options
 
 [RTFM](https://github.com/kivy/buildozer/blob/master/docs/source/specifications.rst), really. And see the [KivyMD section](#kivymd).
@@ -875,18 +887,6 @@ This is what you want when building for the Android Store. For debugging this is
 android.archs = arm64-v8a
 ```
 An install message INSTALL_FAILED_NO_MATCHING_ABIS means the apk was built for a different architecture than the phone or emulator.
-
-## If Buildozer fails to compile
-
-- If Buildozer fails to compile, look for an error message in the last part of the log after `STDOUT:`. There is also a log output after `STDERR:`, this is supplemental information and generally does not contain the error message.
-
-- If you don't can't find the error message in `STDOUT:`, try looking above `STDOUT:`.
-
-- If you find the error message but don't understand it, first look in [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages)
-
-- If you can't find a similar message in that list ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (not screen shots).
-
-- If you are still completely clueless about what is in `STDOUT:` and `STDERR:`, ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (not screen shots). 
 
 # Debugging
 
