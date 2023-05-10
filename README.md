@@ -260,7 +260,7 @@ Shared storage is visible to all apps, and is persistent after an app is uninsta
 
 ### Android Version Issues
 
-On devices running Android 10 and later or build android.api > 28 shared storage is implemented as a database, you cannot access shared storage with Python file operations because there is no file path. The Kivy and KivyMD file choosers do not work, you must use the Android Chooser.
+On devices running Android 10 and later or build android.api > 28 shared storage is implemented as a database, you cannot access shared storage with Python file operations because there is no file path. The [Kivy Filechooser](#kivy-filechooser) and KivyMD file chooser only work with private storage, you must use the Android Chooser for shared storage.
 
 On devices with Android less than 10, shared storage is a file system and you can access file with `from android.storage import primary_external_storage_path`. But this **does not work** on devices running Android 10 or greater.
 
@@ -1259,7 +1259,16 @@ Kivy Filechooser may only be used with [Private Storage](#private-storage), and 
 
 ```
 FileChooserListView(rootpath='.')   # install directory
-FileChooserListView(rootpath=app_storage_path())  # persistent data directory
+```
+
+```
+from android import mActivity
+
+    context = mActivity.getApplicationContext()
+    result =  context.getExternalFilesDir(None)   
+    if result:
+        storage_path =  str(result.toString())
+        FileChooserListView(rootpath=storage_path) # storage directory
 ```
 
 For [Shared Storage](#shared-storage) use the Android Chooser. The [AndroidStorage4Kivy package](#androidstorage4kivy) provides a Python wrapper around the Android Chooser. Files in shared storage are referenced by a *content uri* not a *file path*, the package provides an api for copying between these. 
