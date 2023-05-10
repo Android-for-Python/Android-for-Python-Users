@@ -87,6 +87,7 @@ Revised 2023-05-06
     + [Screen Orientation](#screen-orientation)
     + [Screen Aspect Ratio](#screen-aspect-ratio)
     + [Testing Portability](#testing-portability)
+  * [Kivy Filechooser](#kivy-filechooser)
   * [KivyMD](#kivymd)
   * [Kivy Lifecycle](#kivy-lifecycle)
   * [Kivy Garden](#kivy-garden)
@@ -220,7 +221,21 @@ The install directory is `./`, files from the apk or aab can be accessed. An app
 
 Most of the time this is what you should use. 
 
-The app storage directory is persistent over the installed lifetime of the app, and is removed when the app is uninstalled. The app storage directory is accessed using:
+The app storage directory is persistent over the installed lifetime of the app, and is removed when the app is uninstalled.
+
+The app storage directory is accessed using:
+
+```python
+from android import mActivity
+
+    context = mActivity.getApplicationContext()
+    result =  context.getExternalFilesDir(None)   # don't forget the argument
+    if result:
+        storage_path =  str(result.toString())
+```
+
+In addition p4a provides a legacy storage directory, this works but does not return the same location as the Android documented `getExternalFilesDir(None)` above. The legacy storage directory may be appropriate for older Android devices, and should perhaps be used in the `not result` case above.
+
 ```python
 from android.storage import app_storage_path
 
@@ -1235,6 +1250,20 @@ To test the portability of a layout using a desktop, set the required size and d
 python3 main.py --size=420x720 --dpi=200
 ```
 Manually making changes to this window size quickly explores many cases. This provides a sanity check that you really have a good layout design.
+
+## Kivy Filechooser
+
+Android storage is not organized in the same way as storage on a desktop, read about [Android Storage](#android-storage).
+
+Kivy Filechooser may only be used with [Private Storage](#private-storage), and the `rootpath` property *must* be set to one of the three Private Storage locations. For example:
+
+```
+FileChooserListView(rootpath='.')   # install directory
+FileChooserListView(rootpath=app_storage_path())  # persistent data directory
+```
+
+For [Shared Storage](#shared-storage) use the Android Chooser. The [AndroidStorage4Kivy package](#androidstorage4kivy) provides a Python wrapper around the Android Chooser. Files in shared storage are referenced by a *content uri* not a *file path*, the package provides an api for copying between these. 
+
 
 ## KivyMD
 
