@@ -148,6 +148,7 @@ Revised 2023-05-09
   * [error: expression is not assignable](#error-expression-is-not-assignable)
   * [error: possibly undefined macro: AM_ICONV](#error-possibly-undefined-macro-am_iconv)
   * [error: failed to read PNG](#error-failed-to-read-png)
+  * [Build failed: Requested API target 31 is not available](#build-failed-requested-api-target-31-is-not-available)
 
 # Introduction
 
@@ -1647,6 +1648,8 @@ p4a.branch = some_branch
   * [error: expression is not assignable](#error-expression-is-not-assignable)
   * [error: possibly undefined macro: AM_ICONV](#error-possibly-undefined-macro-am_iconv)
   * [error: failed to read PNG](#error-failed-to-read-png)
+  * [Build failed: Requested API target 31 is not available](#build-failed-requested-api-target-31-is-not-available)
+
 
 ## No module named 'msvcrt'
 
@@ -2086,3 +2089,13 @@ And [appclean](#changing-buildozerspec).
 Set `icon.filename` to a PNG file.
 
 And [appclean](#changing-buildozerspec).
+
+## Build failed: Requested API target 31 is not available
+
+```
+[ERROR]:   Build failed: Requested API target 31 is not available, install it with the SDK android tool.
+```
+
+Buildozer defaults to a version of the Android tools that is no longer available, increase [android.api](https://github.com/Android-for-Python/Android-for-Python-Users#androidapi) to 33
+
+And [appclean](https://github.com/Android-for-Python/Android-for-Python-Users#changing-buildozerspec).
