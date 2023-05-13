@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-05-09
+Revised 2023-05-12
 
 # Table of Contents
 
@@ -149,6 +149,9 @@ Revised 2023-05-09
   * [error: possibly undefined macro: AM_ICONV](#error-possibly-undefined-macro-am_iconv)
   * [error: failed to read PNG](#error-failed-to-read-png)
   * [Build failed: Requested API target 31 is not available](#build-failed-requested-api-target-31-is-not-available)
+  * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
+  * ['config.pxi' not found](#configpxi-not-found)
+  
 
 # Introduction
 
@@ -1649,6 +1652,8 @@ p4a.branch = some_branch
   * [error: possibly undefined macro: AM_ICONV](#error-possibly-undefined-macro-am_iconv)
   * [error: failed to read PNG](#error-failed-to-read-png)
   * [Build failed: Requested API target 31 is not available](#build-failed-requested-api-target-31-is-not-available)
+  * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
+  * ['config.pxi' not found](#configpxi-not-found)
 
 
 ## No module named 'msvcrt'
@@ -2099,3 +2104,32 @@ And [appclean](#changing-buildozerspec).
 Buildozer defaults to a version of the Android tools that is no longer available, increase [android.api](https://github.com/Android-for-Python/Android-for-Python-Users#androidapi) to 33
 
 And [appclean](https://github.com/Android-for-Python/Android-for-Python-Users#changing-buildozerspec).
+
+## aaudio_DetectBrokenPlayState
+
+```
+/data/app/org.test.myapp-gVqZaGUKP2suWwYkosnKNQ==/lib/arm/libSDL2.so (aaudio_DetectBrokenPlayState+72) 
+```
+
+Add this code at the very top of your main.py
+
+```python
+import os
+from kivy.utils import platform
+if platform == "android":
+     os.environ["SDL_AUDIODRIVER"] = "android"
+```
+
+## 'config.pxi' not found
+
+```
+jnius/jnius.pyx:100:0: 'config.pxi' not found
+```
+
+First check for a corrupted Buildozer database: [appclean](#changing-buildozerspec) and build again.
+
+If that does not fix it, the Java install is probably mis-configured. If you are using a VM and you installed Java inside, don't do this.
+
+To reset the Java install: Uninstall all Java packages (this is important, don't skip it), and install the JDK as shown in the [Buildozer install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
+
+And [appclean](#changing-buildozerspec).
