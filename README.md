@@ -1300,10 +1300,11 @@ The App's `on_stop()` method is not always called, use `on_pause()` to save stat
 
 ## Kivy Garden
 
-[Kivy Garden](https://github.com/kivy-garden/) is a library of components ('flowers'). It is mostly not maintained. Anybody who has had a garden knows a garden needs a gardener, Kivy Garden doesn't have one. Set your expectations accordingly.
+[Kivy Garden](https://github.com/kivy-garden/) is a library of components ('flowers'). It consists of user contributions, and is mostly not maintained. Anybody who has had a garden knows a garden needs a gardener, Kivy Garden doesn't have one. Set your expectations accordingly.
 
-For flowers that are maintained add them to your buildozer.spec like this:
-`requirements = python3, kivy, kivy_garden.xcamera`. For flowers that are not maintained copy the code to your project and edit so that it builds.
+For flowers that are maintained add them to your buildozer.spec requirements as  `kivy_garden.flower`, and in the app `from kivy_garden.flower import FlowerClass` replacing `flower` with the actual name, for example `xcamera`.
+
+For flowers that are not maintained copy the flower code to your project and edit so that it builds. Note: `garden.matplotlib` is an example of a flower that is not maintained (also garden.matplotlib depends on matplotlib, this should be added to requirements).
 
 There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated and should not be used.
 
@@ -1389,6 +1390,8 @@ There are **a lot of useful features** to be found at these links:
 [https://github.com/AM-ash-OR-AM-I/Passlock](https://github.com/AM-ash-OR-AM-I/Passlock)
 
 [https://github.com/T-Dynamos/pyjnius-scripts](https://github.com/T-Dynamos/pyjnius-scripts)
+
+[https://github.com/mp-007/kivy_matplotlib_widget](https://github.com/mp-007/kivy_matplotlib_widget)
 
 # Release Builds
 
