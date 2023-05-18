@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-05-12
+Revised 2023-05-17
 
 # Table of Contents
 
@@ -82,6 +82,7 @@ Revised 2023-05-12
     + [Java Api Versions](#java-api-versions)
     + [Calling Python from Java](#calling-python-from-java)
 - [Kivy Related Topics](#kivy-related-topics)
+  * [disable_multitouch](#disable_multitouch)
   * [Layout](#layout)
     + [Screen Resolution](#screen-resolution)
     + [Screen Orientation](#screen-orientation)
@@ -151,6 +152,7 @@ Revised 2023-05-12
   * [Build failed: Requested API target 31 is not available](#build-failed-requested-api-target-31-is-not-available)
   * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
   * ['config.pxi' not found](#configpxi-not-found)
+  * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
   
 
 # Introduction
@@ -1219,6 +1221,17 @@ Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer
 
 # Kivy Related Topics
 
+## disable_multitouch
+
+If you use `disable_multitouch` to disable that nasty red dot in a desktop Kivy app, do not use it on Android (or iOS) as it will result in duplicate touch events in some cases.
+
+```python
+from kivy.utils import platform
+if platform not in ['android', 'ios']:
+    from kivy.config import Config 
+    Config.set('input', 'mouse', 'mouse, disable_multitouch')    
+```
+
 ## Layout
 
 A portable layout must be an *elastic* layout, because on a mobile device the Kivy window is defined by the screen and the screen changes between devices.
@@ -1657,7 +1670,7 @@ p4a.branch = some_branch
   * [Build failed: Requested API target 31 is not available](#build-failed-requested-api-target-31-is-not-available)
   * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
   * ['config.pxi' not found](#configpxi-not-found)
-
+  * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
 
 ## No module named 'msvcrt'
 
@@ -2131,8 +2144,16 @@ jnius/jnius.pyx:100:0: 'config.pxi' not found
 
 First check for a corrupted Buildozer database: [appclean](#changing-buildozerspec) and build again.
 
-If that does not fix it, the Java install is probably mis-configured. If you are using a VM and you installed Java inside, don't do this.
+If that does not fix it, **the Java install is probably mis-configured**. If you are using a VM and you installed Java inside, don't do this.
+
+If you are using Gentoo, check that the Java VM is configured for [the correct JDK](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit) using [eselect](https://wiki.gentoo.org/wiki/Java#Configuring_the_Java_Virtual_Machine).
 
 To reset the Java install: Uninstall all Java packages (this is important, don't skip it), and install the JDK as shown in the [Buildozer install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
 
 And [appclean](#changing-buildozerspec).
+
+## extra tap when single tap expected
+
+This is unexpected behavior, not an error message. It is due to using the Kivy `disable_multitouch` feature on a mobile device. Kivy multitouch creates a nasty red dot on the screen of a desktop, it is commonly disabled with `disable_multitouch`. The red dot does not occur on a mobile device, and should not be disabled on a mobile device.
+
+[Do this](#disable_multitouch).
