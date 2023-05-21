@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-05-17
+Revised 2023-05-21
 
 # Table of Contents
 
@@ -666,6 +666,8 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 * There are Python style trailing comments in the buildozer.spec file. Comment characters must be the first character on a line in the buildozer.spec file.
 
+* There is a white space or a tab before an uncommented option, an option must start on the first character of a line (this only applies to the first line of multi-line options).
+
 ## Changing buildozer.spec
 
 Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management of you project options*. If does do version management of the Android NDK and SDK. If buildozer.spec is changed the change probably *won't* propagate into the apk on the next build.
@@ -684,6 +686,7 @@ There is no magic universal buildozer.spec, its configuration depends on the fun
 Finally Buildozer's config parser sucks:
  - do not add Python style trailing comments (a `#` after an option).
  - do not prefix an uncommented option with whitespace or tab.
+ - do not ommit the `""` on option vaues with string types.
 
 ## What should I change?
 
@@ -984,9 +987,15 @@ The `keyboard_suggestions` property does not work on all Android devices. For a 
 
 ## Back Button and Gesture
 
-A back button/gesture can be detected with a test for key == 27, as shown in the [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/source/apis.rst#handling-the-back-button). The key handler **must** return a boolean.
+The back button or gesture is used by Android to pause an app, It has historically been used to also navigate within a Kivy app as shown below.
 
-Android 10 and up require that the back button/gesture can return the app to the Android home screen, therefore there must be a state in the app where back button/gesture is not consumed by the app. For example if the back button/gesture transitions between Kivy screens, from the "main" screen the app can on a back event go to the Android home screen:
+Android 10 and up require that the back button/gesture can return the app to the Android home screen (pause an app).
+
+Android 14 will show a preview of the 'Back target', this preview probably won't work inside Kivy apps. So using Back to navigate inside a Kivy app is proably going to be confusing to Android users.
+
+To use for internal navigation, a back button/gesture can be detected with a test for key == 27, as shown in the [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/source/apis.rst#handling-the-back-button). The key handler **must** return a boolean, which determines if the event is passed to the OS.
+
+In order to use the button for internal navigation there must be a state in the app where back button/gesture is not consumed by the app. For example if the back button/gesture transitions between Kivy screens, from the "main" screen the app can on a back event go to the Android home screen:
 ```python
 class Main(ScreenManager):
     def __init__(self, **kwargs): 
@@ -999,28 +1008,7 @@ class Main(ScreenManager):
             return True   # key event consumed by app
         else:           
             return False  # key event passed to Android
-	                  # (but you probably want the code below here)
 ```
-
-On an Android back gesture/button, by default Kivy **incorrectly** stops the app and leaves it in the app list. The correct behavior would be to pause the app. The workaround is:
-
-```python
-from kivy.utils import platform
-from android import mActivity
-
-    def keyboard(self,window,key,*args):
-        if key == 27 and platform == 'android':	
-    	    mActivity.moveTaskToBack(True)
-            return True 
-```
-
-If you wish to stop the app and remove it from the app list, use:
-
-```python
-            mActivity.finishAndRemoveTask()
-```
-
-This has been addressed in kivy==master, where the above workarounds are not required.
 
 # Android Packages
 
@@ -1939,15 +1927,9 @@ And [appclean](#changing-buildozerspec).
 
 This message comes from KivyMD, and is seen on all platforms. The message may not be seen and you may see an Android crash (hidden by the Python log filter), related to graphics.
 
-The options are:
+Use Kivy 2.2.0
 
- - Use `kivy, kivymd==1.0.2`
-
- - Use `kivy==master, https://github.com/kivymd/KivyMD/archive/master.zip`
-
-To install the Kivy master version (2.2.0.dev0) on a desktop, see the Kivy install documentation. See also https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-fix-a-shader-bug-on-an-android-device 
-
-Background: KivyMD 1.1.1 uses a feature that is only available in the master version of Kivy (2.2.0.dev0); here is no Kivy 2.2.0 despite what its says in the KivyMD documentation. This Kivy feature (BoxShadow) has had issues - it has not been reliable, this may be fixed now.
+See also https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-fix-a-shader-bug-on-an-android-device 
 
 And [appclean](#changing-buildozerspec).
 
