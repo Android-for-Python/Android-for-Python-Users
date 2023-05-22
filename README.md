@@ -700,7 +700,7 @@ Generally change as few options as possible; resist the temptation to overspecif
 
  - If the app uses Python packages that are normally installed with `pip3`, add these and their dependencies to `requirements`.
 
- - You want pretty? add `presplash.filename` and `icon.filename`.
+ - Optionally add `presplash.filename`, and `icon.filename` (icon must be a `.png`).
 
  - Add the required [Android Permissions](#app-permissions) to `android.permissions`. For example if the app connects to a network add INTERNET permission. 
 
