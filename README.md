@@ -664,7 +664,7 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 * It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`). Because some Python packages implement OS specific behavior based on the disk root name.
 
-* There are Python style trailing comments in the buildozer.spec file. Comment characters must be the first character on a line in the buildozer.spec file.
+* There are Python style trailing comments in the buildozer.spec file, or comment characters inside a list. Comment characters must be the first character on a line in the buildozer.spec file. 
 
 * There is a white space or a tab before an uncommented option, an option must start on the first character of a line (this only applies to the first line of multi-line options).
 
@@ -683,10 +683,10 @@ You don't need to always do a `buildozer appclean` if you don't change buildozer
 
 There is no magic universal buildozer.spec, its configuration depends on the functionality of your app.
 
-Finally Buildozer's config parser sucks:
- - do not add Python style trailing comments (a `#` after an option).
- - do not prefix an uncommented option with whitespace or tab.
- - do not ommit the `""` on option vaues with string types.
+Finally buildozer.spec's syntax is not Python's syntax:
+ - comment characters must only occur on the first character of a line.
+ - comment characters must not occur inside a list.
+ - build options must start on the first character of a line.
 
 ## What should I change?
 
