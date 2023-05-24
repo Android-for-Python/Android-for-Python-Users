@@ -2062,11 +2062,7 @@ jnius/jnius.c:55290:5: error: expression is not assignable
     ++Py_REFCNT(o);
 ```
 
-Error occurs when using `p4a.branch = develop` because this requires an updated Cython.
-
-Either: use `p4a.branch = master`.
-
-Or: upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`.
+Upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`.
 
 And [appclean](#changing-buildozerspec).
 
