@@ -153,7 +153,7 @@ Revised 2023-05-21
   * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
   * ['config.pxi' not found](#configpxi-not-found)
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
-  * [No module named 'kivy._clock'](#no-module-named-kivy._clock)
+  * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
   
 
 # Introduction
@@ -1660,7 +1660,7 @@ p4a.branch = some_branch
   * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
   * ['config.pxi' not found](#configpxi-not-found)
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
-  * [No module named 'kivy._clock'](#no-module-named-kivy._clock)
+  * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
 
 ## No module named 'msvcrt'
 
