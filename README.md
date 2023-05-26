@@ -153,6 +153,7 @@ Revised 2023-05-21
   * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
   * ['config.pxi' not found](#configpxi-not-found)
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
+  * [No module named 'kivy._clock'](#no-module-named-kivy._clock)
   
 
 # Introduction
@@ -1659,6 +1660,7 @@ p4a.branch = some_branch
   * [aaudio_DetectBrokenPlayState](#aaudio_DetectBrokenPlayState)
   * ['config.pxi' not found](#configpxi-not-found)
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
+  * [No module named 'kivy._clock'](#no-module-named-kivy._clock)
 
 ## No module named 'msvcrt'
 
@@ -2135,3 +2137,13 @@ And [appclean](#changing-buildozerspec).
 This is unexpected behavior, not an error message. It is due to using the Kivy `disable_multitouch` feature on a mobile device. Kivy multitouch creates a nasty red dot on the screen of a desktop, it is commonly disabled with `disable_multitouch`. The red dot does not occur on a mobile device, and should not be disabled on a mobile device.
 
 [Do this](#disable_multitouch).
+
+## No module named 'kivy._clock'
+
+```
+05-22 01:24:23.273 10977 12969 I python : ModuleNotFoundError: No module named 'kivy._clock'
+```
+
+Follow the [Buildozer install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
+
+And [appclean](#changing-buildozerspec).
