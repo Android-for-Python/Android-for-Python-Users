@@ -2059,12 +2059,23 @@ And [buildozer appclean](#changing-buildozerspec).
 
 ## error: expression is not assignable
 
+There are two different causes:
+
 ```
 jnius/jnius.c:55290:5: error: expression is not assignable
     ++Py_REFCNT(o);
 ```
 
 Upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`.
+
+And [buildozer appclean](#changing-buildozerspec).
+
+```
+c/_cffi_backend.c:407:23: error: expression is not assignable
+        Py_REFCNT(ct) = 43;
+```
+
+Set `p4a.branch = develop`
 
 And [buildozer appclean](#changing-buildozerspec).
 
