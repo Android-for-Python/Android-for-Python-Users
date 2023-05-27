@@ -2059,7 +2059,7 @@ And [buildozer appclean](#changing-buildozerspec).
 
 ## error: expression is not assignable
 
-There are two different causes:
+There are two different causes, pick the one that applies:
 
 ```
 jnius/jnius.c:55290:5: error: expression is not assignable
