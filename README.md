@@ -1677,7 +1677,7 @@ pip3 uninstall setuptools
 pip3 install setuptools==58.0.0
 ```
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## Aidl not found
 
@@ -1711,7 +1711,7 @@ In this case the requirements for OpenCV is incorrectly specified, it should be 
 
 If this message is `charset_normalizer` related, in Buildozer requirements set `charset-normalizer==2.1.1`.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## EM_X86_64 instead of EM_AARCH64
 
@@ -1725,7 +1725,7 @@ One of the app requirements needs a recipe (or needs to be specified differently
 
 If this message is `charset-normalizer` related, in Buildozer requirements set `charset-normalizer==2.1.1`.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## No module named '_Socket'
 
@@ -1808,7 +1808,7 @@ Check also that your project files are owned by a user, and not by root.
 
 In buildozer.spec set [android.api](#androidapi) to 33.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## BUILD FAILURE: No main.py(o)
 
@@ -1846,7 +1846,7 @@ import certifi
 resp = request.urlopen(req, cafile=certifi.where())
 ```
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## gradlew failed!
 
@@ -1856,7 +1856,7 @@ The Gradle error message is further up the log file. Search upwards for 'BUILD F
 
 Generally Gradle errors are due to an incorrect Java version, Java usage errors, missing Java files, a Java jar [built with a newer](#unsupported-class-file-major-version-62) version of Java, missing Android Java packages, or misconfigured Android resource or configuration files. Gradle does not analyze Python errors.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## android:exported
 
@@ -1893,7 +1893,7 @@ Some possibilities:
 
  - It is also possible that an [impure Python package that has no recipe](#wheels) could generate this error; though [other error messages](#em_x86_64-instead-of-em_aarch64) [or](#64-bit-instead-of-32-bit) are more likely.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## No module named 'android'
 
@@ -1921,7 +1921,7 @@ Usually this is due to [version pinning](#version-pinning) a compile recipe, the
 
 Remove the version pin, or locally modify the recipe.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## Kivy is too old
 
@@ -1933,7 +1933,7 @@ Use Kivy 2.2.0
 
 See also https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-fix-a-shader-bug-on-an-android-device 
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## C compiler cannot create executables
 
@@ -1951,7 +1951,7 @@ Options:
 
 Ref : https://github.com/microsoft/WSL/issues/8681  https://github.com/kivy/buildozer/issues/1543
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## undefined macro LT_SYS_SYMBOL_USCORE
 
@@ -1959,7 +1959,7 @@ And [appclean](#changing-buildozerspec).
 
 Re-check that the Buildozer dependencies are installed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## all is not a valid value for orientation
 
@@ -1990,7 +1990,7 @@ to
 
 `android.gradle_dependencies = org.tensorflow:tensorflow-lite:+,org.tensorflow:tensorflow-lite-support:0.0.0-nightly`
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## Could not resolve all files for configuration
 
@@ -2012,7 +2012,7 @@ to
 android.gradle_dependencies = com.google.mlkit:face-detection:16.0.6
 `
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## presplash-lottie: No such file or directory
 
@@ -2033,7 +2033,7 @@ to
 android.presplash_lottie = ./pics/4.json
 `
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## ssl module in Python is not available
 
@@ -2041,7 +2041,7 @@ And [appclean](#changing-buildozerspec).
 
 Re-check that the Buildozer install instructions were followed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## AttributeError: 'str' object has no attribute 'stdout'
 
@@ -2055,7 +2055,7 @@ Occurs because the default behavior of the Python `sh` package changed.
 
 Workaround: in buildozer.spec set `p4a.branch = develop`.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## error: expression is not assignable
 
@@ -2066,7 +2066,7 @@ jnius/jnius.c:55290:5: error: expression is not assignable
 
 Upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## error: possibly undefined macro: AM_ICONV
 
@@ -2079,7 +2079,7 @@ Install gettext or gettext-dev
 sudo apt-get install gettext
 ```
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## error: failed to read PNG
 
@@ -2089,7 +2089,7 @@ And [appclean](#changing-buildozerspec).
 
 Set `icon.filename` to a PNG file.
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## Build failed: Requested API target 31 is not available
 
@@ -2099,7 +2099,7 @@ And [appclean](#changing-buildozerspec).
 
 Buildozer defaults to a version of the Android tools that is no longer available, increase [android.api](https://github.com/Android-for-Python/Android-for-Python-Users#androidapi) to 33
 
-And [appclean](https://github.com/Android-for-Python/Android-for-Python-Users#changing-buildozerspec).
+And [buildozer appclean](https://github.com/Android-for-Python/Android-for-Python-Users#changing-buildozerspec).
 
 ## aaudio_DetectBrokenPlayState
 
@@ -2122,7 +2122,7 @@ if platform == "android":
 jnius/jnius.pyx:100:0: 'config.pxi' not found
 ```
 
-First check for a corrupted Buildozer database: [appclean](#changing-buildozerspec) and build again.
+First check for a corrupted Buildozer database: [buildozer appclean](#changing-buildozerspec) and build again.
 
 If that does not fix it, **the Java install is probably mis-configured**. If you are using a VM and you installed Java inside, don't do this.
 
@@ -2130,7 +2130,7 @@ If you are using Gentoo, check that the Java VM is configured for [the correct J
 
 To reset the Java install: Uninstall all Java packages (this is important, don't skip it), and install the JDK as shown in the [Buildozer install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
 
 ## extra tap when single tap expected
 
@@ -2146,4 +2146,4 @@ This is unexpected behavior, not an error message. It is due to using the Kivy `
 
 Follow the [Buildozer install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
 
-And [appclean](#changing-buildozerspec).
+And [buildozer appclean](#changing-buildozerspec).
