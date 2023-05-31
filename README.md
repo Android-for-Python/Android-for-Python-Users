@@ -2181,6 +2181,6 @@ Background:
 
 In Kivy border_radius (introduced in 2.2.0) is a 4-tuple. https://github.com/kivy/kivy/blob/2.2.0/kivy/graphics/boxshadow.pyx#L53
 
-The version of KivyMD you are using appears to be using it as a scalar. So I think you need to ask the KivyMD folks what version of their code to use. 
+The version of KivyMD you are using appears to be using it as a scalar. Ask the KivyMD folks what version of their code to use. 
 
 A quick look at the versions shows KivyMD 1.1.1 https://github.com/kivymd/KivyMD/blob/1.1.1/kivymd/uix/behaviors/elevation.py does not use border_radius. For any side effects of using this version contact KivyMD.
