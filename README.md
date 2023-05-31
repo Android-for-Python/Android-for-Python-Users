@@ -749,6 +749,22 @@ Do not add Python system modules, only packages you might install with pip3 on t
 
 There are some pip3 packages that are added automatically, no need to put these in requirements: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android`.
 
+In an example of *poor tool design*, the names of some recipes do not match the Pypi package names. Use the 'Recipe Name', in place of the 'PyPi Name'.
+
+---------------------------------
+| Pypi Name | Recipe Name |
+----------------------------
+| python-dateutil | dateutil |
+| mysql-python | mysql |
+| ndg-httpsclient | ndghttpsclient |
+| opencv-python | opencv |
+| opencv-contrib-python | opencv_extras |
+| protobuf-python | protobuf_cpp |
+| leveldb | pyleveldb |
+| spine-cython | spine |
+| pyav | av |
+------------------
+
 #### Version pinning
 
 If a requirement is a package that requires a [recipe](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes), version pinning may result in a build error. Because a compile recipe is created for the version specified in the recipe, and may not apply to other versions if the compile model has changed.
