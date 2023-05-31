@@ -154,7 +154,7 @@ Revised 2023-05-21
   * ['config.pxi' not found](#configpxi-not-found)
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
-  
+  * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)  
 
 # Introduction
 
@@ -1661,6 +1661,7 @@ p4a.branch = some_branch
   * ['config.pxi' not found](#configpxi-not-found)
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
+  * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)
 
 ## No module named 'msvcrt'
 
@@ -1929,7 +1930,7 @@ And [buildozer appclean](#changing-buildozerspec).
 
 This message comes from KivyMD, and is seen on all platforms. The message may not be seen and you may see an Android crash (hidden by the Python log filter), related to graphics.
 
-Use Kivy 2.2.0
+Use Kivy 2.2.0, for the version of KivyMD to use, contact KivyMD support.
 
 See also https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-fix-a-shader-bug-on-an-android-device 
 
@@ -2158,3 +2159,28 @@ This is unexpected behavior, not an error message. It is due to using the Kivy `
 Follow the [Buildozer install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
 
 And [buildozer appclean](#changing-buildozerspec).
+
+## ValueError: 'border_radius' must have 4, got 0
+
+```
+File "kivy/graphics/boxshadow.pyx", line 316, in kivy.graphics.boxshadow.BoxShadow._check_iter
+I   ValueError: 'border_radius' must have 4, got 0
+```
+
+or
+
+```
+File "kivy\graphics\boxshadow.pyx", line 311, in kivy.graphics.boxshadow.BoxShadow._check_iter
+TypeError: 'spread_radius' accepts only list/tuple, got <class 'float'>
+
+```
+
+This is a KivyMD issue, please ask that project.
+
+Background:
+
+In Kivy border_radius (introduced in 2.2.0) is a 4-tuple. https://github.com/kivy/kivy/blob/2.2.0/kivy/graphics/boxshadow.pyx#L53
+
+The version of KivyMD you are using appears to be using it as a scalar. So I think you need to ask the KivyMD folks what version of their code to use. 
+
+A quick look at the versions shows KivyMD 1.1.1 https://github.com/kivymd/KivyMD/blob/1.1.1/kivymd/uix/behaviors/elevation.py does not use border_radius. For any side effects of using this version contact KivyMD.
