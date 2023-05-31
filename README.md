@@ -751,9 +751,9 @@ There are some pip3 packages that are added automatically, no need to put these 
 
 In an example of *poor tool design*, the names of some recipes do not match the Pypi package names. Use the 'Recipe Name', in place of the 'PyPi Name'.
 
----------------------------------
+
 | Pypi Name | Recipe Name |
-----------------------------
+------------|-------------|
 | python-dateutil | dateutil |
 | mysql-python | mysql |
 | ndg-httpsclient | ndghttpsclient |
@@ -763,7 +763,7 @@ In an example of *poor tool design*, the names of some recipes do not match the 
 | leveldb | pyleveldb |
 | spine-cython | spine |
 | pyav | av |
-------------------
+
 
 #### Version pinning
 
