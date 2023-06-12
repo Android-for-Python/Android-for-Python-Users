@@ -9,6 +9,7 @@ Revised 2023-05-30
 # Table of Contents
 
 - [Introduction](#introduction)
+- [Confidence and Competence](#confidence-and-competence)
 - [What is Different about Android?](#what-is-different-about-android)
   * [Posix](#posix)
   * [Wheels](#wheels)
@@ -169,6 +170,14 @@ Python-for-Android is a truly amazing achievement, but there are some details to
 Lastly this document is my understanding as of the date above. I am not a developer in any of the Kivy sub projects (except for a few PRs). I have created a suite of [Android orientated examples](https://github.com/Android-for-Python/INDEX-of-Examples).
 
 The document is guaranteed to be incomplete is some way, and may possibly be wrong in another way. But reading it will hopefully provide you with come context with which to read the official documentation and to experiment. Those two steps are the key to insight and understanding, which in turn is key to making your idea real.
+
+# Confidence and Competence
+
+This document aims to provide the context to enable you to take yourself up the slope on the right side of the graph.
+
+You can reach the peak on the left by watching old YouTube videos, or letting ChatGPT write your code.
+
+![From Wikimedia Commons](images/Dunning-Kruger_Effect_01.png)
 
 # What is Different about Android?
 
