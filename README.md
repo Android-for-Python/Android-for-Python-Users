@@ -175,7 +175,7 @@ The document is guaranteed to be incomplete is some way, and may possibly be wro
 
 This document aims to provide the context to enable you to take yourself up the slope on the right side of the graph.
 
-You can reach the peak on the left by not reading the documentation, watching old YouTube videos, or letting ChatGPT write your code.
+You can reach the peak on the left by failing to read the documentation, watching old YouTube videos, or letting ChatGPT write your code.
 
 ![Dunning-Kruger Effect](https://github.com/Android-for-Python/Android-for-Python-Users/blob/main/images/Dunning%E2%80%93Kruger_Effect_01.png)
 
