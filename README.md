@@ -177,7 +177,9 @@ This document aims to provide the context to enable you to take yourself up the 
 
 You can reach the peak on the left by watching old YouTube videos, or letting ChatGPT write your code.
 
-![From Wikimedia Commons](https://github.com/Android-for-Python/Android-for-Python-Users/blob/main/images/Dunning%E2%80%93Kruger_Effect_01.png)
+![Dunning-Kruger Effect](https://github.com/Android-for-Python/Android-for-Python-Users/blob/main/images/Dunning%E2%80%93Kruger_Effect_01.png)
+
+Source: Wikimedia Commons
 
 # What is Different about Android?
 
