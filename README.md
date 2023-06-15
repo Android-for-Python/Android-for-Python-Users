@@ -648,7 +648,7 @@ Finally it is normal Android behavior that if a user denies permission, it may n
 
 **The current release version of Buildozer is 1.5, by default always Buildozer uses the current release version of p4a.**
 
-Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL, Colab, or VirtualBox to run Buildozer. Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help and in software maturity.
+Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL, Colab, or VirtualBox to run Buildozer (most users use WSL or Colab). Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help.
 
 **If building on WSL, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`), as this may give unpredicatable results.**
 
