@@ -724,13 +724,21 @@ There are a lots of other options about tool versions, Java, and stuff; most use
 
 ## If Buildozer fails to compile
 
-- If Buildozer fails to compile, look for an error message in the last part of the log after `STDOUT:` but before `STDERR:`. There is also a log output after `STDERR:`, this is supplemental information and generally does not contain the error message.
+### Find the error message
+
+- Look for an error message in the last part of the log after `STDOUT:` but before `STDERR:`. There is also a log output after `STDERR:`, this is supplemental information and generally does not contain the error message.
 
 - If you don't can't find the error message in `STDOUT:`, try looking immediately above `STDOUT:` for lines starting with `[DEBUG]`. 
 
-- If you find the error message but don't understand it, first look in [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages). If you can't find anything there, ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file, *not screen shots*.
+- If you can't find any message, get enough information so somebody can help you. Ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (*not screen shots*). 
 
-- If you can't find any error message, ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file, *not screen shots*. 
+### Understand the message
+
+- If you are lucky the message is self explanatory, or a quick search will explain it. 
+
+- If you don't understand the message, look in [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages).
+
+- If you still don't understand, get enough information so somebody can help you. Ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (*not screen shots*).
 
 ## Some buildozer.spec options
 
