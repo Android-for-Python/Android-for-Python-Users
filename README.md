@@ -652,7 +652,7 @@ Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL,
 
 **If building on WSL, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`), as this may give unpredicatable results.**
 
-[Install documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), RTFM, really.
+[Install documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), RTFM, really. **There is a Docker image *- do not use it*, the install documentation does not reference Docker, and the Docker image is obsolete and not maintained.**
 
 **Test your Buildozer install by building (`buildozer android debug`) and running [Hello World](https://kivy.org/doc/stable/guide/basic.html#create-an-application) with the default `buildozer.spec` (create this with `buildozer init`, modify to set `android.api=32`). I know you just want to see your app run on Android, but this simple first step will provide you with a framework to address any future issues.**
 
