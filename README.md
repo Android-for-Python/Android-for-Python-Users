@@ -1050,7 +1050,9 @@ class Main(ScreenManager):
 
 ## The Android package
 
-P4a provides Android specific utilities in the android package, this is only available on Android. It is as they say 'self documenting', which really means there isn't any documentation. [Read the code](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes/android/src/android).
+P4a provides Android specific utilities in the android package, this package is only available on Android. It is a Python interface to some Android OS apis, these apis only exist on Android devices and Android emulators. Which is why it is only available on Android. The package is part of p4a and you will not find it standalone on PyPi.
+
+The package is as they say 'self documenting', which really means there isn't any documentation. [Read the code](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes/android/src/android).
 
 One (!) such utility is:
 
