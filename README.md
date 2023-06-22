@@ -1090,7 +1090,7 @@ If you plan to use Plyer, and the idea of it is very appealing, first try a smal
 
 ### Basic Pyjnius Usage
 
-[Pyjnus](https://github.com/kivy/pyjnius/tree/master/docs/source) allows import of Java code into Python code. It is an interface to the Java api and the Android api. The Android api is only available on Android devices, Android api calls must be debugged on Android.
+[Pyjnus](https://github.com/kivy/pyjnius/tree/master/docs/source) allows import of Java code into Python code. It is an interface to the Java api and the Android api. The Android api is only available on Android devices and emulators, so Android api calls must be debugged on Android.
 
 ```python
 from jnius import autoclass
