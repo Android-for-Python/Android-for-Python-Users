@@ -95,6 +95,7 @@ Revised 2023-06-12
   * [Kivy Garden](#kivy-garden)
 - [Creating a Recipe](#creating-a-recipe)
   * [Why a Recipe](#why-a-recipe)
+  * [Porting Overview](#porting-overview)
   * [P4A Recipe API](#p4a-recipe-api)
   * [Porting Build Instructions](#porting-build-instructions)
   * [Recipe Support](#recipe-support)
@@ -252,12 +253,19 @@ from android import mActivity
         storage_path =  str(result.toString())
 ```
 
-In addition p4a provides a legacy storage directory, this works but does not return the same location as the Android documented `getExternalFilesDir(None)` above. The legacy storage directory may be appropriate for older Android devices, and should perhaps be used in the `not result` case above.
+In addition p4a provides a legacy storage directory, this works but does not return the same location as the Android documented `getExternalFilesDir(None)` above. The legacy storage directory may be required for older Android devices, and could be used as a fallback. But the location returned by `app_storage_path()` is **not secure**. 
+
 
 ```python
 from android.storage import app_storage_path
+from android import mActivity
 
-    app_storage_directory_path = app_storage_path()
+    context = mActivity.getApplicationContext()
+    result =  context.getExternalFilesDir(None)   # don't forget the argument
+    if result:
+        storage_path =  str(result.toString())
+    else:
+        storage_path = app_storage_path()
 ```
 
 ### App Cache Directory
@@ -1360,6 +1368,16 @@ P4a provides an api for creating package build scripts, such a script is called 
 - The p4a recipe API.
 
 - The existing build instruction for the package.
+
+## Porting Overview
+
+A recipe is simply a format required by p4a, it doesn't do much except set the environment variables for Clang, define some steps (environment, setup, build, install), and automate simple cases. 
+
+The potentially hard and unique part is understanding what you want the package's build scripts to do, once you understand that then to automate within p4a's format is fairly simple.
+
+Its easy to incorrectly focus one's attention on the p4a api when the real issue is understanding what you want the build scripts to do. As humans we hope the recipe will magically make our dreams come true, because the work of understanding a build in order to port it can be hard.
+
+By analogy think of your self as an author of a recipe book, the easy part is formatting for the publisher (p4a recipe) . The potentially hard part is interpreting the chef's instructions (make, cmake, setup, configure.....), so you can modify the instructions for making the dish in a household kitchen. 
 
 ## P4A Recipe API
 
