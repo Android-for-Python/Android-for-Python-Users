@@ -221,7 +221,7 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 A mobile app is different from a desktop app in that it is less likely to be physically secure from bad actors. Anybody with Android Studio and a device on which your app is installed can view most of the contents of your app, though Python, Java, or C code must be decompiled to be human readable (this is not hard).
 
-Nothing is perfectly secure (just ask anybody who prints there own copies of a government's paper money). You can make confidential information harder to reverse engineer by designing your app such that:
+Nothing is perfectly secure (just ask any hacker, or anybody who prints there own copies of a government's paper money). You can make confidential information harder to reverse engineer by designing your app such that:
 
  - Any trade secrets, and also the app user's private data, are only saved on a secure server.
 
