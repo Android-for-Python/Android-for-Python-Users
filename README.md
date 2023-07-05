@@ -221,13 +221,13 @@ Unlike the desktop you must provide information *about* your Python code, this r
 
 A mobile app is different from a desktop app in that it is less likely to be physically secure from bad actors. Anybody with Android Studio and a device on which your app is installed can view most of the contents of your app, though Python, Java, or C code must be decompiled to be human readable (this is not hard).
 
-You can make things harder to reverse engineer by designing your app such that:
+Nothing is perfectly secure (just ask anybody who prints there own copies of a government's paper money). You can make confidential information harder to reverse engineer by designing your app such that:
 
- - Any trade secrets are on a server.
+ - Any trade secrets, and also the app user's private data, are only saved on a server.
 
  - No passwords are built into the app, password vaildation is with a server.
 
- - Any temporary refresh keys are saved in [app private storage](#app-storage-directory), and not in the app install directory. And for private storage do not us p4a's `android.app_storage_path()` api call as this location is not secure 
+ - Any temporary refresh keys are saved in [app private storage](#app-storage-directory), and not in the app install directory. And for private storage location do not us p4a's `android.app_storage_path()` api call as this location is not secure 
 
 # Android Storage
 
