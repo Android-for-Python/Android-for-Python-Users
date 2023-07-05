@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-06-12
+Revised 2023-07-03
 
 # Table of Contents
 
@@ -14,6 +14,7 @@ Revised 2023-06-12
   * [Posix](#posix)
   * [Wheels](#wheels)
   * [Meta-information](#meta-information)
+  * [App Security](#app-security)
 - [Android Storage](#android-storage)
   * [Private Storage](#private-storage)
     + [App Install Directory](#app-install-directory)
@@ -216,6 +217,18 @@ If the package requires a recipe, and one does not exist - your app is not porta
 
 Unlike the desktop you must provide information *about* your Python code, this requirement causes everybody who doesn't understand it to crash and burn. This information must be supplied in the buildozer.spec file. It includes *all* the pip packages your app depends on, any file types your app depends on for data, and the Android permissions your app depends on. Meta-information may not be limited to that short list, but that list is critical.
 
+## App Security
+
+A mobile app is different from a desktop app in that it is less likely to be physically secure from bad actors. Anybody with Android Studio and a device on which your app is installed can view most of the contents of your app, though Python, Java, or C code must be decompiled to be human readable (this is not hard).
+
+You can make things harder to reverse engineer by designing your app such that:
+
+ - Any trade secrets are on a server.
+
+ - No passwords are built into the app, password vaildation is with a server.
+
+ - Any temporary refresh keys are saved in [app private storage](#app-storage-directory), and not in the app install directory. And for private storage do not us p4a's `android.app_storage_path()` api call as this location is not secure 
+
 # Android Storage
 
 The view of the Android file system has changed a few times over the years. Modern Android devices physically use *external storage*, however the term is ambiguous as it applies to two incompatible uses cases.
@@ -263,7 +276,7 @@ from android import mActivity
     context = mActivity.getApplicationContext()
     result =  context.getExternalFilesDir(None)   # don't forget the argument
     if result:
-        storage_path =  str(result.toString())
+        storage_path = str(result.toString())
     else:
         storage_path = app_storage_path()
 ```
@@ -648,7 +661,7 @@ An implementation example is the [`AndroidPermissions`](https://github.com/Andro
 
 Note that the App class variable `self.dont_gc` delays garbage collection and it critically important.
 
-Finally it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. In this case the user must grant the permission from the Android Settings panel for the app.  
+Finally it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. In this case the user must grant the permission from the Android Settings panel for the app.
 
 # Buildozer and p4a
 
