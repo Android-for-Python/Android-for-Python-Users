@@ -223,9 +223,9 @@ A mobile app is different from a desktop app in that it is less likely to be phy
 
 Nothing is perfectly secure (just ask anybody who prints there own copies of a government's paper money). You can make confidential information harder to reverse engineer by designing your app such that:
 
- - Any trade secrets, and also the app user's private data, are only saved on a server.
+ - Any trade secrets, and also the app user's private data, are only saved on a secure server.
 
- - No passwords are built into the app, password vaildation is with a server.
+ - No passwords are built into the app, password vaildation is with a secure server.
 
  - Any temporary refresh keys are saved in [app private storage](#app-storage-directory), and not in the app install directory. And for private storage location do not us p4a's `android.app_storage_path()` api call as this location is not secure 
 
