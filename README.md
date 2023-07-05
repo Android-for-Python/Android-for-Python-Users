@@ -703,7 +703,7 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 * There is a white space or a tab before an uncommented option, an option must start on the first character of a line (this only applies to the first line of multi-line options).
 
-* The buildozer.spec `source.exclude_dir` is used, as `source.include_ext` has priority, and some files in the directory may not be excluded.
+* The buildozer.spec `source.exclude_dir` is used, as `source.include_ext` has priority, so some files in the excluded directory may not be excluded.
 
 ## Changing buildozer.spec
 
