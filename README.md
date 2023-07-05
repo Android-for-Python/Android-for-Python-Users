@@ -703,6 +703,8 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 * There is a white space or a tab before an uncommented option, an option must start on the first character of a line (this only applies to the first line of multi-line options).
 
+* A venv is instantiated inside the project directory.
+
 ## Changing buildozer.spec
 
 Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management of you project options*. If does do version management of the Android NDK and SDK. If buildozer.spec is changed the change probably *won't* propagate into the apk on the next build.
@@ -741,9 +743,11 @@ Generally change as few options as possible; resist the temptation to overspecif
 
  - If the app is for the store you will need to increase the default `android.api`.
 
+ - If you want to add Java use `android.add_src`, `android.add_jars`, `android.add_aars`, or for Maven Java packages `android.gradle_dependencies`.
+
  - Want to speedup debug builds? Remove one of the elements in `android.archs`.
 
-There are a lots of other options about tool versions, Java, and stuff; most users can and should ignore these. 
+There are a lots of other options; most users can and should ignore these. 
 
 ## If Buildozer fails to compile
 
