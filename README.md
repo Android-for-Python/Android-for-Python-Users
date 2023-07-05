@@ -266,7 +266,9 @@ from android import mActivity
         storage_path =  str(result.toString())
 ```
 
-In addition p4a provides a legacy storage directory, this works but does not return the same location as the Android documented `getExternalFilesDir(None)` above. The legacy storage directory may be required for older Android devices, and could be used as a fallback. But the location returned by `app_storage_path()` is **not secure**. 
+The `result` in the code can be `None` on older Android devices that have removable external storage, and that storage is removed.  
+
+In addition p4a provides a legacy storage directory, this works but does not return the same location as the Android documented `getExternalFilesDir(None)` above. The legacy storage directory may be used as a fallback in the case of removed external storage. But the location returned by `app_storage_path()` is **not secure**, and when removed the storage media is **not secure**.
 
 
 ```python
