@@ -225,7 +225,7 @@ Nothing is perfectly secure (just ask any hacker, or anybody who prints there ow
 
  - Any trade secrets, and also the app user's private data, are only saved on a secure server.
 
- - No passwords are built into the app, password vaildation is with a secure server.
+ - Password vaildation is with a secure server (no passwords are built into the app).
 
  - Any temporary refresh keys are saved in [app private storage](#app-storage-directory), and not in the app install directory. And for private storage location do not us p4a's `android.app_storage_path()` api call as this location is not secure 
 
