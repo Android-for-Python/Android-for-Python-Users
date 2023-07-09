@@ -1281,7 +1281,7 @@ In this case you will have to write a small amount of Java. Create a class that 
 
 The following code fragments are taken from the [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example) where you can see the pieces assembled.
 
-The custom listener, extends and overrides the default listener:
+The custom Java listener, extends and overrides the default Java listener:
 
 ```Java
 public class KivyRecognitionListener implements RecognitionListener {
@@ -1329,7 +1329,7 @@ class CallbackWrapper(PythonJavaClass):
 
 ```
 
-Then we initialize the Java functionality with our custom listener, and pass it an instance of the callback wrapper. In this case the listener is set with a method named `setRecognitionListener()`.
+In Python, we then initialize the required Java functionality (in this case SpeechRecognizer) with our custom Java listener, and initialize our listener with an instance of the (PythonJavaClass) callback wrapper. In the case of SpeechRecognizer the listener is set with a method named `setRecognitionListener()`.
 
 It is a characteristic of the SpeechRecognizer class that it must run on the Android UI thread, so we use the `@run_on_ui_thread` directive.  
 
