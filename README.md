@@ -1277,11 +1277,11 @@ Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer
 
 Sometimes the Java api has a listener class containing the Java callback method, and the approach in the previous section is not directly applicable.
 
-In this case you will have to write a small amount of Java. Create a class that extends the required listener class, and initializes your subclass with a CallbackWrapper class similar to the one in the previous section. The methods in your newly created subclass then call the callback wrapper methods.
+In this case you will have to write a small amount of Java. Create a class that extends the required listener class, and initialize it with a CallbackWrapper class similar to the one in the previous section. The methods in your newly created subclass then call the callback wrapper methods.
 
 The following code fragments are taken from the [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example) where you can see the pieces assembled.
 
-The custom listener, overides the required listener:
+The custom listener, extends and overrides the default listener:
 
 ```Java
 public class KivyRecognitionListener implements RecognitionListener {
@@ -1359,7 +1359,7 @@ Since in this case this method configures a Kivy UI Label widget, it must run on
 
 ```
 
-For more details and context, see the full [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example).
+For more details and context, see the full [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example). In particular you will find the Python `autoclass` statements, and the Java `package` and `import` statements. Also the Java file hierarchy, and the `buildozer.spec` with the `android.add_src` directive.  
 
 # Kivy Related Topics
 
