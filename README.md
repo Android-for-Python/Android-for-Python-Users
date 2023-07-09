@@ -211,7 +211,7 @@ If the package requires a recipe, check the list of available [recipes](https://
 
 If the package requires a recipe, and one does not exist - your app is not portable to Android without extra work. Read this summary of [your options](#pure-python).
 
-*Note that it is possible but unlikley that a pure Python package may contain OS specific code, or depend on OS specific apps (for example ffmpeg).* 
+*Note that it is possible but unlikley that a pure Python package may contain OS specific code, or depend on OS specific third party apps (for example ffmpeg).* 
 
 ## Meta-information
 
@@ -1780,7 +1780,7 @@ You can check this by changing arch from `armeabi-v7a` to `arm64-v8a`, `buildoze
 
 The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
 
-One of the app requirements needs a recipe (or needs to be specified differently).
+One of the app requirements needs a recipe (or needs to be specified differently). See the [Wheels](#wheels) section.
 
 In this case the requirements for OpenCV is incorrectly specified, it should be `opencv` because that is the recipe name.
 
@@ -1794,9 +1794,9 @@ And [buildozer appclean](#changing-buildozerspec).
 
 The build process included the wrong binary file.
 
-The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec
+The cause is an x86_64 binary from PyPl was used; because of a requirements specification error in buildozer.spec 
 
-One of the app requirements needs a recipe (or needs to be specified differently).
+One of the app requirements needs a recipe (or needs to be specified differently). See the [Wheels](#wheels) section.
 
 If this message is `charset-normalizer` related, in Buildozer requirements set `charset-normalizer==2.1.1`.
 
