@@ -1331,7 +1331,7 @@ class CallbackWrapper(PythonJavaClass):
 
 In Python, we then initialize the required Java functionality (in this case SpeechRecognizer) with our custom Java listener, and initialize our listener with an instance of the (PythonJavaClass) callback wrapper. In the case of SpeechRecognizer the listener is set with a method named `setRecognitionListener()`.
 
-It is a characteristic of the SpeechRecognizer class that it must run on the Android UI thread, so we use the `@run_on_ui_thread` directive.  
+It is a characteristic of the SpeechRecognizer class that it must run on the Android UI thread, so we use the `@run_on_ui_thread` directive. 
 
 ```Python
     @run_on_ui_thread
@@ -1345,7 +1345,7 @@ It is a characteristic of the SpeechRecognizer class that it must run on the And
 
 Finally we handle the Java callbacks in Python.
 
-Since in this case this method configures a Kivy UI Label widget, it must run on the Kivy main thread. We use the `@mainthread` directive.
+Since in this case this method configures a Kivy UI Label widget, it must run on the Kivy main thread. We use the `@mainthread` directive, because the method was called from Java on the thread specified by `@run_on_ui_thread`. The "Android UI thread" is not the same thread as the thread on which Kivy UI widgets are updated.  
 
 ```Python
     @mainthread
