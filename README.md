@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-07-03
+Revised 2023-07-08
 
 # Table of Contents
 
