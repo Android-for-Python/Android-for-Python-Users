@@ -312,9 +312,11 @@ On devices running Android 10 or greater shared storage is accessed via the Java
 
 The MediaStore is a database, not a file system. The MediaStore is organized based on multiple root directories. For example 'Music', 'Movies', 'Pictures', 'Documents', and 'Downloads'.
 
-The MediaStore files are accessed using a *content uri*, not a file path. Python requires a file path to access a file, not a content uri. Content uris are obtained from Android OS apis, for example in the MediaStore api.
+The MediaStore files are accessed using a *content uri*, not a file path. Python requires a file path to access a file, not a content uri. So **Python apis such as fopen() will fail**. Content uris are obtained from Android OS apis, for example in the MediaStore api. See the [MediaStore documentation](https://developer.android.com/training/data-storage/shared/media).
 
-"Are you telling me I can't ....?", I'm explaining that Android shared storage is different from our expectations, evolve or die out.
+"Are you telling me I can't ....?", I'm explaining that Android shared storage is different from our expectations of a POSIX file system, evolve or die out.
+
+You can find examples of calling the MediaStore Java api from Python in the source for [AndroidStorage4Kivy](https://github.com/Android-for-Python/androidstorage4kivy/blob/main/src/androidstorage4kivy/sharedstorage.py).
 
 ### AndroidStorage4Kivy
 
