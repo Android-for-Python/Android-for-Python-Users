@@ -83,6 +83,7 @@ Revised 2023-07-03
     + [Pyjnius Memory Management](#pyjnius-memory-management)
     + [Java Api Versions](#java-api-versions)
     + [Calling Python from Java](#calling-python-from-java)
+    + [Java Listener Class](#java-listener-class)
 - [Kivy Related Topics](#kivy-related-topics)
   * [disable_multitouch](#disable_multitouch)
   * [Layout](#layout)
@@ -1271,6 +1272,94 @@ class SomeJavaClass() {
 }
 ```
 Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer.spec` set `android.add_src = src` .
+
+### Java Listener Class
+
+Sometimes the Java api has a listener class containing the Java callback method, and the approach in the previous section is not directly applicable.
+
+In this case you will have to write a small amount of Java. Create a class that extends the required listener class, and initializes your subclass with a CallbackWrapper class similar to the one in the previous section. The methods in your newly created subclass then call the callback wrapper methods.
+
+The following code fragments are taken from the [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example) where you can see the pieces assembled.
+
+The custom listener, overides the required listener:
+
+```Java
+public class KivyRecognitionListener implements RecognitionListener {
+
+    private CallbackWrapper callback_wrapper;
+
+    public KivyRecognitionListener(CallbackWrapper callback_wrapper) {	
+	this.callback_wrapper = callback_wrapper;
+    }       
+    
+    @Override
+    public void onReadyForSpeech(Bundle bundle) {
+	this.callback_wrapper.callback_data("onReadyForSpeech",""); 
+    }
+
+    @Override
+    public void onRmsChanged(float v) {
+	this.callback_wrapper.callback_data("onRmsChanged",String.valueOf(v)); 
+    }
+```
+
+The Java part of the callback wrapper:
+
+```Java
+public interface CallbackWrapper {
+    public void callback_data(String key, String value);
+}
+```
+
+The Python part of the callback wrapper:
+
+```Python
+class CallbackWrapper(PythonJavaClass):
+    __javacontext__ = 'app'
+    __javainterfaces__ = ['org/kivy/speech/CallbackWrapper']
+
+    def __init__(self, callback):
+        super().__init__()
+        self.callback = callback
+
+    @java_method('(Ljava/lang/String;Ljava/lang/String;)V')        
+    def callback_data(self, key, value):
+        if self.callback:
+            self.callback(key, value)
+
+```
+
+Then we initialize the Java functionality with our custom listener, and pass it an instance of the callback wrapper. In this case the listener is set with a method named `setRecognitionListener()`.
+
+It is a characteristic of the SpeechRecognizer class that it must run on the Android UI thread, so we use the `@run_on_ui_thread` directive.  
+
+```Python
+    @run_on_ui_thread
+    def create_recognizer(self, recognizer_event_handler):
+        self.speechRecognizer = \
+            SpeechRecognizer.createSpeechRecognizer(mActivity)
+        self.callback_wrapper = CallbackWrapper(recognizer_event_handler)
+        self.speechRecognizer.setRecognitionListener(
+            KivyRecognitionListener(self.callback_wrapper))  # Java
+```
+
+Finally we handle the Java callbacks in Python.
+
+Since in this case this method configures a Kivy UI Label widget, it must run on the Kivy main thread. We use the `@mainthread` directive.
+
+```Python
+    @mainthread
+    def recognizer_event_handler(self, key, value):
+        if key == 'onReadyForSpeech':
+            self.status.text = 'Status: Listening.' 
+        elif key == 'onBeginningOfSpeech':
+            self.status.text = 'Status: Speaker Detected.'
+        elif key == 'onEndOfSpeech':
+	    self.status.text = 'Status: Not Listening.'	    
+
+```
+
+For more details and context, see the full [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example).
 
 # Kivy Related Topics
 
