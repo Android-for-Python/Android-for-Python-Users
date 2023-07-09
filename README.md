@@ -25,6 +25,7 @@ Revised 2023-07-03
     + [MediaStore](#mediastore)
     + [androidstorage4kivy](#androidstorage4kivy)
     + [Storage Permissions](#storage-permissions)
+    + [Shared Storage Alternatives](#shared-storage-alternatives)
   * [Sharing a file between apps](#sharing-a-file-between-apps)
 - [Concurrency](#concurrency)
   * [Threads](#threads)
@@ -335,6 +336,10 @@ Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission i
 There is one special case, which is different from typical desktop usage. An app cannot read another app's file in the Downloads directory, regardless of permissions.
 
 On devices running Android 9 and less, WRITE_EXTERNAL_STORAGE is required for any file writes. Or READ_EXTERNAL_STORAGE if the app only wants to do shared storage reads.
+
+### Shared Storage Alternatives
+
+A little research and you will discover the MANAGE_EXTERNAL_STORAGE permission, and the "requestLegacyExternalStorage" flag. Neither is discussed here, due to the issues they introduce. 
 
 ## Sharing a file between apps
 
