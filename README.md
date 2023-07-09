@@ -1281,7 +1281,7 @@ In this case you will have to write a small amount of Java. Create a class that 
 
 The following code fragments are taken from the [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example) where you can see the pieces assembled.
 
-The custom Java listener, extends and overrides the default Java listener:
+The custom Java listener, extends and overrides the default Java listener for the particular Java functionality:
 
 ```Java
 public class KivyRecognitionListener implements RecognitionListener {
