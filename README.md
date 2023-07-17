@@ -67,6 +67,7 @@ Revised 2023-07-08
     + [android.sdk](#androidsdk)
     + [android.archs](#androidarchs)
 - [Debugging](#debugging)
+  * [Install App on Android](#install-app-on-android)
   * [Get an Error Message](#get-an-error-message)
   * [Slow App Start](#slow-app-start)
 - [Android Hardware](#android-hardware)
@@ -983,40 +984,48 @@ An install message INSTALL_FAILED_NO_MATCHING_ABIS means the apk was built for a
 
 # Debugging
 
-## Get an Error Message
+## Install App on Android
 
-On the desktop your friends are the Python stack trace, and logging or print statements. It is no different on Android. To get these we [run the debugger](https://kivy.org/doc/stable/guide/android.html#debugging-your-application-on-the-android-platform).
+First connect the Android device to a desktop via USB, on the Android device enable 'Developer Mode' and 'USB debugging'. The app is then installed using Android Debug Bridge (adb) either from Buildozer or directly.
 
-First connect the Android device to a desktop via USB, on the Android device enable 'Developer Mode' and 'USB debugging'.
+- If Buildozer was run on a desktop OS (Linux or Mac) you can use it's 'deploy run logcat' options to install and run the app on the device.
 
-If Buildozer was run on a desktop you can use it's 'deploy run logcat' to install the app on the device.
-
-If Buildozer was run on a virtual machine such as WSL or Colab then Buildozer may not be able to use the the physical USB port and the 'deploy run logcat' options will not work. In this case copy the `.apk` to a desktop OS, and use adb:
+- If Buildozer was run on a virtual machine such as WSL or Colab copy the `.apk` to a desktop OS, and use adb to install the app (For details on installing and using adb [see Appendix A](#appendix-a--using-adb)):
 
 ```
 adb install -r myapp-0.1-arm64-v8a-debug.apk
 ```
-
-For details on installing and using adb [see Appendix A](#appendix-a--using-adb).
 
 Successful adb/Buildozer configuration is indicated by log output similar to:
 ```
 List of devices attached
 0A052FDE40019P  device
 ```
-If 'List of devices attached' is followed by an empty line then the connection failed, regardless of what the Buildozer log says afterwards. Because either the device debug options are not set, or the debugger is run from a virtual machine that can't see a physical USB port.
 
-In the logcat output search for 'Traceback', what follows is a Python stack trace, which usually indicates the cause of the issue. For example:
+If 'List of devices attached' is followed by an empty line then the configuration is incorrect. Usually because either the Android device debug options are not set, or adb is run from a virtual machine that can't see the physical USB port.
+
+**Do not install** a *debug* app by copying it to the Android device and using afile manager to install the app. This will **intermittently fail** on an app update, requiring an uninstall and loss of user data. Also this install method does not allow viewing debug error messages.
+
+An app that has been debugged and is to be distributed must be built using the *release* option not the *debug* option, and must be signed. For more details see [Release Builds](#release-builds). An app built with the *release* option can be installed either via the Android Store, some other Store, or using a file manager.
+
+## Get an Error Message
+
+On the desktop your friends are the Python stack trace, and logging or print statements. It is no different on Android. To get these we [run the debugger](https://kivy.org/doc/stable/guide/android.html#debugging-your-application-on-the-android-platform).
+
+Assuming the app has been [installed on Android](#install-app-on-android), in the logcat output search for `TraceBack`, what follows is a Python stack trace, which usually indicates the cause of the issue. For example:
+
 ```
 ModuleNotFoundError: No module named 'some-import-name'
 ```
 Where 'some-import-name' is in 'some-pip-package-name', the error occurs because 'some-pip-package-name' is missing from [buildozer.spec requirements](#requirements). To get 'some-pip-package-name' look at the import statement in the Python code, it will typically be similar to `from some-pip-package-name import some-import-name`. Get the file name and line number of the import statement from the traceback.
 
-If you don't see an error message with the Python only messages, there is probably an error message from Android. If using Buildozer's 'deploy run logcat', comment the Python only filter:
+Messages from the Android OS rather than from Python can usually be found by searching for `backtrace`. If using adb Android messages appear by default, if using Buildozer the messages are filtered to be Python only. To see the Android messages when using Buildozer, in buildozer.spec comment the Python only filter:
 ```
 # (str) Android logcat filters to use
 #android.logcat_filters = *:S python:D
 ```
+
+Messages from Android can be cryptic, most commonly they are due to a missing recipe for a Python package, Java api errors when using pyjnius, or Kivy lifecycle violations.
 
 It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
 
