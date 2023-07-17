@@ -1006,7 +1006,7 @@ If 'List of devices attached' is followed by an empty line then the configuratio
 
 **Do not install** a *debug* app by copying it to the Android device and using a file manager to install the app. This will **intermittently fail** on an app update, requiring an uninstall and loss of user data. Also this install method does not allow viewing debug error messages.
 
-An app that has been debugged and is to be distributed must be built using the *release* option not the *debug* option, and must be signed. For more details see [Release Builds](#release-builds). An app built with the *release* option can be installed either via the Android Store, some other Store, or using a file manager.
+An app that has been debugged and is ready to be distributed must be built using the *release* option not the *debug* option, and must be signed. For more details see [Release Builds](#release-builds). An app built with the *release* option can be installed either via the Android Store, some other Store, or using a file manager.
 
 ## Get an Error Message
 
