@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-07-08
+Revised 2023-07-16
 
 # Table of Contents
 
@@ -161,6 +161,7 @@ Revised 2023-07-08
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)  
+  * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
 
 # Introduction
 
@@ -1841,6 +1842,7 @@ p4a.branch = some_branch
   * [extra tap when single tap expected](#extra-tap-when-single-tap-expected)
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)
+  * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
 
 ## No module named 'msvcrt'
 
@@ -2363,3 +2365,13 @@ In Kivy border_radius (introduced in 2.2.0) is a 4-tuple. https://github.com/kiv
 The version of KivyMD you are using appears to be using it as a scalar. Ask the KivyMD folks what version of their code to use. 
 
 A quick look at the versions shows KivyMD 1.1.1 https://github.com/kivymd/KivyMD/blob/1.1.1/kivymd/uix/behaviors/elevation.py does not use border_radius. For any side effects of using this version contact KivyMD.
+
+## storage dir path cannot contain spaces
+
+```
+ValueError: storage dir path cannot contain spaces, please specify a path with --storage-dir
+```
+
+The project directory or a directory somewhere above it has a whitespace (` `) in the name, this is not supported.
+
+Change something like `/home/user/my project` to `/home/user/my_project` or similar.
