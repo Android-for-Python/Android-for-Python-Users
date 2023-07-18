@@ -162,7 +162,8 @@ Revised 2023-07-16
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)  
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
-  * [java.lang.OutOfMemoryError](#javalangOutOfMemoryError)
+  * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
+
 
 # Introduction
 
@@ -1844,7 +1845,7 @@ p4a.branch = some_branch
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
-  * [java.lang.OutOfMemoryError](#javalangOutOfMemoryError)
+  * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
 )
 
 ## No module named 'msvcrt'
