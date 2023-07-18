@@ -162,6 +162,7 @@ Revised 2023-07-16
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)  
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
+  * [java.lang.OutOfMemoryError](#javalangOutOfMemoryError)
 
 # Introduction
 
@@ -1843,6 +1844,8 @@ p4a.branch = some_branch
   * [No module named 'kivy._clock'](#no-module-named-kivy_clock)
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
+  * [java.lang.OutOfMemoryError](#javalangOutOfMemoryError)
+)
 
 ## No module named 'msvcrt'
 
@@ -2375,3 +2378,22 @@ ValueError: storage dir path cannot contain spaces, please specify a path with -
 The project directory or a directory somewhere above it has a whitespace (` `) in the name, this is not supported.
 
 Change something like `/home/user/my project` to `/home/user/my_project` or similar.
+
+## java.lang.OutOfMemoryError
+
+Gradle fails with
+
+```
+[DEBUG]:   	   > java.lang.OutOfMemoryError (no error message)
+```
+
+This is a Java error. It occurs because your app is too large for the Java settings. Typically your app will be larger than 100MB.
+
+To change the Java settings see the Java documentation https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties
+
+You will have to create `~/.gradle/gradle.properties`, and add this line:
+```
+org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+```
+
+If you have to do this your app will probably be too large for the Android Store. The above Java settings workaround will not address the constraints of the Store.
