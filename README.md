@@ -2389,6 +2389,8 @@ Gradle fails with
 
 This is a Java error. It occurs because your app is too large for the Java settings. Typically your app will be larger than 100MB.
 
+Check that you do not have any unexpected data files in your app.
+
 To change the Java settings see the Java documentation https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties
 
 You will have to create `~/.gradle/gradle.properties`, and add this line:
