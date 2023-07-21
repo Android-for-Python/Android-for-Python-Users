@@ -732,14 +732,15 @@ You don't need to always do a `buildozer appclean` if you don't change buildozer
 
 There is no magic universal buildozer.spec, its configuration depends on the functionality of your app.
 
-Finally buildozer.spec's syntax is not Python's syntax:
- - comment characters must only occur on the first character of a line.
- - comment characters must not occur inside a list.
- - build options must start on the first character of a line.
+**Note:** `buildozer.spec` syntax is `.ini` syntax, so there is no syntax checking.
+ - Options must start on the first character of a line.
+ - Comments must start on the first character of a line.
+ - Comments must not be imbedded in multi-line options.
+ - Failure to follow this syntax may result in non-deterministic behavior.
 
 ## What should I change?
 
-Generally change as few options as possible; resist the temptation to overspecify, you will over constrain the implementation. 
+Generally change as few options as possible; resist the temptation to overspecify, you will over constrain the implementation.
 
  - If the app is for you, change the `title` and `package.name`.
 
@@ -760,6 +761,12 @@ Generally change as few options as possible; resist the temptation to overspecif
  - Want to speedup debug builds? Remove one of the elements in `android.archs`.
 
 There are a lots of other options; most users can and should ignore these. 
+
+**Note:** `buildozer.spec` syntax is `.ini` syntax, so there is no syntax checking.
+ - Options must start on the first character of a line.
+ - Comments must start on the first character of a line.
+ - Comments must not be imbedded in multi-line options.
+ - Failure to follow this syntax may result in non-deterministic behavior.
 
 ## If Buildozer fails to compile
 
