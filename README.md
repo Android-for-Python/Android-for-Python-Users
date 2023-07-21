@@ -711,9 +711,7 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 * It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`). Because some Python packages implement OS specific behavior based on the disk root name.
 
-* There are Python style trailing comments in the buildozer.spec file, or comment characters inside a list. Comment characters must be the first character on a line in the buildozer.spec file. 
-
-* There is a white space or a tab before an uncommented option, an option must start on the first character of a line (this only applies to the first line of multi-line options).
+* `buildozer.spec` syntax is not `.ini` syntax.
 
 * The buildozer.spec `source.exclude_dir` is used, as `source.include_ext` has priority, so some files in the excluded directory may not be excluded.
 
