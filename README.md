@@ -551,6 +551,15 @@ As explained in the next section this does not work with a sticky foreground ser
 
 When debugging, the default Python filter excludes any print statments in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
 
+A within a service the Java activity can be obtained using:
+
+```python
+from android.config import SERVICE_CLASS_NAME
+
+    PythonService = autoclass(SERVICE_CLASS_NAME)
+    mActivity = PythonService.mService
+```
+
 ## Service Lifetime
 
 The lifetime of the service is limited by the service type. Three types of service are avilabile, the difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
@@ -1170,6 +1179,15 @@ from android import mActivity
     mActivity.getApplicationContext()
     mActivity.getSystemService( <service type> )
     mActivity.getContentResolver() 
+```
+
+A within a service the Java activity can be obtained using:
+
+```python
+from android.config import SERVICE_CLASS_NAME
+
+    PythonService = autoclass(SERVICE_CLASS_NAME)
+    mActivity = PythonService.mService
 ```
 
 Add your own Java to the package using the Buildozer options `android.add_src` and `android.add_jars`, see buildozer.spec. Java files should be organized in sub-directories reflecting the Java package hierarchy.
