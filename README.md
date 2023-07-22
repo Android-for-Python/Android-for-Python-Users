@@ -551,7 +551,7 @@ As explained in the next section this does not work with a sticky foreground ser
 
 When debugging, the default Python filter excludes any print statments in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
 
-Within a service the Android activity can be obtained using:
+Within a service the service's Android activity can be obtained using:
 
 ```python
 from android.config import SERVICE_CLASS_NAME
@@ -1181,7 +1181,7 @@ from android import mActivity
     mActivity.getContentResolver() 
 ```
 
-Within a service the Android activity can be obtained using:
+Within a service the service's Android activity can be obtained using:
 
 ```python
 from android.config import SERVICE_CLASS_NAME
