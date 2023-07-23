@@ -145,6 +145,7 @@ Revised 2023-07-16
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
   * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
+  * [possibly undefined macro: AC_PROG_LD](#possibly-undefined macro-ac_prog_ld)
   * [all is not a valid value for orientation](#all-is-not-a-valid-value-for-orientation)
   * [orientation have an invalid value](#orientation-have-an-invalid-value)
   * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
@@ -1850,6 +1851,7 @@ p4a.branch = some_branch
   * [Kivy is too old](#kivy-is-too-old)
   * [C compiler cannot create executables](#c-compiler-cannot-create-executables)
   * [undefined macro LT_SYS_SYMBOL_USCORE](#undefined-macro-lt_sys_symbol_uscore)
+  * [possibly undefined macro: AC_PROG_LD](#possibly-undefined macro-ac_prog_ld)
   * [all is not a valid value for orientation](#all-is-not-a-valid-value-for-orientation)
   * [orientation have an invalid value](#orientation-have-an-invalid-value)
   * [build.gradle : 79: Unexpected input: '{'](#buildgradle--79-unexpected-input-)
@@ -2165,7 +2167,17 @@ And [buildozer appclean](#changing-buildozerspec).
 
 `[DEBUG]:        configure.ac:215: error: possibly undefined macro: LT_SYS_SYMBOL_USCORE`
 
-Re-check that the Buildozer dependencies are installed https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit
+Recheck that the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) were followed.
+
+And [buildozer appclean](#changing-buildozerspec).
+
+## possibly undefined macro: AC_PROG_LD
+
+```
+configure:8578: error: possibly undefined macro: AC_PROG_LD
+```
+
+Recheck that the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) were followed.
 
 And [buildozer appclean](#changing-buildozerspec).
 
@@ -2294,6 +2306,7 @@ configure.as:109: error: possibly undefined macro: AM_ICONV
 ```
 
 Install gettext or gettext-dev
+
 ```
 sudo apt-get install gettext
 ```
@@ -2422,3 +2435,4 @@ org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryEr
 ```
 
 If you have to do this your app will probably be too large for the Android Store. The above Java settings workaround will not address the constraints of the Store.
+
