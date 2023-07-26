@@ -41,8 +41,7 @@ Revised 2023-07-16
   * [User Permissions](#user-permissions)
 - [Buildozer and p4a](#buildozer-and-p4a)
   * [Install](#install)
-    + [Most Common Issues](#most-common-issues)
-    + [Non-deterministic Behavior](#non-deterministic-behavior)
+  * [Try Hello World](try-hello-world)
   * [Changing buildozer.spec](#changing-buildozerspec)
   * [What should I change?](#what-should-i-change)
   * [If Buildozer fails to compile](#if-buildozer-fails-to-compile)
@@ -66,6 +65,8 @@ Revised 2023-07-16
     + [android.ndk](#androidndk)
     + [android.sdk](#androidsdk)
     + [android.archs](#androidarchs)
+  * [Most Common Issues](#most-common-issues)
+  * [Non-deterministic Behavior](#non-deterministic-behavior)
 - [Debugging](#debugging)
   * [Install App on Android](#install-app-on-android)
   * [Get an Error Message](#get-an-error-message)
@@ -699,31 +700,18 @@ Read the [Install documentation](https://github.com/kivy/buildozer/blob/master/d
 
 **If building on WSL**, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`), as this may give unpredicatable results.
 
-**Test your Buildozer install** by building (`buildozer android debug`) [Hello World](https://kivy.org/doc/stable/guide/basic.html#create-an-application) in `main.py`. Use the default `buildozer.spec` (create this with `buildozer init`, modify to set `android.api=32`). I know you just want to see your app run on Android, but this simple first step will provide you with familiarity with the overall process.
+## Try Hello World
 
-### Most Common Issues
+- Create a project directory and cd to it `mkdir hello; cd hello`.
 
-Some things you can do now to prevent surprises later:
+- Create `main.py` containing the [Kivy Hello World app](https://kivy.org/doc/stable/guide/basic.html#create-an-application).
 
-* [Read the install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) to re-check that all the dependencies are installed.
+- Run `buildozer init`, edit `buildozer.spec` so that `android.api=32`.
 
-* Re-check that the requirements in buildozer.spec are fully and correctly specified.
+- Run `buildozer android debug`, this will take a while.
 
-* Re-check that each of the requirements is either pure Python or has a recipe.
+- Install the app on your phone, [see](#install-app-on-android).  
 
-* The first time Buildozer is run type `y` each time you are asked to accept a Google License Agreement.
-
-### Non-deterministic Behavior
-
-Buildozer's behavior can be non-deterministic in any of these cases:
-
-* It is run as root on an OS with user accounts (so Colab is OK).
-
-* It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`). Because some Python packages implement OS specific behavior based on the disk root name.
-
-* `buildozer.spec` syntax is not `.ini` syntax.
-
-* The buildozer.spec `source.exclude_dir` is used, as `source.include_ext` has priority, so some files in the excluded directory may not be excluded.
 
 ## Changing buildozer.spec
 
@@ -999,6 +987,30 @@ This is what you want when building for the Android Store. For debugging this is
 android.archs = arm64-v8a
 ```
 An install message INSTALL_FAILED_NO_MATCHING_ABIS means the apk was built for a different architecture than the phone or emulator.
+
+## Most Common Issues
+
+Some things you can do now to prevent surprises later:
+
+* [Read the install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) to re-check that all the dependencies are installed.
+
+* Re-check that the requirements in buildozer.spec are fully specified.
+
+* Re-check that each of the requirements is either pure Python or has a recipe.
+
+* The first time Buildozer is run type `y` each time you are asked to accept a Google License Agreement.
+
+## Non-deterministic Behavior
+
+Buildozer's behavior can be non-deterministic in any of these cases:
+
+* It is run as root on an OS with user accounts (so Colab is OK).
+
+* It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`). Because some Python packages implement OS specific behavior based on the disk root name.
+
+* `buildozer.spec` syntax is not `.ini` syntax.
+
+* The buildozer.spec `source.exclude_dir` is used, as `source.include_ext` has priority, so some files in the excluded directory may not be excluded.
 
 # Debugging
 
@@ -1478,13 +1490,11 @@ For [Shared Storage](#shared-storage) use the Android Chooser. The [AndroidStora
 
 ## KivyMD
 
-The KivyMD widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
-
-**KivyMD has moved, it is now at [https://git.org.ru/KivyMD/kivymd](https://git.org.ru/KivyMD/kivymd). The previous location [https://github.com/kivymd/KivyMD](https://github.com/kivymd/KivyMD) is still there but will not be updated. The explaination is at [https://github.com/kivymd/KivyMD/blob/master/README.md#warning](https://github.com/kivymd/KivyMD/blob/master/README.md#warning).**
+The [KivyMD](https://github.com/kivymd/KivyMD) widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
 
 Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the api may change with KivyMD versions.
 
-The KivyMD [instructions for Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-use-with-buildozer-https-github-com-kivy-buildozer) are updated for [KivyMD 2.1.1 with Buildozer](https://git.org.ru/KivyMD/kivymd#how-to-fix-a-shader-bug-on-an-android-device).
+The KivyMD [instructions for Buildozer](https://github.com/kivymd/KivyMD#how-to-use-with-buildozer) are updated for [a known KivyMD issue on some Android devices](https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device).
 
 ## Kivy Lifecycle
 
@@ -2089,7 +2099,7 @@ DEBUG   :   NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-pac
 DEBUG   :   NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/graphics/instructions.so
 NOTE:   /data/data/org.mac.tec2023/files/app/_python_bundle/site-packages/kivy/graphics/vbo.so
 ```
-[To workaround, see the instructions for KivyMD 2.1.1](https://github.com/Android-for-Python/Android-for-Python-Users#kivymd).
+[To workaround, see the KivyMD instructions]((https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device)) or use KivyMD 1.0.2 .
 
 Memory issues are incredibly hard to debug, the error may or may not be local to the symptom. So removing code from the app may just move the issue, not remove the issue. That doesn't mean don't cut your app down, it means it is not sufficent to see your app work - you must also understand which code of yours broke the app.
 
