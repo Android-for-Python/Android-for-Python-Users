@@ -41,7 +41,7 @@ Revised 2023-07-16
   * [User Permissions](#user-permissions)
 - [Buildozer and p4a](#buildozer-and-p4a)
   * [Install](#install)
-  * [Try Hello World](try-hello-world)
+  * [Try Hello World](#try-hello-world)
   * [Changing buildozer.spec](#changing-buildozerspec)
   * [What should I change?](#what-should-i-change)
   * [If Buildozer fails to compile](#if-buildozer-fails-to-compile)
