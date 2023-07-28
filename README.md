@@ -370,7 +370,7 @@ from kivy.clock import mainthread
     def run_some_function_in_thread(self, arg0):
         # note the value of args is a tuple,
         # it always contains at least one comma
-        Thread(target=self.some_function, args = (arg0_val,),
+        Thread(target=self.some_function, args = (arg0,),
                daemon=True).start()
 
     def some_function(self, arg0):
