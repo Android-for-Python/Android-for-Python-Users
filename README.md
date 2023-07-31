@@ -201,7 +201,7 @@ The file system model is different, the app cannot use any directory in the file
 
 Threads are available like the desktop. Subprocess is available, but the excutable called by subprocess on the desktop almost certainly is not available.
 
-Multi-tasking, on the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and then does not execute any app code. Execution without a UI requires an Android service.
+Multi-tasking, on the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events; it is said to move to the *background*. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and then does not execute any app code there is no *background* operation. Execution in the *background* requires an [Android Service](#android-service).
 
 Apps have a lifecycle, keep to the [Kivy Lifcycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle) so that the app keeps to the [Android Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle#alc). Android api calls made outside of the Kivy App class or its children may cause non-deterministic behavior or crashes.
 
@@ -396,7 +396,7 @@ A daemon thread will exit when the app exits, providing all threads running at a
 
 The Python subprocess depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commands which of course are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and when run from `subprocess.Popen` have app only permission. 
 
-There is no `python3` executable, Python's `sys.executable` is empty. To run a Python script in a new process, we use an Android Service.
+There is no `python3` executable, Python's `sys.executable` is empty. To run a Python script in a new process, we use an [Android Service](#android-service).
 
 ## Async
 
