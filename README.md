@@ -422,7 +422,7 @@ The basic approaches are shown in the next two sections, with simple examples. U
 
 ### trio
 
-Using `trio`, indirectly call a coroutine from a routine by initializing the app with the `trio` event loop, and using this to call `start_soon()`. The coroutine is *started* from a routine.
+[Trio](https://trio.readthedocs.io/en/stable/) is an alternative async library to Python's built-in `asyncio`. Using Trio, indirectly call a coroutine from a routine by initializing the app with the `trio` event loop, and using this to call `start_soon()`. The coroutine is *started* from a routine.
 
 ```python
 from kivy.app import App
@@ -551,7 +551,7 @@ As explained in the next section, this does not work with a sticky foreground se
    self.start_service('Worker').stop(mActivity)
 ```
 
-When debugging, the default Python filter excludes any print statments in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
+When debugging, the default Python filter excludes any print statements in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
 
 Within a service, the service's Android activity can be obtained using:
 
@@ -564,9 +564,7 @@ from android.config import SERVICE_CLASS_NAME
 
 ## Service Lifetime
 
-The lifetime of the service is limited by the service type. Three types of service are available. The difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
-
-There is an API for restarting a service killed by the OS [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart). This is only meaningful with a background service.
+Three types of service are available. The difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
 
 ### Background Service
 
@@ -576,6 +574,9 @@ A background service is generally "short lived" as defined by the OS, its lifeti
 # (list) List of service to declare
 services = Worker:the_service.py
 ```
+
+There is an API for restarting a background service killed by the OS: [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart).
+
 
 ### Foreground Service
 
@@ -607,7 +608,7 @@ Because an app may stop and restart while a sticky foreground service is running
 
 ### Bound Service
 
-There is no built-in support for a bound service.
+There is no built-in p4a support for a [bound service](https://developer.android.com/guide/components/bound-services).
 
 ## Service Notifications
 
@@ -692,77 +693,76 @@ Finally, it is normal Android behavior that if a user denies permission, it may 
 
 ## Install
 
-**The current release version of Buildozer is 1.5, by default always Buildozer uses the current release version of p4a.**
+**The [current release version of Buildozer is 1.5](https://pypi.org/project/buildozer/#history). By default, Buildozer always uses the current release version of [python-for-android](https://pypi.org/project/python-for-android/#history).**
 
-Buildozer runs on Linux, Windows users need a Linux virtual machine such as WSL, Colab, or VirtualBox to run Buildozer (most users use WSL or Colab). Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help.
+Buildozer runs on Linux. Buildozer also runs on a Mac, but the number of users is small and this is reflected in the availability of help.
 
-Read the [Install documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), really. **There is an obsolete Docker image *- do not use it*,** the install documentation does not reference Docker, and the Docker image is not maintained.
+It does not run on native Windows. Windows users need a Linux virtual machine such as [Microsoft's WSL](https://learn.microsoft.com/en-us/windows/wsl/install), [Google's Colaboatory](https://colab.research.google.com/?utm_source=scs-index) (Colab), or [Oracle's VirtualBox](https://www.virtualbox.org/) to run Buildozer. (Most users use WSL or Colab). 
 
-**If building on WSL**, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. NEVER build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`), as this may give unpredicatable results.
+Read [Buildozer's installation documentation](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst). Really. 
+
+There is an **obsolete** Docker image. **DO NOT USE IT.** The Docker image is not maintained.
+
+**If building on WSL**, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. Never build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`). This may give unpredictable results.
 
 ## Try Hello World
 
-- Create a project directory and cd to it `mkdir hello; cd hello`.
+- Create a project directory and cd to it: `mkdir hello; cd hello`.
 
 - Create `main.py` containing the [Kivy Hello World app](https://kivy.org/doc/stable/guide/basic.html#create-an-application).
 
-- Run `buildozer init`, edit `buildozer.spec` so that `android.api=32`.
+- Run `buildozer init` - this will create a `buildozer.spec` default template. Edit it to say that `android.api=32`.
 
-- Run `buildozer android debug`, this will take a while.
+- Run `buildozer android debug`. This will take a while, especially the first time.
 
-- Install the app on your phone, [see](#install-app-on-android).  
+- Install the app on your phone. [Learn how.](#install-app-on-android).  
 
 
-## Changing buildozer.spec
+## Changing `buildozer.spec`
 
-Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management of you project options*. If does do version management of the Android NDK and SDK. If buildozer.spec is changed the change probably *won't* propagate into the apk on the next build.
+Note that Buildozer allows *specification* of build files, versions, and options; but unlike most other build tools it *does not do version management of your project options*. If `buildozer.spec` is changed, the change probably *won't* propagate into the apk on the next build.
 
 After changing the buildozer.spec file (or any of the dependencies) users *must* do an appclean.
 ```
 buildozer appclean
 buildozer android debug
 ```
-There may be some exceptions to this, the only one I know to be safe is one can add (but not change version of, or remove) a package in the [requirements](#requirements) list without the appclean.
 
-You don't need to always do a `buildozer appclean` if you don't change buildozer.spec.
+There may be some exceptions to this. The only one I know to be safe is one can add (but not change version of, or remove) a package in the [requirements](#requirements) list without the appclean.
 
-There is no magic universal buildozer.spec, its configuration depends on the functionality of your app.
+If you don't change `buildozer.spec`, you don't need do a `buildozer appclean`.
 
-**Note:** `buildozer.spec` syntax is `.ini` syntax, so there is no syntax checking.
- - Options must start on the first character of a line.
- - Comments must start on the first character of a line.
- - Comments must not be imbedded in multi-line options.
- - Failure to follow this syntax may result in non-deterministic behavior.
+There is no magic universal `buildozer.spec`. Its configuration depends on the functionality of your app.
+
+**Note:** `buildozer.spec` syntax is a variant of the `.ini` syntax. There is no syntax checking.
+ - Comments must start on the first non-whitespace character of a line. You can't put a comment at the end of a line containing an option.
+ - Options and comments must not be more deeply indented than the previous options - they will be considered part of a multi-line options.
+
+Failure to follow this syntax may result in hard-to-understand behavior.
 
 ## What should I change?
 
-Generally change as few options as possible; resist the temptation to overspecify, you will over constrain the implementation.
+Generally change as few options as possible; resist the temptation to overspecify. You will over-constrain the implementation.
 
- - If the app is for you, change the `title` and `package.name`.
+ - Change the `title` and `package.name`.
 
- - If the app is for the store, also change `package.domain`.
+ - If the app is for distribution via a store, also change `package.domain`.
 
  - If the app includes data files, add any necessary file extensions in `source.include_exts`.
 
- - If the app uses Python packages that are normally installed with `pip3`, add these and their dependencies to `requirements`.
+ - If the app uses Python packages that are normally installed with `pip`, add these and their dependencies to `requirements`.
 
  - Optionally add `presplash.filename`, and `icon.filename` (icon must be a `.png`).
 
- - Add the required [Android Permissions](#app-permissions) to `android.permissions`. For example if the app connects to a network add INTERNET permission. 
+ - Add the required [Android Permissions](#app-permissions) to `android.permissions`. For example, if the app connects to a network add `INTERNET` permission. 
 
- - If the app is for the store you will need to increase the default `android.api`.
+ - If the app is for the Android store you will need to increase the default `android.api`.
 
  - If you want to add Java use `android.add_src`, `android.add_jars`, `android.add_aars`, or for Maven Java packages `android.gradle_dependencies`.
 
- - Want to speedup debug builds? Remove one of the elements in `android.archs`.
+ - Want to speedup debug builds? Remove one of the machine architectures in `android.archs`.
 
-There are a lots of other options; most users can and should ignore these. 
-
-**Note:** `buildozer.spec` syntax is `.ini` syntax, so there is no syntax checking.
- - Options must start on the first character of a line.
- - Comments must start on the first character of a line.
- - Comments must not be imbedded in multi-line options.
- - Failure to follow this syntax may result in non-deterministic behavior.
+There are a lots of other options; most users should ignore these. 
 
 ## If Buildozer fails to compile
 
@@ -772,7 +772,7 @@ There are a lots of other options; most users can and should ignore these.
 
 - If you don't can't find the error message in `STDOUT:`, try looking immediately above `STDOUT:` for lines starting with `[DEBUG]`. 
 
-- If you can't find any message, get enough information so somebody can help you. Ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (*not screen shots*). 
+- If you can't find any message, get enough information so somebody can help you. Ask in one of the (Support) User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include the **FULL LOG** as a `.txt` file (*not screen shots*). 
 
 ### Understand the message
 
@@ -780,23 +780,24 @@ There are a lots of other options; most users can and should ignore these.
 
 - If you don't understand the message, look in [Appendix H : Cryptic Error Messages](#appendix-h--cryptic-error-messages).
 
-- If you still don't understand, get enough information so somebody can help you. Ask in one of the User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (*not screen shots*).
+- If you still don't understand, get enough information so somebody can help you. Ask in one of the (Support) User Groups ([Discord Kivy](https://discord.com/invite/eT3cuQp), or [Google Groups Kivy](https://groups.google.com/g/kivy-users)). Always include **BOTH** the full contents of `STDOUT:` (or above) and full contents of `STDERR:` as a `.txt` file (*not screen shots*).
 
-## Some buildozer.spec options
+## Some `buildozer.spec` options
 
-[RTFM](https://github.com/kivy/buildozer/blob/master/docs/source/specifications.rst), really. And see the [KivyMD section](#kivymd).
+[RTFM](https://github.com/kivy/buildozer/blob/master/docs/source/specifications.rst), really. See the [KivyMD section](#kivymd).
 
 ### package.name
 
-This must contain only alpha numeric characters, do not use any other characters.
+This must contain only alpha numeric characters. Do not use any other characters.
 
 ### package.domain
 
-This must contain exactly one period `.` surrounded by alpha numeric characters, do not use any other characters. Anthing else will cause a Gradle fail.
+This must contain exactly one period `.` surrounded by alpha numeric characters. Do not use any other characters. Anthing else will cause the [Gradle build tool](https://gradle.org/) to fail.
 
 ### version
 
-This must contain no more than two periods `.` surrounded by numeric characters. More than two periods will cause a Gradle fail.
+This must contain no more than two periods `.` surrounded by numeric characters. More than two periods will cause [Gradle build tool](https://gradle.org/) to fail.
+
 
 ### requirements
 
@@ -804,13 +805,13 @@ This must contain no more than two periods `.` surrounded by numeric characters.
 
 This is the list of pip packages (and possibly versions) that your app imports from.
 
-**In addition** Buildozer needs to know the packages your packages depend on (because there is no pip3 on Android). Determining these is [shown in the next section](#find-the-dependencies).
+**In addition** Buildozer needs to know all the packages your packages depend on; there is no pip engine to work this out on Android. Determining these is [shown in the next section](#find-the-dependencies).
 
-Do not add Python system modules, only packages you might install with pip3 on the desktop. 
+Do not add Python system modules. Only packages you might install with pip on the desktop. 
 
-There are some pip3 packages that are added automatically, no need to put these in requirements: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android`.
+There are some pip packages that are added automatically: `libffi, openssl, sqlite3, setuptools, six, pyjnius, android`. There is no need to put these in requirements:
 
-In an example of *poor tool design*, the names of some recipes do not match the Pypi package names. Use the 'Recipe Name', in place of the 'PyPi Name'.
+Remember that some packages need "recipes" to be supported. In an example of *poor tool design*, the names of some recipes do not match the `PyPI` package names. Use the 'Recipe Name', in place of the 'PyPI' package name.
 
 
 | PyPi Name | Recipe Name |
@@ -873,13 +874,13 @@ google-cloud-firestore, googxle-api-core, google-auth, cachetools, pyasn1-module
 
 Some Kivy widgets have requirement dependencies:
 
-`kivy.network.urlrequest` needs  `requests, urllib3, chardet, idna, certifi`
+* `kivy.network.urlrequest` needs  `requests, urllib3, chardet, idna, certifi`
 
-`kivy.uix.video` needs `ffpyplayer`
+* `kivy.uix.video` needs `ffpyplayer`
 
-`kivy.core.audio.SoundLoader` needs `ffpyplayer, ffpyplayer_codecs` 
+* `kivy.core.audio.SoundLoader` needs `ffpyplayer, ffpyplayer_codecs` 
 
-Not a Kivy Widget, but `requests` depends on `urllib3, chardet, idna, certifi` or `urllib3, charset-normalizer==2.1.1, idna, certifi`
+* Not a Kivy Widget, but `requests` depends on `urllib3, chardet, idna, certifi` or `urllib3, charset-normalizer==2.1.1, idna, certifi`
 
 #### Requirements Examples
 
@@ -926,7 +927,9 @@ orientation = portrait, landscape, portrait-reverse, landscape-reverse
 
 ### fullscreen
 
-If the `fullscreen` value is `1` the Status Bar is not shown; defaults to `0`, Status Bar shown. When not shown, a swipe up/down will temporarily show the Status Bar. 
+If the `fullscreen` value is `1`, the Status Bar is not shown. It defaults to `0` and the Status Bar is shown. 
+
+When not shown, a swipe up/down will temporarily show the Status Bar. 
 
 ```
 fullscreen = 0
@@ -950,7 +953,7 @@ Qualified permissions (only maxSdkVersion, or usesPermissionFlags) are supported
 android.permissions = INTERNET, CAMERA, (name=android.permission.BLUETOOTH_SCAN;usesPermissionFlags=neverForLocation)
 ```
 
-If the app connects to a network you must include INTERNET permission.
+If the app connects to a network you must include `INTERNET` permission.
 
 ### android.api
 
@@ -962,17 +965,17 @@ android.api = 33
 ### android.minapi
 
 The current default is 21.
-For typical usage **don't change this**.
+For typical usage, **don't change this**.
 
 ### android.ndk
 
 The current default is 25b.
-For typical usage **don't change this**.
+For typical usage, **don't change this**.
 
 ### android.sdk
 
-Is set by Buildozer to the newest supported.
-For typical usage **don't change this**.
+This is automatically set by Buildozer to the latest supported version.
+For typical usage, **don't change this**.
 
 ### android.archs
 
@@ -994,19 +997,19 @@ Some things you can do now to prevent surprises later:
 
 * [Read the install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) to re-check that all the dependencies are installed.
 
-* Re-check that the requirements in buildozer.spec are fully specified.
+* Re-check that the requirements in `buildozer.spec` are fully specified.
 
 * Re-check that each of the requirements is either pure Python or has a recipe.
 
-* The first time Buildozer is run type `y` each time you are asked to accept a Google License Agreement.
+* The first time Buildozer is run, type `y` each time you are asked to accept a Google License Agreement.
 
 ## Non-deterministic Behavior
 
-Buildozer's behavior can be non-deterministic in any of these cases:
+Buildozer's behavior can be unpredictable in any of these cases:
 
 * It is run as root on an OS with user accounts (so Colab is OK).
 
-* It is run on an NTFS partition mounted on a Linux system. WSL users, don't build your app on the Windows partition (`/mnt/c/Users....`). Because some Python packages implement OS specific behavior based on the disk root name.
+* It is run on an NTFS partition mounted on a Linux system, because some Python packages implement OS specific behavior based on the disk root name. WSL users: don't build your app on the Windows partition (`/mnt/c/Users....`). 
 
 * `buildozer.spec` syntax is not `.ini` syntax.
 
@@ -1016,11 +1019,15 @@ Buildozer's behavior can be non-deterministic in any of these cases:
 
 ## Install App on Android
 
-First connect the Android device to a desktop via USB, on the Android device enable 'Developer Mode' and 'USB debugging'. The app is then installed using Android Debug Bridge (adb) either from Buildozer or directly.
+First, connect the Android device to a desktop via USB. On the Android device, enable 'Developer Mode' (This option varies by device and tends to be well hidden. Google it.) and enable 'USB debugging'. 
 
-- If Buildozer was run on a desktop OS (Linux or Mac) you can use it's 'deploy run logcat' options to install and run the app on the device.
+The app is then installed nwith one of these techniqueis:
 
-- If Buildozer was run on a virtual machine such as WSL or Colab copy the `.apk` to a desktop OS, and use adb to install the app (For details on installing and using adb [see Appendix A](#appendix-a--using-adb)):
+- Using [Android Debug Bridge](https://developer.android.com/tools/adb) (adb) directly. e.g. 'adb deploy run logcat' will install the app on the device, run it, and display the log.
+
+- Using adb via Buildozer: e.g. `buildozer adb deploy`
+
+- If Buildozer was run on a virtual machine, such as WSL or Colab, copy the `.apk` to a desktop OS, and use adb to install the app (For details on installing and using adb [see Appendix A](#appendix-a--using-adb)):
 
 ```
 adb install -r myapp-0.1-arm64-v8a-debug.apk
@@ -1040,28 +1047,28 @@ An app that has been debugged and is ready to be distributed must be built using
 
 ## Get an Error Message
 
-On the desktop your friends are the Python stack trace, and logging or print statements. It is no different on Android. To get these we [run the debugger](https://kivy.org/doc/stable/guide/android.html#debugging-your-application-on-the-android-platform).
+On the desktop, your friends are the Python stack trace, and logging or print statements. It is no different on Android. To get these we [run the debugger](https://kivy.org/doc/stable/guide/android.html#debugging-your-application-on-the-android-platform).
 
-Assuming the app has been [installed on Android](#install-app-on-android), in the logcat output search for `TraceBack`, what follows is a Python stack trace, which usually indicates the cause of the issue. For example:
+If the app has been [installed on Android](#install-app-on-android), search the logcat output for `TraceBack`. What follows is a Python stack trace, which usually indicates the cause of the issue. For example:
 
 ```
 ModuleNotFoundError: No module named 'some-import-name'
 ```
 Where 'some-import-name' is in 'some-pip-package-name', the error occurs because 'some-pip-package-name' is missing from [buildozer.spec requirements](#requirements). To get 'some-pip-package-name' look at the import statement in the Python code, it will typically be similar to `from some-pip-package-name import some-import-name`. Get the file name and line number of the import statement from the traceback.
 
-Messages from the Android OS rather than from Python can usually be found by searching for `backtrace`. If using adb Android messages appear by default, if using Buildozer the messages are filtered to be Python only. To see the Android messages when using Buildozer, in buildozer.spec comment the Python only filter:
+Messages from the Android OS rather than from Python can usually be found by searching for `backtrace`. If using adb, Android messages appear by default. If using Buildozer, the messages are filtered to be Python only. To see the Android messages when using Buildozer, in `buildozer.spec` comment out the Python-only filter:
 ```
 # (str) Android logcat filters to use
 #android.logcat_filters = *:S python:D
 ```
 
-Messages from Android can be cryptic, most commonly they are due to a missing recipe for a Python package, Java API errors when using pyjnius, or Kivy lifecycle violations.
+Messages from Android can be cryptic. Most commonly they are due to a missing recipe for a Python package, Java API errors when using pyjnius, or Kivy lifecycle violations.
 
 It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
 
 ## Slow App Start
 
-On the desktop if you start a Kivy app from a desktop icon, the app is slower to start than say from an IDE. This is because from the icon Python has to start first, on Android the same delay due to Python starting exists. On Android the splash screen is used to distract from this delay; the splash screen is a work around, not a cause of the delay.
+On the desktop, if you start a Kivy app from a desktop icon, the app is slower to start than say from an IDE. This is because Python has to start first. On Android, the same delay due to Python starting exists - Kivy apps can be slow to launch. On Android, the splash screen is used to distract from this delay. The splash screen is a work=around; it isn't the cause of the delay.
 
 If your app is *unusually slow* to start, it is because it is doing too much work in the `__init__()`, `build()` or `on_start()` methods. A common symptom of this is is a black screen *after* the splash screen has closed but before the app displays.
 
@@ -1071,41 +1078,41 @@ If your app is *unusually slow* to start, it is because it is doing too much wor
 - blocking I/O operations in the above methods
 - too many `autoclass()` statements
 
-Monolithic `kv` is an example of doing too much work in the `build()` method. A solution for monolithic `kv` is to have a `kv` *file* for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as lazy loading.
+Monolithic `kv` is an example of doing too much work in the `build()` method. A solution for monolithic `kv` is to have a `kv` *file* for each screen and to instantiate the screen manager in Python. At `build()` only the first screen is added to the screen manager. Other screens are built and added after `on_start()`, either on demand or on some schedule. This is known as "lazy loading".
 
-Another common solution is to schedule any initial Python compute intensive, or I/O tasks to occur after `on_start()`, either on demand or on some schedule. And I/O operations must *always* be implemented in a non-blocking way, for example using threading.
+Another common solution is to schedule any initial Python compute intensive, or I/O tasks to occur after `on_start()`, either on demand or on some schedule. I/O operations must *always* be implemented in a non-blocking way, for example using threading.
 
 Autoclass is expensive in startup time, if you have 10 or more autoclass statements this may be significant on older devices. The solution is to throw out most of that clever Pyjnius code you spent so long perfecting, and move the code to a Java class in a .java file. Then reference your Java with one or two autoclass in the usual way. Include your Java in the build with Buildozer's `android.add_src`.
 
-There may be other causes, its your code.
+There may be other causes. It's your code.
 
 # Android Hardware
 
 ## Camera
 
-Use the 3rd party [Camera4Kivy Preview widget](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#examples).
+Use the third party [Camera4Kivy Preview widget](https://github.com/Android-for-Python/Camera4Kivy#camera4kivy), and try its [examples](https://github.com/Android-for-Python/Camera4Kivy#examples).
 
-Other cameras do not work on newer versions of Android; including OpenCV Camera, [Kivy Camera](https://kivy.org/doc/stable/api-kivy.uix.camera.html) and its derivatives such as [Xcamera](https://github.com/kivy-garden/xcamera).
+Other cameras libraries do not work on newer versions of Android; including OpenCV Camera, [Kivy Camera](https://kivy.org/doc/stable/api-kivy.uix.camera.html) and its derivatives such as [Xcamera](https://github.com/kivy-garden/xcamera).
 
 ## Keyboard
 
-The relationship between the Android keyboard and the layout is somewhat configurable with [softinput_mode](https://kivy.org/doc/stable/api-kivy.core.window.html#kivy.core.window.WindowBase.softinput_mode), consider `Window.softinput_mode = 'below_target'`.
+The relationship between the Android keyboard and the layout is somewhat configurable with [softinput_mode](https://kivy.org/doc/stable/api-kivy.core.window.html#kivy.core.window.WindowBase.softinput_mode). Consider `Window.softinput_mode = 'below_target'`.
 
 The type of keyboard can be set with `input_type` for example `TextInput(input_type = 'tel')`. Accepted values are 'text', 'number', 'url', 'mail', 'datetime', 'tel', or 'address'.
 
-The `keyboard_suggestions` property does not work on all Android devices. For a workaround see https://github.com/kivy/kivy/blob/master/kivy/uix/behaviors/focus.py#L246-L250 . 
+The `keyboard_suggestions` property does not work on all Android devices. For a workaround, see [Kivy's Focus behavior](https://github.com/kivy/kivy/blob/master/kivy/uix/behaviors/focus.py#L246-L250). 
 
 ## Back Button and Gesture
 
-The back button or gesture is used by Android to pause an app, It has historically been used to also navigate within a Kivy app as shown below.
+The back button or gesture is used by Android to pause an app. It has historically been used to also navigate within a Kivy app, as shown below.
 
-Android 10 and up require that the back button/gesture can return the app to the Android home screen (pause an app).
+Android 10 and up require that the back button/gesture can return the app to the Android home screen (i.e. pause an app).
 
-Android 14 will show a preview of the 'Back target', this preview probably won't work inside Kivy apps. So using Back to navigate inside a Kivy app is proably going to be confusing to Android users.
+Android 14 will show a preview of the 'Back target'. This preview probably won't work inside Kivy apps. So, using Back to navigate inside a Kivy app is probably going to be confusing to Android users.
 
-To use for internal navigation, a back button/gesture can be detected with a test for key == 27, as shown in the [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/source/apis.rst#handling-the-back-button). The key handler **must** return a boolean, which determines if the event is passed to the OS.
+To use for internal navigation, a back button/gesture can be detected with a test for `key == 27`, as shown in the [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/source/apis.rst#handling-the-back-button). The key handler **must** return a boolean, which determines if the event is passed to the OS.
 
-In order to use the button for internal navigation there must be a state in the app where back button/gesture is not consumed by the app. For example if the back button/gesture transitions between Kivy screens, from the "main" screen the app can on a back event go to the Android home screen:
+In order to use the button for internal navigation, there must be a state in the app where back button/gesture is not consumed by the app. For example if the back button/gesture transitions between Kivy screens, from the "main" screen the app can go to the Android home screen on a back event:
 ```python
 class Main(ScreenManager):
     def __init__(self, **kwargs): 
@@ -1124,9 +1131,9 @@ class Main(ScreenManager):
 
 ## The Android package
 
-P4a provides Android specific utilities in the android package, this package is only available on Android. It is a Python interface to some Android OS APIs, these APIs only exist on Android devices and Android emulators. Which is why the package is only available on Android. The package is part of p4a and you will not find it standalone on PyPi.
+P4a provides Android specific utilities in the `android` package. This package is only available on Android. It is a Python interface to some Android OS APIs. These APIs only exist on Android devices and Android emulators, which is why the package is only available on Android. The package is part of p4a and you will not find it standalone on PyPi.
 
-The package is as they say 'self documenting', which really means there isn't any documentation. [Read the code](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes/android/src/android).
+The package is, as they say, 'self documenting' (i.e. there isn't any documentation!) [Read the code](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes/android/src/android).
 
 One (!) such utility is:
 
@@ -1140,7 +1147,7 @@ To find a file containing a list of all the Android *system* Broadcast actions f
 
 Plyer is an OS independent API for some non-POSIX OS features. See [Supported APIs](https://github.com/kivy/plyer#supported-apis). **Plyer is not well maintained**.
 
-**Some Plyer modules and examples work on older Android versions, but not on newer Android versions. The Supported APIs table does not reflect this. For example Camera, Speech to text, Audio, and FileChooser do not work on newer Android versions.**
+Some Plyer modules and examples work on older Android versions, but not on newer Android versions. **The Supported APIs table does not reflect this.** For example Camera, Speech to text, Audio, and FileChooser do not work on newer Android versions.
 
 The [Plyer examples](https://github.com/kivy/plyer/tree/master/examples) are the documentation. 
 
@@ -1158,7 +1165,7 @@ sms | SEND_SMS
 stt | RECORD_AUDIO
 vibrator | VIBRATE
 
-If you plan to use Plyer, and the idea of it is very appealing, first try a small test case on your target Android versions. If it does what you expect, check that all the features you need are available; as Plyer has a platform lowest common denominator design.
+If you plan to use Plyer, and the idea of it is very appealing, first try a small test case on your target Android versions. If it does what you expect, check that all the features you need are available; as Plyer has a platform lowest-common-denominator design.
 
 ## Pyjnius
 
@@ -1181,7 +1188,7 @@ DownloadManagerRequest = autoclass('android.app.DownloadManager$Request')
    self.request.setNotificationVisibility(visibility)
 ```
 
-Then use this to write code with Python syntax and semantics, and Java class semantics added. Some basic knowledge of Java semantics is required, get over it. Android classes will require (possibly extensive) reading of the [Android Developer Guide](https://developer.android.com/guide) and [Android Reference](https://developer.android.com/reference).
+Then use this to write code with Python syntax and semantics, and Java class semantics added. Some basic knowledge of Java semantics is required. Get over it. Android classes will require (possibly extensive) reading of the [Android Developer Guide](https://developer.android.com/guide) and [Android Reference](https://developer.android.com/reference).
 
 In addition `android.mActivity` gives access to some Android state that may be used by the Android API. For example:
 
@@ -1194,7 +1201,7 @@ from android import mActivity
     mActivity.getContentResolver() 
 ```
 
-Within a service the service's Android activity can be obtained using:
+Within a service, the service's Android activity can be obtained using:
 
 ```python
 from android.config import SERVICE_CLASS_NAME
@@ -1203,11 +1210,11 @@ from android.config import SERVICE_CLASS_NAME
     mActivity = PythonService.mService
 ```
 
-Add your own Java to the package using the Buildozer options `android.add_src` and `android.add_jars`, see buildozer.spec. Java files should be organized in sub-directories reflecting the Java package hierarchy.
+Add your own Java to the package using the Buildozer options `android.add_src` and `android.add_jars` in the `buildozer.spec`. Java files should be organized in sub-directories reflecting the Java package hierarchy.
 
-Add AndroidX Java packages (or other Maven packages) using the Buildozer option `android.gradle_dependencies`, see buildozer.spec and [Maven AndroidX Group](https://mvnrepository.com/artifact/androidx).
+Add AndroidX Java packages (or other Maven packages) using the Buildozer option `android.gradle_dependencies` in the buildozer.spec. See [Maven AndroidX Group](https://mvnrepository.com/artifact/androidx).
 
-More challenging, it is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This implementation is only visible in Python, Java classes cannot see it (though they can see the Java defined interface).
+More challenging, it is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This implementation is only visible in Python. Java classes cannot see it (though they can see the Java-defined interface).
 
 Note: some documentation examples are obsolete. If you see '.renpy.' as a sub field in an autoclass argument replace it with '.kivy.'.
 
@@ -1219,11 +1226,11 @@ The way to address this is to create a Java file that references the Java classe
 
 ### Java Abstract Classes
 
-It is not possible to import Java `abstract` classes or methods, as they have no `implementation` (abstract and implementation are Java keywords). And it it is not possible to provide the implementation in Python. You must write the implementation in Java and import that new class.
+It is not possible to import Java `abstract` classes or methods, as they have no `implementation` (abstract and implementation are Java keywords). It is not possible to provide the implementation in Python. You must write the implementation in Java and import that new class.
 
 ### Pyjnius Memory Management
 
-You will be using two garbage collectors working on the same heap, but they don't know each other's boundaries. Python may free a local reference to a Java object because it cant see that the object is used. Obviously this will cause the app to crash in an ugly way. So use class variables, as shown below, to indicate persistence to the Python garbage collector.
+You will be using two garbage collectors working on the same heap, but they don't know each other's boundaries. Python may free a local reference to a Java object because it can't see that the object is used. Obviously this will cause the app to crash in an ugly way. So use class variables, as shown below, to indicate persistence to the Python garbage collector.
 
 ```python
     ###### DONT DO THIS ####
@@ -1248,15 +1255,15 @@ You will be using two garbage collectors working on the same heap, but they don'
 
 Python for Android builds an apk with a minimum device API. Importing Java modules can invalidate this minimum. Check the [Added in API level field](https://developer.android.com/reference/android/provider/MediaStore.Downloads) in the class or method reference documentation.
 
-And if the app includes an `.aar` file, check that the version of Java used to build the aar is not newer than the version of OpenJDK you installed for Buildozer. If the aar is built with a newer Java you will get an error message similar to [this](#unsupported-class-file-major-version-62).
+If the app includes an `.aar` file, check that the version of Java used to build the aar is not newer than the version of OpenJDK you installed for Buildozer. If the aar is built with a newer Java, you will get an error message similar to [this](#unsupported-class-file-major-version-62).
 
 ### Calling Python from Java
 
-The following illustrates calling a Python method ( here called `from_java()`) from Java. In the example there is one argument which is a string. Java sees the method as having a different name, in this case `callback_string()`. 
+The following illustrates calling a Python method (here called `from_java()`) from Java. In the example there is one argument which is a string. Java sees the method as having a different name, in this case `callback_string()`. 
 
 The technique relies on passing the method inside a wrapper class. The `interface` of the wrapper class is defined in Java. And the `implementation` of this wrapper class is defined in Python. The wrapper class is initialized with the Python method to be called. Java calls a method inside an the same instance of the same wrapper class. 
 
-You are going to have to write some Java, get over it. To comprehend the following code fragments; read from top to bottom, then follow the path of the string from bottom to top.
+You are going to have to write some Java; get over it. To comprehend the following code fragments: read from top to bottom, then follow the path of the string from bottom to top.
 
 In Python:
 
@@ -1330,9 +1337,9 @@ Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer
 
 ### Java Listener Class
 
-Sometimes the Java API has a listener class containing the Java callback method, and the approach in the previous section is not directly applicable.
+Sometimes the Java API has a listener class containing the Java callback method. The approach in the previous section is not directly applicable.
 
-In this case you will have to write a small amount of Java. Create a class that extends the required listener class, and initialize it with a CallbackWrapper class similar to the one in the previous section. The methods in your newly created subclass then call the callback wrapper methods.
+In this case, you will have to write a small amount of Java. Create a class that extends the required listener class, and initialize it with a CallbackWrapper class similar to the one in the previous section. The methods in your newly created subclass then call the callback wrapper methods.
 
 The following code fragments are taken from the [speech recognizer example](https://github.com/Android-for-Python/speech_recognizer_example) where you can see the pieces assembled.
 
@@ -1384,7 +1391,7 @@ class CallbackWrapper(PythonJavaClass):
 
 ```
 
-In Python, we then initialize the required Java functionality (in this case SpeechRecognizer) with our custom Java listener, and initialize our listener with an instance of the (PythonJavaClass) callback wrapper. In the case of SpeechRecognizer the listener is set with a method named `setRecognitionListener()`.
+In Python, we then initialize the required Java functionality (in this case SpeechRecognizer) with our custom Java listener, and initialize our listener with an instance of the (PythonJavaClass) callback wrapper. In the case of SpeechRecognizer, the listener is set with a method named `setRecognitionListener()`.
 
 It is a characteristic of the SpeechRecognizer class that it must run on the Android UI thread, so we use the `@run_on_ui_thread` directive. 
 
@@ -1398,7 +1405,7 @@ It is a characteristic of the SpeechRecognizer class that it must run on the And
             KivyRecognitionListener(self.callback_wrapper))  # Java
 ```
 
-Finally we handle the Java callbacks in Python.
+Finally, we handle the Java callbacks in Python.
 
 Since in this case this method configures a Kivy UI Label widget, it must run on the Kivy main thread. We use the `@mainthread` directive, because the method was called from Java on the thread specified by `@run_on_ui_thread`. The "Android UI thread" is not the same thread as the thread on which Kivy UI widgets are updated.  
 
@@ -1459,7 +1466,7 @@ Geometry tells us there is no right answer. You can however localize issues by f
 
 ### Testing Portability
 
-To test the portability of a layout using a desktop, set the required size and dpi on app start (change the numbers to whatever you want).
+To test the portability of a layout using a desktop, set the required size and dpi on app start.  (Change the numbers to whatever you want).
 ```
 python3 main.py --size=420x720 --dpi=200
 ```
@@ -1490,7 +1497,7 @@ For [Shared Storage](#shared-storage) use the Android Chooser. The [AndroidStora
 
 ## KivyMD
 
-The [KivyMD](https://github.com/kivymd/KivyMD) widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
+The [KivyMD](https://github.com/kivymd/KivyMD) widgets have the look-and-feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
 
 Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the API may change with KivyMD versions.
 
@@ -1500,7 +1507,7 @@ The KivyMD [instructions for Buildozer](https://github.com/kivymd/KivyMD#how-to-
 
 Follow the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle), it abstracts the app behavior that Android expects.
 
-Do not place code in the app that interacts with Android 'script style', to be executed before the Kivy build() call.
+Do not place code in the app that interacts with Android 'script style' to be executed before the Kivy build() call.
 
 `request_permissions()` must only be called from the App's `build()` method, and only one once with an argument that is a list of all required permissions.
 
@@ -1508,13 +1515,13 @@ The App's `on_stop()` method is not always called, use `on_pause()` to save stat
 
 ## Kivy Garden
 
-[Kivy Garden](https://github.com/kivy-garden/) is a library of components ('flowers'). It consists of user contributions, and is mostly not maintained. Anybody who has had a garden knows a garden needs a gardener, Kivy Garden doesn't have one. Set your expectations accordingly.
+[Kivy Garden](https://github.com/kivy-garden/) is a library of components ('flowers'). It consists of user contributions, and is mostly not maintained. Anybody who has had a garden knows a garden needs a gardener. Kivy Garden doesn't have one. Set your expectations accordingly.
 
-For flowers that are maintained add them to your buildozer.spec requirements as  `kivy_garden.flower`, and in the app `from kivy_garden.flower import FlowerClass` replacing `flower` with the actual name, for example `xcamera`.
+For flowers that are maintained, add them to your buildozer.spec requirements as  `kivy_garden.flower`, and in the app `from kivy_garden.flower import FlowerClass` replacing `flower` with the actual name, for example `xcamera`.
 
-For flowers that are not maintained copy the flower code to your project and edit so that it builds. Note: `garden.matplotlib` is an example of a flower that is not maintained (also garden.matplotlib depends on matplotlib, this should be added to requirements).
+For flowers that are not maintained, copy the flower code to your project and edit so that it builds. Note: `garden.matplotlib` is an example of a flower that is not maintained. (Also, `garden.matplotlib` depends on `matplotlib`; this should be added to requirements).
 
-There is a `#garden_requirements =` field in older buildozer.spec files. This is depreciated and should not be used.
+There is a `#garden_requirements =` field in older buildozer.spec files. This is deprecated and should not be used.
 
 # Creating a Recipe
 
@@ -1522,9 +1529,9 @@ There is a `#garden_requirements =` field in older buildozer.spec files. This is
 
 Some Python packages are not pure Python, they contain compiled code. This must be compiled for the specific platform.
 
-Python packages are generally distributed in a wheel, this will contain pre-compiled binaries for supported platforms. Python wheels do not support Android, so to port a package to Android is must be explicitly compiled for ARM/Android.
+Python packages are generally distributed in a wheel. This will contain pre-compiled binaries for supported platforms. Python wheels do not support Android, so to port a package to Android is must be explicitly compiled for ARM/Android.
 
-P4a provides an API for creating package build scripts, such a script is called a "recipe". The task in creating a recipe is to port existing build instructions. To create a recipe you must understand both of these:
+P4a provides an API for creating package build scripts, called "recipes". The task in creating a recipe is to port existing build instructions. To create a recipe you must understand both of these:
 
 - The p4a recipe API.
 
@@ -1532,13 +1539,13 @@ P4a provides an API for creating package build scripts, such a script is called 
 
 ## Porting Overview
 
-A recipe is simply a format required by p4a, it doesn't do much except set the environment variables for Clang, define some steps (environment, setup, build, install), and automate simple cases. 
+A recipe is simply a format required by p4a. It doesn't do much except set the environment variables for Clang, define some steps (environment, setup, build, install), and automate simple cases. 
 
-The potentially hard and unique part is understanding what you want the package's build scripts to do, once you understand that then to automate within p4a's format is fairly simple.
+The potentially hard and unique part is understanding what you want the package's build scripts to do. Once you understand that then to automate within p4a's format is fairly simple.
 
-Its easy to incorrectly focus one's attention on the p4a API when the real issue is understanding what you want the build scripts to do. As humans we hope the recipe will magically make our dreams come true, because the work of understanding a build in order to port it can be hard.
+Its easy to incorrectly focus one's attention on the p4a API when the real issue is understanding what you want the build scripts to do. As humans, we hope the recipe will magically make our dreams come true, because the work of understanding a build in order to port it can be hard.
 
-By analogy think of your self as an author of a recipe book, the easy part is formatting for the publisher (p4a recipe) . The potentially hard part is interpreting the chef's instructions (make, cmake, setup, configure.....), so you can modify the instructions for making the dish in a household kitchen. 
+By analogy, think of your self as an author of a recipe book. The easy part is formatting for the publisher (p4a recipe) . The potentially hard part is interpreting the chef's instructions (make, cmake, setup, configure.....), so you can modify the instructions for making the dish in a household kitchen. 
 
 ## P4A Recipe API
 
@@ -1550,15 +1557,15 @@ The [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/
 
 ## Porting Build Instructions
 
-Build instructions could be a `setup.py`, `a shell script`, `Make`, `CMake`, `Bazel`, or something else. These instructions may be processor or OS specific, and usually depend on the GCC tools.
+Build instructions could be a `setup.py`, `a shell script`, `Make`, `CMake`, `Bazel`, or something else. These instructions may be processor- or OS-specific, and usually depend on the GCC tools.
 
-A port involves specifying the Android NDK supplied compiler tools (Clang and LLVM) in place of GCC tools; and patching any of the existing build scripts as necessary.
+A port involves specifying the Android-NDK-supplied compiler tools (Clang and LLVM) in place of GCC tools, and patching any of the existing build scripts as necessary.
 
-For background reading the [Build System Maintainers Guide](https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md) provides some perspective of the Android build tools. 
+For background reading, the [Build System Maintainers Guide](https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md) provides some perspective of the Android build tools. 
 
 ## Recipe Support
 
-This is full custom work. You can't schedule this, you are finished when the surprises stop. This task is for those who consider themselves self-supporting. Requests for help usually go unanswered because nobody will have experience of that specific issue in that context.
+This is full custom work. You can't schedule this; you aren't finished until the surprises stop. This task is for those who consider themselves self-supporting. Requests for help usually go unanswered because nobody will have experience of that specific issue in that context.
 
 # Resources
 
@@ -1566,22 +1573,22 @@ This is full custom work. You can't schedule this, you are finished when the sur
 
 Really.
 
-[Buildozer](https://github.com/kivy/buildozer/tree/master/docs/source)
+* [Buildozer](https://github.com/kivy/buildozer/tree/master/docs/source)
 
-[Python for Android](https://github.com/kivy/python-for-android/tree/develop/doc/source)
+* [Python for Android](https://github.com/kivy/python-for-android/tree/develop/doc/source)
 
-[Pyjnius](https://github.com/kivy/pyjnius/tree/master/docs/source)
+* [Pyjnius](https://github.com/kivy/pyjnius/tree/master/docs/source)
 
-Don't rely on other sources, they can be obsolete.
+Don't rely on other sources; they can be obsolete.
 
 ## Android for Python
 
 [Android for Python Examples](https://github.com/Android-for-Python/INDEX-of-Examples) contains examples of some Android features as used from Python. These examples only run on Android.
 
 ## KivAds and KivMob
-[KivAds](https://kivads.readthedocs.io/en/latest/index.html) is a Library that allows you to monetize your Kivy Apps using Google Admob. To use KivAds [minor modifications to p4a](https://github.com/Guhan-SenSam/KivAds/tree/v1.0.0#requirements) are currently required.
+[KivAds](https://kivads.readthedocs.io/en/latest/index.html) is a library that allows you to monetize your Kivy Apps using Google Admob. To use KivAds, [minor modifications to p4a](https://github.com/Guhan-SenSam/KivAds/tree/v1.0.0#requirements) are currently required.
 
-[KivMob](https://github.com/MichaelStott/KivMob) is a Library that allows you to monetize your Kivy Apps using Google Admob. The documentation for `android.gradle_dependencies` needs to be [updated](https://github.com/MichaelStott/KivMob/issues/115#issuecomment-1132929035).
+[KivMob](https://github.com/MichaelStott/KivMob) is a library that allows you to monetize your Kivy Apps using Google Admob. The documentation for `android.gradle_dependencies` needs to be [updated](https://github.com/MichaelStott/KivMob/issues/115#issuecomment-1132929035).
 
 ## Android Notifications
 
@@ -1595,27 +1602,27 @@ Don't rely on other sources, they can be obsolete.
 
 There are **a lot of useful features** to be found at these links:
 
-[https://github.com/Sahil-pixel/Pykivdroid](https://github.com/Sahil-pixel/Pykivdroid)
+* [Pykivdroid](https://github.com/Sahil-pixel/Pykivdroid)
 
-[https://github.com/yunus-ceyhan](https://github.com/yunus-ceyhan)
+* [yunus-ceyhan's github](https://github.com/yunus-ceyhan)
 
-[https://github.com/adywizard](https://github.com/adywizard)
+* [adywizard's github](https://github.com/adywizard)
 
-[https://github.com/tshirtman](https://github.com/tshirtman)
+* [tshirtman's github](https://github.com/tshirtman)
 
-[https://github.com/Kulothungan16/Example-Kivy-Apps](https://github.com/Kulothungan16/Example-Kivy-Apps)
+* [Kulothungan16's Example-Kivy-Apps](https://github.com/Kulothungan16/Example-Kivy-Apps)
 
-[https://github.com/AM-ash-OR-AM-I/Passlock](https://github.com/AM-ash-OR-AM-I/Passlock)
+* [Passlock](https://github.com/AM-ash-OR-AM-I/Passlock)
 
-[https://github.com/T-Dynamos/pyjnius-scripts](https://github.com/T-Dynamos/pyjnius-scripts)
+* [T-Dynamos' pyjnius-scripts](https://github.com/T-Dynamos/pyjnius-scripts)
 
-[https://github.com/mp-007/kivy_matplotlib_widget](https://github.com/mp-007/kivy_matplotlib_widget)
+* [kivy_matplotlib_widget](https://github.com/mp-007/kivy_matplotlib_widget)
 
 # Release Builds
 
-Setup signing *before* your release build.
+Set up signing *before* your release build.
 
-## Setup signing
+## Set up signing
 
 The official [Android signing overview is here](https://developer.android.com/studio/publish/app-signing.html).
 
@@ -1666,7 +1673,7 @@ To install an .aab locally use [Bundletool](#appendix-f--install-bundletool), in
 
 # Appendix A : Using adb
 
-The easiest way to get `adb` is to install Android Studio.
+The easiest way to get `adb` is to install [Android Studio](https://developer.android.com/studio).
 
 Add something like this to your PATH:
 `C:\Users\UserName\AppData\Local\Android\Sdk\platform-tools`
@@ -1688,14 +1695,14 @@ adb logcat *:S python:D
 
 Now start your app.
 
-Note that `adb` does not finish, it continues logging until it is terminated.
+Note that `adb logcat` does not finish; it continues logging until it is terminated.
 
-You can also connect the device wirelessly using adb, see https://www.makeuseof.com/use-adb-over-wifi-android/  but this does not appear to work from WSL.
+You can also [connect the device wirelessly using adb](https://www.makeuseof.com/use-adb-over-wifi-android/)  but this does not appear to work from WSL.
 
 
 # Appendix B : Using an emulator
 
-It is possible to debug using an emulator but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
+It is possible to debug using an emulator but this is not recomended initially; it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
 
 The apk **must** be built with buildozer.spec `android.arch` having the same as ABI the emulator, I find x86 works more reliably than x86_64.
 
