@@ -84,7 +84,7 @@ Revised 2023-07-25
     + [Pyjnius Performance](#pyjnius-performance)
     + [Java Abstract Classes](#java-abstract-classes)
     + [Pyjnius Memory Management](#pyjnius-memory-management)
-    + [Java Api Versions](#java-api-versions)
+    + [Java API Versions](#java-api-versions)
     + [Calling Python from Java](#calling-python-from-java)
     + [Java Listener Class](#java-listener-class)
 - [Kivy Related Topics](#kivy-related-topics)
@@ -169,17 +169,17 @@ Revised 2023-07-25
 
 # Introduction
 
-Python and Kivy are portable across operating systems because of POSIX, Python wheels, and pip. However Android is not POSIX compliant, wheels are not usually available for Android, and pip is not installed on Android. Clearly many apps won't 'just work' on Android. The document is about porting a Kivy app to Android.
+Python and Kivy are portable across operating systems because of [POSIX](https://en.wikipedia.org/wiki/POSIX), Python wheels, and pip. However Android is not POSIX-compliant, wheels are not usually available for Android, and pip is not installed on Android. Clearly many apps won't 'just work' on Android. The document is about porting a Kivy app to Android.
 
-For a well written app that only paints the screen, and does nothing else, building for Android will be 'push button'. One can for example build 'Hello World' with the default 'buildozer.spec' file. Of course this does not describe many apps.
+For a simple, well-written app that only paints the screen, and does nothing else, building for Android will be 'push button'. One can for example build 'Hello World' with the default 'buildozer.spec' file. Of course this does not describe many apps.
 
 This document is not a substitute for Reading The Fine Manual [(RTFM)](https://en.wikipedia.org/wiki/RTFM). Your basic resources are [Buildozer](https://github.com/kivy/buildozer/tree/master/docs/source), [Python for Android](https://github.com/kivy/python-for-android/tree/develop/doc/source), and [Android](https://developer.android.com/guide).
 
-Python-for-Android is a truly amazing achievement, but there are some details to understand. The alternative is Java and the Android api, which has been shown to induce insanity in laboratory mice. 
+Python-for-Android (p4a) is a truly amazing achievement, but there are some details to understand. The alternative is Java and the Android API, which has been shown to induce insanity in laboratory mice. 
 
-Lastly this document is my understanding as of the date above. I am not a developer in any of the Kivy sub projects (except for a few PRs). I have created a suite of [Android orientated examples](https://github.com/Android-for-Python/INDEX-of-Examples).
+Finally, this document is my understanding as of the date above. I am not a developer in any of the Kivy sub projects (except for a few PRs). I have created a suite of [Android oriented examples](https://github.com/Android-for-Python/INDEX-of-Examples).
 
-The document is guaranteed to be incomplete is some way, and may possibly be wrong in another way. But reading it will hopefully provide you with come context with which to read the official documentation and to experiment. Those two steps are the key to insight and understanding, which in turn is key to making your idea real.
+The document is guaranteed to be incomplete in some way, and may possibly be wrong in other ways. But reading it will hopefully provide you with come context with which to read the official documentation and to experiment. Those two steps are the key to insight and understanding, which in turn is key to making your idea real.
 
 # Confidence and Competence
 
@@ -193,75 +193,75 @@ Source: Wikimedia Commons
 
 # What is Different about Android?
 
-## Posix
+## POSIX
 
-Android is not POSIX compliant (POSIX is so deep in your assumptions about computers you probably don't know it exists).
+Android is not POSIX-compliant (POSIX is so deep in your assumptions about computers you probably don't know it exists).
    
-The file system model is different, the app cannot use any directory in the file system. The app has specific private storage directories that support file operations. The app also has storage shared between apps, this is implemented as a database.
+The file system model is different; the app cannot use any directory in the file system. The app has specific private storage directories that support file operations. The app also has storage shared between apps; this is implemented as a database.
 
-Threads are available like the desktop. Subprocess is available, but the excutable called by subprocess on the desktop almost certainly is not available.
+Threads are available like a desktop. Subprocess is available, but the excutable called by subprocess on the desktop almost certainly is not available.
 
-Multi-tasking, on the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events; it is said to move to the *background*. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and does not execute any app code - there is no *background* operation. Execution of separate code (with no UI), in the *background* requires an [Android Service](#android-service).
+Multi-tasking: On the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events; it is said to move to the *background*. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and does not execute any app code - there is no *background* operation. Execution of separate code (with no UI), in the *background* requires an [Android Service](#android-service).
 
-Apps have a lifecycle, keep to the [Kivy Lifcycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle) so that the app keeps to the [Android Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle#alc). Android api calls made outside of the Kivy App class or its children may cause non-deterministic behavior or crashes.
+Apps have a lifecycle. Stick to the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle) so that the app sticks to the [Android Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle#alc). Android API calls made outside of the Kivy App class or its children may cause non-deterministic behavior or crashes.
 
 ## Wheels
 
-Some Python packages are not written in Python (are not pure-Python), they contain code that must be compiled. Pip provides pre-compiled packages for desktop OSes, **but not for Android**. P4a addresses this with recipes, but not all impure packages are available. AVOID DISAPPOINTMENT, check availability first. 
+Some Python packages are not written in Python (i.e. are not pure Python); they contain code that must be compiled. Pip provides pre-compiled packages for desktop OSes, **but not for Android**. P4a addresses this with recipes, but not all impure packages are available. AVOID DISAPPOINTMENT, check availability first. 
 
-A quick and easy way to determine if a package is pure Python is to go to the package on `pypi.org` (this is where pip gets wheels), then follow the "Download Files" link, and look under "Built Distribution".
+A quick and easy way to determine if a package is pure Python is to go to the package on [PyPI](https://pypi.org) (this is where pip gets wheels), then follow the "Download Files" link, and look under "Built Distribution".
 
 If the "Built Distribution" *only* contains files that end with `py3-none-any.whl` ([for example](https://pypi.org/project/chardet/#files)) then the package is pure Python, and WILL NOT require a recipe. 
 
 If the "Built Distribution" contains files that end with `win32.whl`, `and64.whl`, `arm64.whl` or similar ([for example](https://pypi.org/project/opencv-python/#files)) then the package is not pure Python, and WILL require a recipe.
 
-If the package requires a recipe, check the list of available [recipes](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). Note that the recipe name is not always identical to the Pypi package name, for example the "opencv-python" package has a recipe named "opencv".
+If the package requires a recipe, check the list of available [recipes](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). Note that the recipe name is not always identical to the PyPI package name, for example the "opencv-python" package has a recipe named "opencv".
 
-If the package requires a recipe, and one does not exist - your app is not portable to Android without extra work. Read this summary of [your options](#pure-python).
+If the package requires a recipe, and one does not exist, then your app is not portable to Android without extra work. Read this summary of [your options](#not-pure-python).
 
-*Note that it is possible but unlikley that a pure Python package may contain OS specific code, or depend on OS specific third party apps (for example ffmpeg).* 
+*Note that it is possible but unlikely that a pure Python package may contain OS-specific code, or depend on OS-specific third-party apps (for example ffmpeg).* 
 
 ## Meta-information
 
-Unlike the desktop you must provide information *about* your Python code, this requirement causes everybody who doesn't understand it to crash and burn. This information must be supplied in the buildozer.spec file. It includes *all* the pip packages your app depends on, any file types your app depends on for data, and the Android permissions your app depends on. Meta-information may not be limited to that short list, but that list is critical.
+Unlike the desktop, you must provide information *about* your Python code. This requirement causes everybody who doesn't understand it to crash and burn. This information must be supplied in the `buildozer.spec` file. It includes *all* the pip packages your app depends on, any file types your app depends on for data, and the Android permissions your app depends on. Meta-information may not be limited to that short list, but that list is critical.
 
 ## App Security
 
-A mobile app is different from a desktop app in that it is less likely to be physically secure from bad actors. Anybody with Android Studio and a device on which your app is installed can view most of the contents of your app, though Python, Java, or C code must be decompiled to be human readable (this is not hard).
+A mobile app is different from a desktop app in that it is less likely to be physically secure from bad actors. Anybody with Android Studio and a device on which your app is installed can view most of the contents of your app. Python, Java, or C code must be decompiled to be human-readable, but this is not hard for a determined attacker.
 
-Nothing is perfectly secure (just ask any hacker, or anybody who prints there own copies of a government's paper money). You can make confidential information harder to reverse engineer by designing your app such that:
+Nothing is perfectly secure (just ask any hacker, or anybody who prints their own copies of a government's paper money). You can make confidential information harder to reverse engineer by designing your app such that:
 
  - Any trade secrets, and also the app user's private data, are only saved on a secure server.
 
- - Password vaildation is with a secure server (no passwords are built into the app).
+ - Password vaildation is with a secure server (i.e. no passwords are built into the app).
 
- - Any temporary refresh keys are saved in [app private storage](#app-storage-directory), and not in the app install directory. And for private storage location do not us p4a's `android.app_storage_path()` api call as this location is not secure 
+ - Any temporary refresh keys are saved in [app private storage](#app-storage-directory), and not in the app install directory. For private storage location do not use p4a's `android.app_storage_path()` API call as this location is not secure 
 
 # Android Storage
 
 The view of the Android file system has changed a few times over the years. Modern Android devices physically use *external storage*, however the term is ambiguous as it applies to two incompatible uses cases.
 
-Storage is either *Private Storage* or *Shared Storage*. **Private Storage content is only visible to the app that created it, Shared Storage is visible to all apps. Python file operations can only be performed in Private Storage, Shared Storage is a database not a file system.** Programmers used to only a desktop file system have a hard time accepting this storage architecture is different.
+Storage is either *Private Storage* or *Shared Storage*. **Private Storage content is only visible to the app that created it, Shared Storage is visible to all apps. Python file operations can only be performed in Private Storage. Shared Storage is a database not a file system.** Programmers used to only a desktop file system have a hard time accepting this storage architecture is different.
 
-The storage architecture is summarized in the Android documentation https://developer.android.com/training/data-storage . The following subsections address storage from the point of view of a Buildozer user.
+The storage architecture is summarized in the [Android documentation](https://developer.android.com/training/data-storage). The following subsections address storage from the point of view of a Buildozer user.
 
 ## Private Storage
 
 An app can perform Python file operations (read, write, shutil) on its private storage. There are three usable storage location: the app install directory, the app storage directory, and the app cache directory.
 
-No permissions are requires to read or write an app's private storage. [More on permissions below](#app-permissions).
+No permissions are required to read or write an app's private storage. [More on permissions below](#app-permissions).
 
-Do not confuse private with secure, on older Android versions it is possible for other apps to read private storage. And more generally Android Studio allows inspection.
+Do not confuse private with secure. On older Android versions it is possible for other apps to read private storage. More generally, Android Studio allows inspection of private storage.
 
 ### App Install Directory
 
-The install directory is `./`, files from the apk or aab can be accessed. An app update will overwrte this directory so this is not a good place to save files (though you can).
+The install directory is `./`. Files from the apk or aab can be accessed. An app update will overwrite this directory, so this is not a good place to save important files (though you can).
 
 ### App Storage Directory
 
-Most of the time this is what you should use. 
+Most of the time, this is what you should use. 
 
-The app storage directory is persistent over the installed lifetime of the app, and is removed when the app is uninstalled.
+The app storage directory is persistent over the installed lifetime of the app. It is removed when the app is uninstalled.
 
 The app storage directory is accessed using:
 
@@ -274,9 +274,9 @@ from android import mActivity
         storage_path =  str(result.toString())
 ```
 
-The `result` in the code can be `None` on older Android devices that have removable external storage, and that storage is removed.  
+The `result` in the code can be `None` on Android devices that have removable external storage when that storage is removed.  
 
-In addition p4a provides a legacy storage directory, this works but does not return the same location as the Android documented `getExternalFilesDir(None)` above. The legacy storage directory may be used as a fallback in the case of removed external storage. But the location returned by `app_storage_path()` is **not secure**, and when removed the storage media is **not secure**.
+In addition, p4a provides a legacy storage directory. This works but does not return the same location as the Android documented `getExternalFilesDir(None)` above. The legacy storage directory may be used as a fallback in the case of removed external storage. The location returned by `app_storage_path()` is **not secure**, and when removed, the storage media is **not secure**.
 
 
 ```python
@@ -293,7 +293,7 @@ from android import mActivity
 
 ### App Cache Directory
 
-The app cache directory is temporary storage, the lifetime of files in this are is managed by Android.  The app storage directory is accessed using:
+The app cache directory is temporary storage. The lifetime of files in this are is managed by Android.  The app storage directory is accessed using:
 ```python
 from android import mActivity
 
@@ -309,47 +309,47 @@ Shared storage is visible to all apps, and is persistent after an app is uninsta
 
 ### Android Version Issues
 
-On devices running Android 10 and later or build android.api > 28 shared storage is implemented as a database, you cannot access shared storage with Python file operations because there is no file path. The [Kivy Filechooser](#kivy-filechooser) and KivyMD file chooser only work with private storage, you must use the Android Chooser for shared storage.
+On devices running Android 10 and later or build `android.api` > 28, shared storage is implemented as a database. You cannot access shared storage with Python file operations because there is no file path. The [Kivy Filechooser](#kivy-filechooser) and KivyMD file chooser only work with private storage; you must use the Android Chooser for shared storage.
 
-On devices with Android less than 10, shared storage is a file system and you can access file with `from android.storage import primary_external_storage_path`. But this **does not work** on devices running Android 10 or greater.
+On devices with Android less than 10, shared storage is a file system and you can access file with `from android.storage import primary_external_storage_path`. This **does not work** on devices running Android 10 or greater.
 
-On devices running Android 10 or greater shared storage is accessed via the Java MediaStore api, or the Chooser api. 
+On devices running Android 10 or greater, shared storage is accessed via the Java MediaStore API or the Chooser API. 
 
 ### MediaStore
 
 The MediaStore is a database, not a file system. The MediaStore is organized based on multiple root directories. For example 'Music', 'Movies', 'Pictures', 'Documents', and 'Downloads'.
 
-The MediaStore files are accessed using a *content uri*, not a file path. Python requires a file path to access a file, not a content uri. So **Python apis such as fopen(), which depend on a file path, will fail**. Content uris are obtained from Android OS apis, for example in the MediaStore api. See the [MediaStore documentation](https://developer.android.com/training/data-storage/shared/media).
+The MediaStore files are accessed using a *content URI*, not a file path. Python requires a file path to access a file, not a content URI. So **Python APIs such as fopen(), which depend on a file path, will fail**. Content URIs are obtained from Android OS APIs - for example, the [MediaStore API](https://developer.android.com/training/data-storage/shared/media).
 
-"Are you telling me I can't ....?", I'm explaining that Android shared storage is different from our expectations of a POSIX file system, evolve or die out.
+"Are you telling me I can't ....?" I'm explaining that Android shared storage is different from our expectations of a POSIX file system. Evolve or die out.
 
-You can find examples of calling the MediaStore Java api from Python in the source for [AndroidStorage4Kivy](https://github.com/Android-for-Python/androidstorage4kivy/blob/main/src/androidstorage4kivy/sharedstorage.py).
+You can find examples of calling the MediaStore Java API from Python in the source for [AndroidStorage4Kivy](https://github.com/Android-for-Python/androidstorage4kivy/blob/main/src/androidstorage4kivy/sharedstorage.py).
 
 ### AndroidStorage4Kivy
 
-An Android version independent Python api for shared storage is implemented in the package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy).
+An Android-version-independent Python API for shared storage is implemented in the package [androidstorage4kivy](https://github.com/Android-for-Python/androidstorage4kivy).
 
-This package is an abstraction of the MediaStore api. The abstraction is *copy or delete*, so *files can be copies to, copied from, and deleted from shared storage*. The MediaStore api, and content uris are thus hidden. For more details see https://github.com/Android-for-Python/androidstorage4kivy#programming-model and https://github.com/Android-for-Python/androidstorage4kivy#sharedstorage-class.
+This package is an abstraction of the MediaStore API. The abstraction is *copy or delete*, so *files can be copies to, copied from, and deleted from shared storage*. The MediaStore API, and content URIs are thus hidden. For more details see [Android Shared Storage 4 Kivy's Programming Model](https://github.com/Android-for-Python/androidstorage4kivy#programming-model) and [Android Shared Storage 4 Kivy's Shared Storage Class](https://github.com/Android-for-Python/androidstorage4kivy#sharedstorage-class).
 
 Example usage is in [shared_storage_example](https://github.com/Android-for-Python/shared_storage_example). The example also demonstrates using the Android file Chooser, using the SharedStorage4Kivy Chooser class.
 
 ### Storage Permissions
 
-On devices running Android 10 and later no permissions are requires to read or write an app's own shared storage or private storage.
+On devices running Android 10 and later, no permissions are requires to read or write an app's own shared storage or private storage.
 
 Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission if android.api < 33 and READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_MEDIA_AUDIO [see](https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE) if android.api >= 33.  An app cannot overwrite another app's shared file.
 
-There is one special case, which is different from typical desktop usage. An app cannot read another app's file in the Downloads directory, regardless of permissions.
+There is one special case which is different from typical desktop usage. An app cannot read another app's file in the Downloads directory, regardless of permissions.
 
 On devices running Android 9 and less, WRITE_EXTERNAL_STORAGE is required for any file writes. Or READ_EXTERNAL_STORAGE if the app only wants to do shared storage reads.
 
 ### Shared Storage Alternatives
 
-A little research and you will discover the MANAGE_EXTERNAL_STORAGE permission, and the "requestLegacyExternalStorage" flag. Neither is discussed here, due to the issues they introduce. 
+A little research and you will discover the MANAGE_EXTERNAL_STORAGE permission, and the `requestLegacyExternalStorage` flag. Neither is discussed here, due to the issues they introduce. 
 
 ## Sharing a file between apps
 
-Files in Shared Storage can be shared between apps. If you want to share a file first copy it to shared storage. Then send it to an Android ShareSheet. The complement operation, receiving a shared file requires copying the file to private storage so Python can access it.
+Files in Shared Storage can be shared between apps. If you want to share a file, first copy it to shared storage and then send it to an Android ShareSheet. The complement operation (receiving a shared file) requires copying the file to private storage so Python can access it.
 
 The androidstorage4kivy package contains a ShareSheet class that invokes an Android ShareSheet, or sends a file directly to a specific app. The latter assumes that the specific app knows how to receive files of the type sent.
 
@@ -359,9 +359,9 @@ Examples of sending a file are in [share_send_example](https://github.com/Androi
 
 ## Threads
 
-Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads.
+Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence, long latency operations (e.g. network access, sleep()) or computationally expensive operations must be performed in their own Python threads.
 
-Threads must be truly asynchronous to the UI thread, so do not use `join()` in the UI thread. A non-UI thread may not write to a UI widget. [See this basics example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A very thread safe way to return results to the UI thread is to use the `@mainthread` decorator, for example:
+Threads must be truly asynchronous to the UI thread, so do not use `join()` in the UI thread. A non-UI thread may not write to a UI widget. [See this basic example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A thread-safe way to return results to the UI thread is to use the `@mainthread` decorator, for example:
 
 ```python
 from threading import Thread
@@ -370,13 +370,13 @@ from kivy.clock import mainthread
     def run_some_function_in_thread(self, arg0):
         # note the value of args is a tuple,
         # it always contains at least one comma
-        Thread(target=self.some_function, args = (arg0,),
+        Thread(target=self.some_function, args = (arg0, ),
                daemon=True).start()
 
     def some_function(self, arg0):
         try:
             # the behavior goes here, creating some result
-            result = 'greetings earthlings'
+            result = 'Greetings, Earthlings.'
             # sync a *copy* of the result with the Kivy UI thread
             self.make_thread_safe(str(result))
         except:
@@ -389,12 +389,12 @@ from kivy.clock import mainthread
         self.label.text = text
 ```
 
-A daemon thread will exit when the app exits, providing all threads running at app exit are also daemon threads. Failure to always specify a daemon thread may cause an app to exit in a delayed way.
+A daemon thread will automatically terminate when the main thread comepletes, providing all threads running at app exit are also daemon threads. Failure to always specify a daemon thread may cause an app to exit in a delayed way.
 
 
 ## Subprocess
 
-The Python subprocess depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commands which of course are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and when run from `subprocess.Popen` have app only permission. 
+The Python `subprocess` module depends on having an ARM executable to run, this does not exist unless you build it and then `chmod 744`. The exception is system commands which, of course, are compiled for ARM; the executables for `ls`, `ps`, etc. are in Android's `/system/bin`. System commands may not have the same features as a Bash shell, and when run from `subprocess.Popen` have app-only permission. 
 
 There is no `python3` executable, Python's `sys.executable` is empty. To run a Python script in a new process, we use an [Android Service](#android-service).
 
@@ -402,7 +402,7 @@ There is no `python3` executable, Python's `sys.executable` is empty. To run a P
 
 ### Kivy async usage
 
-Python does not allow calling (async) coroutines from (traditional) routines. Kivy is constructed of routines, however Kivy has a method that allows it to be started as an async coroutine. Thus the Kivy and Async loops do not block one another, this does not mean any other Kivy routines become coroutines.
+Python does not allow calling (async) coroutines from (traditional) routines. Kivy is constructed of routines, however Kivy has a method that allows it to be started as an async coroutine. Thus, the Kivy and Async loops do not block one another. This does not mean any other Kivy routines become coroutines.
 
 We normally start a Kivy app with:
 
@@ -410,13 +410,13 @@ We normally start a Kivy app with:
 ExampleApp().run()
 ```
 
-For basic Async usage we start Kivy with (we'll show trio later):
+For basic Async usage we start Kivy with (we'll show `trio` later):
 
 ```python
 asyncio.run(ExampleApp().async_run('asyncio'))
 ```
 
-Alone this does not allow us to combine routines and coroutines. An app can't directly call a coroutine from say a Kivy UI event such as a Button event. But an app can do this indirectly, the details are different for the `trio` and `asyncio` packages.
+Alone, this does not allow us to combine routines and coroutines. An app can't directly call a coroutine from, say, a Kivy UI event such as a Button event. But an app can do this indirectly. The details are different for the `trio` and `asyncio` packages.
 
 The basic approaches are shown in the next two sections, with simple examples. Using `trio` a coroutine is *started* from a routine. Using `asyncio` a coroutine is *enabled* from a routine. 
 
@@ -507,9 +507,9 @@ asyncio.run(main())             # note this is a call of main()
 
 An [Android Service](https://developer.android.com/guide/components/services) performs operations that are not related to the UI. In the context of Kivy, an Android service is a Python script that executes in its own process.
 
-**A service is a Python script, not a Kivy App**. You can use some functions from the Kivy package, but nothing that depends on an instantiated Kivy App class. There is no Kivy event loop (so no Clock), there is no SDL2 (so no codecs). Don't even think about instantiating a Kivy App class (there is no Window). **Most Kivy functions will not work in a stand alone Python script that does not contain an instantiated App.**     
+**A service is a Python script, not a Kivy App**. You can use some functions from the Kivy package, but nothing that depends on an instantiated Kivy App class. There is no Kivy event loop (so no Clock), there is no SDL2 (so no codecs). Don't even think about instantiating a Kivy App class (there is no Window). **Most Kivy functions will not work in a stand-alone Python script that does not contain an instantiated App.**     
 
-There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy_service_osc), and [Mutli-Service Example](https://github.com/Android-for-Python/Multi-Service-Example). OSC is a good package for message passing between app and service. However it is not designed for passing large datas, consider using the file system in this case. OSC requires INTERNET permission.
+There are two Kivy examples [Kivy Service Osc](https://github.com/tshirtman/kivy_service_osc), and [Mutli-Service Example](https://github.com/Android-for-Python/Multi-Service-Example). OSC is a good package for message passing between app and service. However it is not designed for passing large data; consider using the file system in this case. OSC requires INTERNET permission.
 
 ## Specifying a Service 
 
@@ -543,7 +543,7 @@ Most documentation and examples show stopping a service like this (assuming the 
    self.service.stop(self.mActivity)
 ```
 
-As explained in the next section this does not work with a sticky foreground service. The general way to stop a service is to re-initialize the service then immediately stop it:
+As explained in the next section, this does not work with a sticky foreground service. The general way to stop a service is to re-initialize the service then immediately stop it:
 
 ```python
    # a general way to stop a service
@@ -553,7 +553,7 @@ As explained in the next section this does not work with a sticky foreground ser
 
 When debugging, the default Python filter excludes any print statments in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
 
-Within a service the service's Android activity can be obtained using:
+Within a service, the service's Android activity can be obtained using:
 
 ```python
 from android.config import SERVICE_CLASS_NAME
@@ -564,13 +564,13 @@ from android.config import SERVICE_CLASS_NAME
 
 ## Service Lifetime
 
-The lifetime of the service is limited by the service type. Three types of service are avilabile, the difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
+The lifetime of the service is limited by the service type. Three types of service are available. The difference between them is the service lifetime allowed by the OS. The service type is specified in `buildozer.spec`.
 
-There is an api for restarting a service killed by the OS [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart). This is only meaningful with a background service.
+There is an API for restarting a service killed by the OS [`setAutoRestartService()`](https://github.com/kivy/python-for-android/blob/develop/doc/source/services.rst#service-auto-restart). This is only meaningful with a background service.
 
 ### Background Service
 
-A background service is generally "short lived" as defined by the OS, its lifetime is never longer than the lifetime of the app that started it. A background service is specified in buildozer.spec with:
+A background service is generally "short lived" as defined by the OS, its lifetime is never longer than the lifetime of the app that started it. A background service is specified in `buildozer.spec` with:
 
 ```
 # (list) List of service to declare
@@ -579,7 +579,7 @@ services = Worker:the_service.py
 
 ### Foreground Service
 
-A foreground service's lifetime is no longer than it's app lifetime, when the app stops (not pauses) the service stops. A foreground service is specified in buildozer.spec with:
+A foreground service's lifetime is no longer than its app's lifetime. When the app stops (not pauses) the service stops. A foreground service is specified in `buildozer.spec` with:
 
 ```
 # (list) List of service to declare
@@ -592,7 +592,7 @@ A notification icon may be created in the task bar, see next section.
 
 ### Sticky Foreground Service
 
-A sticky foreground service lifetime is nominally unconstrained. An app may stopand start (not just pause) and resume communication with a sticky foreground service. **An app is responsible for terminating a sticky foreground service, specially if the service is energy intensive.** A sticky foreground service is specified in buildozer.spec with:
+A sticky foreground service lifetime is nominally unconstrained. An app may stop and start (not just pause) and resume communication with a sticky foreground service. **An app is responsible for terminating a sticky foreground service, especially if the service is energy intensive.** A sticky foreground service is specified in `buildozer.spec` with:
 
 ```
 # (list) List of service to declare
@@ -603,7 +603,7 @@ android.permissions = FOREGROUND_SERVICE
 ```
 A notification icon may be created in the task bar, see next section.
 
-Because an app may stop and restart while a sticky foreground service is running, the app may not contain valid dynamic information about the service. Importantly a reference to the instance of the service saved in a class variable will be `None` when the app restarts. The restart-stop code above re-initializes the service to obtain a new reference to the service so that it can be stopped.
+Because an app may stop and restart while a sticky foreground service is running, the app may not contain valid dynamic information about the service. Importantly, a reference to the instance of the service saved in a class variable will be `None` when the app restarts. The restart-stop code above re-initializes the service to obtain a new reference to the service so that it can be stopped.
 
 ### Bound Service
 
@@ -611,11 +611,11 @@ There is no built-in support for a bound service.
 
 ## Service Notifications
 
-For android.api < 33 a foreground service always places a notification icon in the task bar. Depending on Android device version there may be an up to 10 second delay in the appearance of the icon, this delay is an Android 'feature' and does not indicate that the foreground service has not started.
+For android.api < 33, a foreground service always places a notification icon in the task bar. Depending on Android device version there may be an up-to-10-second delay in the appearance of the icon. This delay is an Android 'feature' and does not indicate that the foreground service has not started.
 
-For android.api >= 33 a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is specified in buildozer.spec and as a run time permission. If you do not do this, app behavior will vary with device version. See the [Android documentation](https://developer.android.com/develop/ui/views/notifications/notification-permission) and [App Permissions](#app-permissions). No notification does not mean the service is not started.
+For android.api >= 33, a foreground service only places a notification icon in the task bar if POST_NOTIFICATIONS permission is specified in `buildozer.spec` and as a run-time permission. If you do not do this, app behavior will vary with device version. See the [Android documentation](https://developer.android.com/develop/ui/views/notifications/notification-permission) and [App Permissions](#app-permissions). No notification does not mean the service is not started.
 
-The default icon, and the notification title and text,can be changed by specifying three additional string arguments. 
+The default icon, and the notification title and text, can be changed by specifying three additional string arguments. 
 
 ```python
   service.start(mActivity, 'icon_resource_name', 'Title', 'Text', '')
@@ -641,29 +641,29 @@ If you want to understand the implementation of services in more detail, read th
 
 # App Permissions
 
-Android restricts access to many features. An app must declare the permissions it requires. There are two different declarations, manifest and user. User permissions are a subset of manifest permissions.
+Android restricts access to many features. An app must declare the permissions it requires. There are two different declarations: manifest and user. User permissions are a subset of manifest permissions.
 
-The [full list of permissions](https://developer.android.com/reference/android/Manifest.permission) is documented by Google. In general you must research the permissions needed by your app, resist the temptation to blindly guess.
+The [full list of permissions](https://developer.android.com/reference/android/Manifest.permission) is documented by Google. In general, you must research the permissions needed by your app. Resist the temptation to blindly guess.
 
-Note: starting with Android api 33 the names of the shared storage permissions changed. See [Storage Permissions](#storage-permissions).
+Note: starting with Android API 33, the names of the shared storage permissions changed. See [Storage Permissions](#storage-permissions).
 
 ## Manifest permissions
 
-Manifest permissions are declared in the buildozer.spec file. Common examples are  CAMERA, INTERNET, BLUETOOTH_SCAN, RECORD_AUDIO. Apps that scan Bluetooth or scan Wifi may require multiple permissions.
+Manifest permissions are declared in the `buildozer.spec` file. Common examples are: `CAMERA`, `INTERNET`, `BLUETOOTH_SCAN`, `RECORD_AUDIO`. Apps that scan Bluetooth or scan Wifi may require multiple permissions.
 
-For example if the app connects to a network add INTERNET permission.
+For example: If the app connects to a network, add `INTERNET` permission.
 
-WRITE_EXTERNAL_STORAGE is never required for api >= 30 https://developer.android.com/training/data-storage#permissions
+`WRITE_EXTERNAL_STORAGE` is never required for api >= 30. [[Learn more](https://developer.android.com/training/data-storage#permissions).]
 
-READ_EXTERNAL_STORAGE is never required for api >= 33 https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE 
+`READ_EXTERNAL_STORAGE` is never required for api >= 33. [[Learn more](https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE).]
 
 ## User permissions
 
-Any app manifest permission documented as having "Protection level: dangerous" additionally requires a user permission. From Python this is initiated with a `request_permissions()` call. User permission requests are seen as the dialog that Android apps present to the user. Of the four manifest permissions listed above, three are "dangerous". 
+Any app manifest permission documented as having "Protection level: dangerous" additionally requires a user permission. From Python, this is initiated with a `request_permissions()` call. User permission requests are seen as the dialog that Android apps present to the user. Of the four manifest permissions listed above, three are "dangerous". 
 
-Many old Kivy examples show `request_permissions()` at the top of main.py, on newer versions of Android this will lead to unexpected behavior. Because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
+Many old Kivy examples show `request_permissions()` at the top of `main.py`. On newer versions of Android this will lead to unexpected behavior, because it violates the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle).
 
-Currently `request_permissions()` can only be called *after (not from)* `on_start()`, or from `build()`, and can only be called once per time step. Generally calling after `on_start` simplifies the app control logic for handling both the 'request' case and the 'previously granted' case; of course the user may deny permission and the app must handle this case.
+Currently `request_permissions()` can only be called *after (not from)* `on_start()`, or from `build()`, and can only be called once per time step. Generally calling after `on_start` simplifies the app control logic for handling both the 'request' case and the 'previously granted' case; of course, the user may deny permission and the app must handle this case.
 
 ```python
 from android.permissions import request_permissions, check_permission, Permission
@@ -684,9 +684,9 @@ An implementation example is the [`AndroidPermissions`](https://github.com/Andro
 	# use whatever required permission
 ```
 
-Note that the App class variable `self.dont_gc` delays garbage collection and it critically important.
+Note that the App class variable `self.dont_gc` delays garbage collection. It is critically important.
 
-Finally it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. In this case the user must grant the permission from the Android Settings panel for the app.
+Finally, it is normal Android behavior that if a user denies permission, it may not be possible to grant that permission from the App. In this case, the user must grant the permission from the Android Settings panel for the app.
 
 # Buildozer and p4a
 
@@ -898,7 +898,7 @@ Run on Windows, the last four items were not determined automatically. Run on Li
 requirements = python3,kivy, firebase-admin, cachecontrol, msgpack, requests, certifi, chardet, idna, urllib3, google-api-core, google-auth, cachetools, pyasn1-modules, pyasn1, rsa, pyasn1, googleapis-common-protos, protobuf, google-api-python-client, google-auth-httplib2, httplib2, pyparsing, uritemplate, google-cloud-firestore, google-cloud-core, proto-plus, google-cloud-storage, google-resumable-media, google-crc32c
 ```
 
-#### Pure Python
+#### Not Pure Python
 
 The packages you add here **must be pure Python, or have a recipe** [in this list](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes). If this is not the case, the options are to:
 
@@ -1055,7 +1055,7 @@ Messages from the Android OS rather than from Python can usually be found by sea
 #android.logcat_filters = *:S python:D
 ```
 
-Messages from Android can be cryptic, most commonly they are due to a missing recipe for a Python package, Java api errors when using pyjnius, or Kivy lifecycle violations.
+Messages from Android can be cryptic, most commonly they are due to a missing recipe for a Python package, Java API errors when using pyjnius, or Kivy lifecycle violations.
 
 It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
 
@@ -1124,7 +1124,7 @@ class Main(ScreenManager):
 
 ## The Android package
 
-P4a provides Android specific utilities in the android package, this package is only available on Android. It is a Python interface to some Android OS apis, these apis only exist on Android devices and Android emulators. Which is why the package is only available on Android. The package is part of p4a and you will not find it standalone on PyPi.
+P4a provides Android specific utilities in the android package, this package is only available on Android. It is a Python interface to some Android OS APIs, these APIs only exist on Android devices and Android emulators. Which is why the package is only available on Android. The package is part of p4a and you will not find it standalone on PyPi.
 
 The package is as they say 'self documenting', which really means there isn't any documentation. [Read the code](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes/android/src/android).
 
@@ -1138,7 +1138,7 @@ To find a file containing a list of all the Android *system* Broadcast actions f
 
 ## Plyer
 
-Plyer is an OS independent api for some non-POSIX OS features. See [Supported APIs](https://github.com/kivy/plyer#supported-apis). **Plyer is not well maintained**.
+Plyer is an OS independent API for some non-POSIX OS features. See [Supported APIs](https://github.com/kivy/plyer#supported-apis). **Plyer is not well maintained**.
 
 **Some Plyer modules and examples work on older Android versions, but not on newer Android versions. The Supported APIs table does not reflect this. For example Camera, Speech to text, Audio, and FileChooser do not work on newer Android versions.**
 
@@ -1164,7 +1164,7 @@ If you plan to use Plyer, and the idea of it is very appealing, first try a smal
 
 ### Basic Pyjnius Usage
 
-[Pyjnus](https://github.com/kivy/pyjnius/tree/master/docs/source) allows import of Java code into Python code. It is an interface to the Java api and the Android api. The Android api is only available on Android devices and emulators, so Android api calls must be debugged on Android.
+[Pyjnus](https://github.com/kivy/pyjnius/tree/master/docs/source) allows import of Java code into Python code. It is an interface to the Java API and the Android API. The Android API is only available on Android devices and emulators, so Android API calls must be debugged on Android.
 
 ```python
 from jnius import autoclass
@@ -1244,9 +1244,9 @@ You will be using two garbage collectors working on the same heap, but they don'
         self.request = None
 ```
 
-### Java Api Versions
+### Java API Versions
 
-Python for Android builds an apk with a minimum device api. Importing Java modules can invalidate this minimum. Check the [Added in API level field](https://developer.android.com/reference/android/provider/MediaStore.Downloads) in the class or method reference documentation.
+Python for Android builds an apk with a minimum device API. Importing Java modules can invalidate this minimum. Check the [Added in API level field](https://developer.android.com/reference/android/provider/MediaStore.Downloads) in the class or method reference documentation.
 
 And if the app includes an `.aar` file, check that the version of Java used to build the aar is not newer than the version of OpenJDK you installed for Buildozer. If the aar is built with a newer Java you will get an error message similar to [this](#unsupported-class-file-major-version-62).
 
@@ -1330,7 +1330,7 @@ Place the Java files in `<project>/src/org/wherever/whatever/` and in `buildozer
 
 ### Java Listener Class
 
-Sometimes the Java api has a listener class containing the Java callback method, and the approach in the previous section is not directly applicable.
+Sometimes the Java API has a listener class containing the Java callback method, and the approach in the previous section is not directly applicable.
 
 In this case you will have to write a small amount of Java. Create a class that extends the required listener class, and initialize it with a CallbackWrapper class similar to the one in the previous section. The methods in your newly created subclass then call the callback wrapper methods.
 
@@ -1485,14 +1485,14 @@ from android import mActivity
         FileChooserListView(rootpath=storage_path) # storage directory
 ```
 
-For [Shared Storage](#shared-storage) use the Android Chooser. The [AndroidStorage4Kivy package](#androidstorage4kivy) provides a Python wrapper around the Android Chooser. Files in shared storage are referenced by a *content uri* not a *file path*, the package provides an api for copying between these. 
+For [Shared Storage](#shared-storage) use the Android Chooser. The [AndroidStorage4Kivy package](#androidstorage4kivy) provides a Python wrapper around the Android Chooser. Files in shared storage are referenced by a *content URI* not a *file path*, the package provides an API for copying between these. 
 
 
 ## KivyMD
 
 The [KivyMD](https://github.com/kivymd/KivyMD) widgets have the look and feel that Android users expect, but the Material Design rules mean you don't have the same flexibility as Kivy widgets.
 
-Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the api may change with KivyMD versions.
+Be certain to use the same version of KivyMD on the desktop and with Buildozer, as the API may change with KivyMD versions.
 
 The KivyMD [instructions for Buildozer](https://github.com/kivymd/KivyMD#how-to-use-with-buildozer) are updated for [a known KivyMD issue on some Android devices](https://github.com/kivymd/KivyMD#how-to-fix-a-shader-bug-on-an-android-device).
 
@@ -1524,7 +1524,7 @@ Some Python packages are not pure Python, they contain compiled code. This must 
 
 Python packages are generally distributed in a wheel, this will contain pre-compiled binaries for supported platforms. Python wheels do not support Android, so to port a package to Android is must be explicitly compiled for ARM/Android.
 
-P4a provides an api for creating package build scripts, such a script is called a "recipe". The task in creating a recipe is to port existing build instructions. To create a recipe you must understand both of these:
+P4a provides an API for creating package build scripts, such a script is called a "recipe". The task in creating a recipe is to port existing build instructions. To create a recipe you must understand both of these:
 
 - The p4a recipe API.
 
@@ -1536,7 +1536,7 @@ A recipe is simply a format required by p4a, it doesn't do much except set the e
 
 The potentially hard and unique part is understanding what you want the package's build scripts to do, once you understand that then to automate within p4a's format is fairly simple.
 
-Its easy to incorrectly focus one's attention on the p4a api when the real issue is understanding what you want the build scripts to do. As humans we hope the recipe will magically make our dreams come true, because the work of understanding a build in order to port it can be hard.
+Its easy to incorrectly focus one's attention on the p4a API when the real issue is understanding what you want the build scripts to do. As humans we hope the recipe will magically make our dreams come true, because the work of understanding a build in order to port it can be hard.
 
 By analogy think of your self as an author of a recipe book, the easy part is formatting for the publisher (p4a recipe) . The potentially hard part is interpreting the chef's instructions (make, cmake, setup, configure.....), so you can modify the instructions for making the dish in a household kitchen. 
 
@@ -1544,7 +1544,7 @@ By analogy think of your self as an author of a recipe book, the easy part is fo
 
 A recipe generally consists of two parts; a package build, and a package install. 
 
-The recipe api attempts to automate common cases such as Cython or `setup.py`, but likely this will not be sufficient - you will have to dig deeper.
+The recipe API attempts to automate common cases such as Cython or `setup.py`, but likely this will not be sufficient - you will have to dig deeper.
 
 The [documentation](https://github.com/kivy/python-for-android/blob/develop/doc/source/recipes.rst) provides an overview. Your best resource is the [examples](https://github.com/kivy/python-for-android/tree/develop/pythonforandroid/recipes).
 
@@ -1965,7 +1965,7 @@ This almost always due to a known issue in `kivy==1.11.1` with `Python >= 3.8`
 
 The fix for this case is to [use the current Kivy](#requirements).
 
-In any other case this issue can be hard to find. The programmer is assuming an object can be reused, and the garbage collector is assuming it will not be reused. One way to create this error is to assume some third party api is not stateful, when infact it does have state. 
+In any other case this issue can be hard to find. The programmer is assuming an object can be reused, and the garbage collector is assuming it will not be reused. One way to create this error is to assume some third-party API is not stateful, when infact it does have state. 
 
 ## OpenCV requires Android SDK Tools
 
@@ -2090,7 +2090,7 @@ You can research Android package versions at [Maven](https://mvnrepository.com),
 
 `DEBUG : Cause: null pointer dereference`
 
-This message is not from Python, it is from the Android run time system. Some Android api call has been corrupted. This is a memory corruption issue it may exhibit differently (or not at all) on different devices. Probably due to a misuse of Pyjnius, Plyer, or android_permissions.
+This message is not from Python, it is from the Android run time system. Some Android API call has been corrupted. This is a memory corruption issue it may exhibit differently (or not at all) on different devices. Probably due to a misuse of Pyjnius, Plyer, or android_permissions.
 
 **ALERT** There is an [issue on some devices with KivyMD 1.1.1](https://github.com/kivymd/KivyMD/issues/1393) that can cause a null pointer deference, this issue does not exist in KivyMD 1.0.2 . You will see an (unfiltered) backtrace like this:
 ```
@@ -2119,7 +2119,7 @@ And [buildozer appclean](#changing-buildozerspec).
 
 `ModuleNotFoundError: No module named 'android'`
 
-The android package is only available on Android. This error occurs on a desktop, because there is no Android api implementation. The android package is only available on Android, and is installed by p4a.
+The android package is only available on Android. This error occurs on a desktop, because there is no Android API implementation. The android package is only available on Android, and is installed by p4a.
 
 Perhaps you want platform specific code:
 
