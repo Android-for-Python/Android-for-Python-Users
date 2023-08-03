@@ -2368,7 +2368,9 @@ First check for a corrupted Buildozer database: [buildozer appclean](#changing-b
 
 If that does not fix it, **the Java install is probably mis-configured**. If you are using a VM and you installed Java inside, don't do this.
 
-If you are using Gentoo, check that the Java VM is configured for [the correct JDK](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit) using [eselect](https://wiki.gentoo.org/wiki/Java#Configuring_the_Java_Virtual_Machine).
+Check that the Java VM is configured for [the correct JDK](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit):
+- for Gentoo, by using [eselect](https://wiki.gentoo.org/wiki/Java#Configuring_the_Java_Virtual_Machine).
+- for Arch (or it's derivatives), by using [archlinux-java](https://wiki.archlinux.org/title/java#Switching_between_JVM).
 
 To reset the Java install: Uninstall all Java packages (this is important, don't skip it), and install the JDK as shown in the [Buildozer install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
 
