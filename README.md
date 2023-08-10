@@ -2145,11 +2145,11 @@ And [buildozer appclean](#changing-buildozerspec).
 
 ## Kivy is too old
 
-`Exception: The version of Kivy installed on this system is too old. (You have 2.1.0, but the application requires 2.2.0)`
+`Exception: The version of Kivy installed on this system is too old. (You have 2.1.0, but the application requires 2.2.1)`
 
 This message comes from KivyMD, and is seen on all platforms. The message may not be seen and you may see an Android crash (hidden by the Python log filter), related to graphics.
 
-Use Kivy 2.2.0, for the version of KivyMD to use, contact KivyMD support.
+Use Kivy 2.2.1, for the version of KivyMD to use, contact KivyMD support.
 
 See also https://github.com/kivymd/KivyMD/blob/master/README.md#how-to-fix-a-shader-bug-on-an-android-device 
 
