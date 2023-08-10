@@ -1609,7 +1609,9 @@ There are **a lot of useful features** to be found at these links:
 
 [https://github.com/T-Dynamos/pyjnius-scripts](https://github.com/T-Dynamos/pyjnius-scripts)
 
-[https://github.com/mp-007/kivy_matplotlib_widget](https://github.com/mp-007/kivy_matplotlib_widget)
+[https://github.com/b3b/able](https://github.com/b3b/able) Bluetooth Low Energy.
+
+[https://github.com/mp-007/kivy_matplotlib_widget](https://github.com/mp-007/kivy_matplotlib_widget) Enhanced Matplotlib widget.
 
 # Release Builds
 
