@@ -1029,7 +1029,7 @@ The app is then installed using Android Debug Bridge (adb) either indirectly fro
 	buildozer android deploy run logcat
 ```
 
-- If Buildozer was run on a virtual machine, such as WSL or Colab, copy the `.apk` to a desktop OS, and use adb to install the app (For details on installing and using adb [see Appendix A](#appendix-a--using-adb)). e.g.:
+- If Buildozer was run on a virtual machine, such as WSL or Colab, copy the `.apk` to a desktop OS, and use adb to install the app (For details on installing and using adb [see Appendix A](#appendix-a--using-adb)).
 
 ```
 	adb install -r myapp-0.1-arm64-v8a-debug.apk
