@@ -835,7 +835,7 @@ Your options are to use the default version, or [locally modify the recipe](#app
 
 #### Find the Dependencies
 
-To recursively find an *installed* package dependencies, use pipdeptree. **Do not use `pip freeze`**, this will relpicate a feature of p4a and will case unexpected results.
+To recursively find an *installed* package dependencies, use pipdeptree. **Do not use `pip freeze`**, this will cause unexpected results.
 
 ```
 pip3 install pipdeptree
