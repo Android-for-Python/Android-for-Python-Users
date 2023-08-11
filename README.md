@@ -1025,15 +1025,14 @@ The app is then installed using Android Debug Bridge (adb) either indirectly fro
 
 - If Buildozer was run on a desktop OS (Linux or Mac) you can use Buildozer options to install and run the app on the device.
 
-xx
 ```
-buildozer android deploy run logcat
+	buildozer android deploy run logcat
 ```
 
 - If Buildozer was run on a virtual machine, such as WSL or Colab, copy the `.apk` to a desktop OS, and use adb to install the app (For details on installing and using adb [see Appendix A](#appendix-a--using-adb)). e.g.:
 
 ```
-adb install -r myapp-0.1-arm64-v8a-debug.apk
+	adb install -r myapp-0.1-arm64-v8a-debug.apk
 ```
 
 Successful adb/Buildozer configuration is indicated by log output similar to:
