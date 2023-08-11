@@ -1025,6 +1025,7 @@ The app is then installed using Android Debug Bridge (adb) either indirectly fro
 
 - If Buildozer was run on a desktop OS (Linux or Mac) you can use Buildozer options to install and run the app on the device.
 
+xx
 ```
 buildozer android deploy run logcat
 ```
