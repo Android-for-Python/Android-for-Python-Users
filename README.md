@@ -1626,6 +1626,8 @@ There are **a lot of useful features** to be found at these links:
 
 * [kivy_matplotlib_widget](https://github.com/mp-007/kivy_matplotlib_widget)
 
+* [Bluetooth Low Energy](https://github.com/b3b/able)
+
 # Release Builds
 
 Set up signing *before* your release build.
