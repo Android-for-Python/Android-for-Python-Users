@@ -1019,27 +1019,21 @@ Buildozer's behavior can be unpredictable in any of these cases:
 
 ## Install App on Android
 
-First, connect the Android device to a desktop via USB. On the Android device, enable 'Developer Mode' (This option varies by device and tends to be well hidden. Google it.) and enable 'USB debugging'. 
+First, connect the Android device to a desktop via USB. On the Android device, enable 'Developer Mode' (This option varies by device and tends to be well hidden. Google it.) and enable 'USB debugging'.
 
-The app is then installed with one of these techniques:
+The app is then installed using Android Debug Bridge (adb) either indirectly from Buildozer or directly.
 
-- Using [Android Debug Bridge](https://developer.android.com/tools/adb) (adb) directly. e.g:
+- If Buildozer was run on a desktop OS (Linux or Mac) you can use Buildozer options to install and run the app on the device.
 
-    ```
-    adb install -r myapp-0.1-arm64-v8a-debug.apk
-    ```
-    
-- Using adb via Buildozer: e.g.:
+```
+buildozer android deploy run logcat
+```
 
-    ```
-    buildozer android adb install -- -r myapp-0.1-arm64-v8a-debug.apk
-    ```
-    
 - If Buildozer was run on a virtual machine, such as WSL or Colab, copy the `.apk` to a desktop OS, and use adb to install the app (For details on installing and using adb [see Appendix A](#appendix-a--using-adb)). e.g.:
 
-    ```
-    adb install -r myapp-0.1-arm64-v8a-debug.apk
-    ```
+```
+adb install -r myapp-0.1-arm64-v8a-debug.apk
+```
 
 Successful adb/Buildozer configuration is indicated by log output similar to:
 ```
