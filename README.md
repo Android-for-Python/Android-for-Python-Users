@@ -1622,6 +1622,8 @@ There are **a lot of useful features** to be found at these links:
 
 * [Bluetooth Low Energy](https://github.com/b3b/able)
 
+* [In-app Billing](https://github.com/shashi278/IABKivy)
+
 # Release Builds
 
 Set up signing *before* your release build.
