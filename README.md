@@ -2083,7 +2083,7 @@ And [buildozer appclean](#changing-buildozerspec).
 
 `[WARNING]: ERROR: whatever/.buildozer/android/platform/build-arm64-v8a_armeabi-v7a/dists/appname/gradlew failed!`
 
-The Gradle error message is further up the log file. Search upwards for 'BUILD FAILED' or 'what went wrong' (without the ''), the error messages will be in this general area.
+The Gradle error message is further up the log file. Search upwards for 'BUILD FAILED' or 'what went wrong', the error messages will be in this general area.
 
 Generally Gradle errors are due to an incorrect Java version, Java usage errors, missing Java files, a Java jar [built with a newer](#unsupported-class-file-major-version-62) version of Java, missing Android Java packages, or misconfigured Android resource or configuration files. Gradle does not analyze Python errors.
 
