@@ -210,7 +210,7 @@ On a desktop apps simply 'execute' and eventually 'exit'. On Android an app has 
 
 A special case is an impure Python app that calls Android Java apis. *Android api calls must occur no earlier in the Kivy Lifecycle that one timestep after* `on_start()`.
 
-In practice you may find that some apis are available earlier in the Kivy Lifecycle, this may vary by api and by Android version. Android documentation does not in general discuss this. Calling from `on_start()` or earlier is not reliable, and may (or not!) result in unexpected behavior.   
+In practice you may find that some Android apis are available earlier in the Kivy Lifecycle, this may vary by api and by Android version. Android documentation does not in general discuss the earliest point in the lifecycle that an api can be called. Calling from `on_start()` or earlier is not reliable, and may (or not!) result in unexpected behavior.   
 
 ## Wheels
 
@@ -1519,7 +1519,7 @@ Follow the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-ap
 
 The Kivy Lifecycle is a platform superset so `on_pause()` and `on_resume()` are never called by a desktop OS, but always called by Android. And `on_stop()` is always called by a desktop OS and never by Android. If the app implements `on_pause()` the implementation must `return True` otherwise the app will exit not pause.
 
-In general Android api calls should be called no earlier than one timestep after `on_start()`. Do not place code in the app that interacts with Android 'script style' to be executed before the App class is instantiated, in a Widget's `__init__()`, in `build()`, or in `on_start()`. 
+In general Android api calls should be called no earlier than one timestep after `on_start()`. So code that innteracts with Android should not be 'script style' before the App class is instantiated, in a Widget's `__init__()`, in `build()`, or in `on_start()`. This is the conservative and safest approach, for more details see [Android Lifecycle](#android-lifecycle)
 
 An example is `request_permissions()` which must only be called after the App's `on_start()` method, and only one once in a given timestep.
 
@@ -2079,7 +2079,11 @@ The fix is to upgrade to WSL 2.
 
 `[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate`
 
-Add `certifi` to [requirements](#requirements), and possibly explicitly specify the location of the certificate.
+- Check that `certifi` is included in the [requirements](#requirements).
+
+- Check that the app conforms to the [Kivy Lifecycle](#kivy-lifecycle). 
+
+- And possibly explicitly specify the location of the certificate in the `request` that generates the error.
 
 ```
 import certifi
