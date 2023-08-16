@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-08-14
+Revised 2023-08-15
 
 # Table of Contents
 
@@ -12,6 +12,7 @@ Revised 2023-08-14
 - [Confidence and Competence](#confidence-and-competence)
 - [What is Different about Android?](#what-is-different-about-android)
   * [Posix](#posix)
+  * [Android Lifecycle](#android-lifecycle)
   * [Wheels](#wheels)
   * [Meta-information](#meta-information)
   * [App Security](#app-security)
@@ -203,7 +204,13 @@ Threads are available like a desktop. Subprocess is available, but the excutable
 
 Multi-tasking: On the desktop when an app loses focus or is minimized it continues to execute - it just doesnt see UI events; it is said to move to the *background*. Android is not multi-tasking, when an app is removed from the UI it *pauses*, and does not execute any app code - there is no *background* operation. Execution of separate code (with no UI), in the *background* requires an [Android Service](#android-service).
 
-Apps have a lifecycle. Stick to the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle) so that the app sticks to the [Android Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle#alc). Android API calls made outside of the Kivy App class or its children may cause non-deterministic behavior or crashes.
+## Android Lifecycle
+
+On a desktop apps simply 'execute' and eventually 'exit'. On Android an app has an [Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle). The [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle) is compliant with the Android Activity Lifecycle, so no special considerations are required for a pure Python app.
+
+A special case is an impure Python app that calls Android Java apis. *Android api calls must occur no earlier in the Kivy Lifecycle that one timestep after* `on_start()`.
+
+In practice you may find that some apis are available earlier in the Kivy Lifecycle, this may vary by api and by Android version. Android documentation does not in general discuss this. Calling from `on_start()` or earlier is not reliable, and may (or not!) result in unexpected behavior.   
 
 ## Wheels
 
@@ -220,7 +227,6 @@ If the package requires a recipe, check the list of available [recipes](https://
 If the package requires a recipe, and one does not exist, then your app is not portable to Android without extra work. Read this summary of [your options](#not-pure-python).
 
 *Note that it is possible but unlikely that a pure Python package may contain OS-specific code, or depend on OS-specific third-party apps (for example ffmpeg).* 
-
 ## Meta-information
 
 Unlike the desktop, you must provide information *about* your Python code. This requirement causes everybody who doesn't understand it to crash and burn. This information must be supplied in the `buildozer.spec` file. It includes *all* the pip packages your app depends on, any file types your app depends on for data, and the Android permissions your app depends on. Meta-information may not be limited to that short list, but that list is critical.
@@ -1509,11 +1515,11 @@ The KivyMD [instructions for Buildozer](https://github.com/kivymd/KivyMD#how-to-
 
 Follow the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-app-life-cycle), it abstracts the app behavior that Android expects.
 
-Do not place code in the app that interacts with Android 'script style' to be executed before the Kivy build() call.
+The Kivy Lifecycle is a platform superset so `on_pause()` and `on_resume()` are never called by a desktop OS, but always called by Android. And `on_stop()` is always called by a desktop OS and never by Android. If the app implements `on_pause()` the implementation must `return True` otherwise the app will exit not pause.
 
-`request_permissions()` must only be called from the App's `build()` method, and only one once with an argument that is a list of all required permissions.
+In general Android api calls should be called no earlier than one timestep after `on_start()`. Do not place code in the app that interacts with Android 'script style' to be executed before the App class is instantiated, in Widget `__init__()` calls, in `build()`, or in `on_start()`. 
 
-The App's `on_stop()` method is not always called, use `on_pause()` to save state.
+An example is `request_permissions()` which must only be called after the App's `on_start()` method, and only one once in a given timestep.
 
 ## Kivy Garden
 
@@ -1598,7 +1604,7 @@ Don't rely on other sources; they can be obsolete.
 
 ## Android Billing
 
-[In-app billing](https://github.com/shashi278/IABKivy)
+[In-app billing](https://github.com/shashi278/android-iab-v3-kivy)
 
 ## Other Resources
 
