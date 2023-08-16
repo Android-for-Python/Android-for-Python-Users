@@ -1198,7 +1198,9 @@ DownloadManagerRequest = autoclass('android.app.DownloadManager$Request')
 
 Then use this to write code with Python syntax and semantics, and Java class semantics added. Some basic knowledge of Java semantics is required. Get over it. Android classes will require (possibly extensive) reading of the [Android Developer Guide](https://developer.android.com/guide) and [Android Reference](https://developer.android.com/reference).
 
-In addition `android.mActivity` gives access to some Android state that may be used by the Android API. For example:
+The [record_audio_example](https://github.com/Android-for-Python/record_audio_example) is small and uses two different Android api classes. There is also a reference to the Android Java example that it is based on. 
+
+Android Activity state is available via `mActivity` this may be used by the Android API. For example:
 
 ```python
 from android import mActivity
@@ -1209,7 +1211,7 @@ from android import mActivity
     mActivity.getContentResolver() 
 ```
 
-Within a service, the service's Android activity can be obtained using:
+Within a service, the service's Android mActivity can be obtained using:
 
 ```python
 from android.config import SERVICE_CLASS_NAME
