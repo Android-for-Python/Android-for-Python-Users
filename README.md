@@ -1517,7 +1517,7 @@ Follow the [Kivy Lifecycle](https://kivy.org/doc/stable/guide/basic.html#kivy-ap
 
 The Kivy Lifecycle is a platform superset so `on_pause()` and `on_resume()` are never called by a desktop OS, but always called by Android. And `on_stop()` is always called by a desktop OS and never by Android. If the app implements `on_pause()` the implementation must `return True` otherwise the app will exit not pause.
 
-In general Android api calls should be called no earlier than one timestep after `on_start()`. Do not place code in the app that interacts with Android 'script style' to be executed before the App class is instantiated, in Widget `__init__()` calls, in `build()`, or in `on_start()`. 
+In general Android api calls should be called no earlier than one timestep after `on_start()`. Do not place code in the app that interacts with Android 'script style' to be executed before the App class is instantiated, in a Widget's `__init__()`, in `build()`, or in `on_start()`. 
 
 An example is `request_permissions()` which must only be called after the App's `on_start()` method, and only one once in a given timestep.
 
