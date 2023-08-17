@@ -2081,7 +2081,7 @@ The fix is to upgrade to WSL 2.
 
 - Check that `certifi` is included in the [requirements](#requirements).
 
-- Check that the request to use the Android network api conforms to the [Kivy Lifecycle](#kivy-lifecycle). 
+- Check that the request to use Android's network api conforms to the [Kivy Lifecycle](#kivy-lifecycle). 
 
 - And possibly explicitly specify the location of the certificate in the `request` that generates the error.
 
