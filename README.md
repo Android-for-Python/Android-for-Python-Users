@@ -1233,7 +1233,20 @@ SpeechRecognizer = autoclass('android.speech.SpeechRecognizer')
         self.speechRecognizer = SpeechRecognizer.createSpeechRecognizer(mActivity)
 ```
 
-It is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This implementation is only visible in Python. Java classes cannot see it (though they can see the Java-defined interface).
+It is possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This class implementation is only visible in Python, Java cannot see the implementation (though they can see the Java-defined interface).
+
+Python implementations of Java classes have this general form:
+```python
+from jnius import PythonJavaClass, java_method
+
+class CallbackWrapper(PythonJavaClass):
+    __javacontext__ = 'app'                # include if adding your own java 
+    __javainterfaces__ = ['org/kivy/speech/CallbackWrapper'] # Java package
+
+    @java_method('(Ljava/lang/String;Ljava/lang/String;)V')  # Java signatures 
+    def callback_data(self, key, value):
+    	pass
+```
 
 
 ### Pyjnius Performance
