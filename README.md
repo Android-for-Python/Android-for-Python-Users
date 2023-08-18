@@ -424,7 +424,7 @@ asyncio.run(ExampleApp().async_run('asyncio'))
 
 Alone, this does not allow us to combine routines and coroutines. An app can't directly call a coroutine from, say, a Kivy UI event such as a Button event. But an app can do this indirectly.
 
-The details are different for the `trio` and `asyncio` packages. But the approac is the same, a co-rountine is scheduled on the async loop from a routine.
+The details are different for the `trio` and `asyncio` packages. But the approach is the same, a co-rountine is scheduled on the async loop from a routine.
 
 ### trio
 
