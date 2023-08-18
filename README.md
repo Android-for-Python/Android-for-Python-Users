@@ -82,10 +82,9 @@ Revised 2023-08-17
   * [Plyer](#plyer)
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
-    + [More Pyjnius Usage](#more-pyjnius-usage)
-      - [mActivity](#mactivity)
-      - [Android UI Thread](#android-ui-thread)
-      - [Python Java Class](#python-java-class)
+    + [mActivity](#mactivity)
+    + [Android UI Thread](#android-ui-thread)
+    + [Python Java Class](#python-java-class)
     + [Pyjnius Performance](#pyjnius-performance)
     + [Java Abstract Classes](#java-abstract-classes)
     + [Pyjnius Memory Management](#pyjnius-memory-management)
@@ -1200,9 +1199,7 @@ Add AndroidX Java packages (or other Maven packages) using the Buildozer option 
 
 Note: some documentation examples are obsolete. If you see `.renpy.` as a sub field in an autoclass argument replace it with `.kivy.`.
 
-### More Pyjnius Usage
-
-#### mActivity
+### mActivity
 
 Android Activity state is available via `mActivity` this may be used by the Android API. For example:
 
@@ -1224,7 +1221,7 @@ from android.config import SERVICE_CLASS_NAME
     mActivity = PythonService.mService
 ```
 
-#### Android UI Thread
+### Android UI Thread
 
 It possible, but uncommon, that Java statements must be executed on the Android UI thread. This is not the same as the Kivy UI thread, so will result in a run time error seen in the unfiltered logcat. In this case use the `@run_on_ui_thread` decorator, for example:
 
@@ -1240,9 +1237,9 @@ SpeechRecognizer = autoclass('android.speech.SpeechRecognizer')
         self.speechRecognizer = SpeechRecognizer.createSpeechRecognizer(mActivity)
 ```
 
-#### Python Java Class
+### Python Java Class
 
-It is possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This class implementation is only visible in Python, Java cannot see the implementation (though it can see the Java-defined interface).
+Write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This class implementation is only visible in Python, Java cannot see the implementation (though it can see the Java-defined interface).
 
 Python implementations of Java classes have this general form:
 ```python
