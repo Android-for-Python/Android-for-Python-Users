@@ -82,12 +82,12 @@ Revised 2023-08-17
   * [Plyer](#plyer)
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
+    + [Pyjnius Memory Management](#pyjnius-memory-management)
     + [mActivity](#mactivity)
     + [Android UI Thread](#android-ui-thread)
     + [Python Java Class](#python-java-class)
     + [Pyjnius Performance](#pyjnius-performance)
     + [Java Abstract Classes](#java-abstract-classes)
-    + [Pyjnius Memory Management](#pyjnius-memory-management)
     + [Java API Versions](#java-api-versions)
     + [Calling Python from Java](#calling-python-from-java)
     + [Java Listener Class](#java-listener-class)
@@ -1199,6 +1199,29 @@ Add AndroidX Java packages (or other Maven packages) using the Buildozer option 
 
 Note: some documentation examples are obsolete. If you see `.renpy.` as a sub field in an autoclass argument replace it with `.kivy.`.
 
+### Pyjnius Memory Management
+
+You will be using two garbage collectors working on the same heap, but they don't know each other's boundaries. Python may free a local reference to a Java object because it can't see that the object is used. Obviously this will cause the app to crash in an ugly way. So use class variables, as shown below, to indicate persistence to the Python garbage collector.
+
+```python
+    ###### DONT DO THIS ####
+    def foobar(self):
+        # instance a Java class
+        request = DownloadManagerRequest(uri)
+        # call a method in that class
+        request.setNotificationVisibility(visibility)    
+```
+```python
+    ###### DO THIS ####
+    def foobar(self):
+        # instance a Java class
+        self.request = DownloadManagerRequest(uri)
+        # call a method in that class
+        self.request.setNotificationVisibility(visibility)
+        # Tell the Python garbage collector this will not be reused
+        self.request = None
+```
+
 ### mActivity
 
 Android Activity state is available via `mActivity` this may be used by the Android API. For example:
@@ -1246,7 +1269,7 @@ Python implementations of Java classes have this general form:
 from jnius import PythonJavaClass, java_method
 
 class CallbackWrapper(PythonJavaClass):
-    __javacontext__ = 'app'                # include if adding your own java 
+    __javacontext__ = 'app'  # include if Java class interface is user supplied 
     __javainterfaces__ = ['org/kivy/speech/CallbackWrapper'] # Java package
 
     @java_method('(Ljava/lang/String;Ljava/lang/String;)V')  # Java signatures 
@@ -1264,29 +1287,6 @@ The way to address this is to create a Java file that references the Java classe
 ### Java Abstract Classes
 
 It is not possible to import Java `abstract` classes or methods, as they have no `implementation` (abstract and implementation are Java keywords). It is not possible to provide the implementation in Python. You must write the implementation in Java and import that new class.
-
-### Pyjnius Memory Management
-
-You will be using two garbage collectors working on the same heap, but they don't know each other's boundaries. Python may free a local reference to a Java object because it can't see that the object is used. Obviously this will cause the app to crash in an ugly way. So use class variables, as shown below, to indicate persistence to the Python garbage collector.
-
-```python
-    ###### DONT DO THIS ####
-    def foobar(self):
-        # instance a Java class
-        request = DownloadManagerRequest(uri)
-        # call a method in that class
-        request.setNotificationVisibility(visibility)    
-```
-```python
-    ###### DO THIS ####
-    def foobar(self):
-        # instance a Java class
-        self.request = DownloadManagerRequest(uri)
-        # call a method in that class
-        self.request.setNotificationVisibility(visibility)
-        # Tell the Python garbage collector this will not be reused
-        self.request = None
-```
 
 ### Java API Versions
 
