@@ -1229,7 +1229,7 @@ Add AndroidX Java packages (or other Maven packages) using the Buildozer option 
 
 More challenging, it is also possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python) and [look at some examples](https://github.com/Android-for-Python/CameraXF-Example/blob/main/cameraxf/listeners.py). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This implementation is only visible in Python. Java classes cannot see it (though they can see the Java-defined interface).
 
-Note: some documentation examples are obsolete. If you see '.renpy.' as a sub field in an autoclass argument replace it with '.kivy.'.
+Note: some documentation examples are obsolete. If you see `.renpy.` as a sub field in an autoclass argument replace it with `.kivy.`.
 
 ### Pyjnius Performance
 
