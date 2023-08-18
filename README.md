@@ -422,13 +422,15 @@ For basic Async usage we start Kivy with (we'll show `trio` later):
 asyncio.run(ExampleApp().async_run('asyncio'))
 ```
 
-Alone, this does not allow us to combine routines and coroutines. An app can't directly call a coroutine from, say, a Kivy UI event such as a Button event. But an app can do this indirectly. The details are different for the `trio` and `asyncio` packages.
+Alone, this does not allow us to combine routines and coroutines. An app can't directly call a coroutine from, say, a Kivy UI event such as a Button event. But an app can do this indirectly.
 
-The basic approaches are shown in the next two sections, with simple examples. Using `trio` a coroutine is *started* from a routine. Using `asyncio` a coroutine is *enabled* from a routine. 
+The details are different for the `trio` and `asyncio` packages. But the approac is the same, a co-rountine is scheduled on the async loop from a routine.
 
 ### trio
 
-[Trio](https://trio.readthedocs.io/en/stable/) is an alternative async library to Python's built-in `asyncio`. Using Trio, indirectly call a coroutine from a routine by initializing the app with the `trio` event loop, and using this to call `start_soon()`. The coroutine is *started* from a routine.
+[Trio](https://trio.readthedocs.io/en/stable/) is an alternative async library to Python's built-in `asyncio`.
+
+Using `trio`, a coroutine is scheduled with `nursery.start_soon()`:
 
 ```python
 from kivy.app import App
@@ -470,7 +472,7 @@ Thanks to @Hamburguesa for this one.
 
 ### asyncio
 
-Using `asyncio`, indirectly enable a coroutine from a routine by having the coroutine `await` on an `asyncio.Event` set by a routine. The coroutine is *enabled* from a routine.
+Using `asyncio`, a coroutine is scheduled with `asyncio.create_task()`:
 
 ```python
 from kivy.app import App
@@ -479,20 +481,14 @@ import asyncio
 
 class ExampleApp(App):
     
-    def __init__(self):
-        super().__init__()
-        self.started = asyncio.Event()
-
     def build(self):
         return Label(text = 'Greetings Earthlings')
 
     def on_start(self):
         print("Kivy app started")
-        self.started.set()
+        asyncio.create_task(self.my_async_function())
     
     async def my_async_function(self):
-        await self.started.wait()              # enables coroutine when set()
-	self.started.clear()	     # not needed here but good to know about
         print("woohooo running async function on kivy app")
         await self.another_async_function()
 
@@ -500,13 +496,7 @@ class ExampleApp(App):
         print("another async function")
         
 # Start kivy app as an asynchronous task
-async def main():
-    app = ExampleApp()
-    await asyncio.gather(app.async_run('asyncio'),  # starts Kivy
-                         app.my_async_function(),   # starts coroutine
-                         return_exceptions = True)  # for debugging
-
-asyncio.run(main())             # note this is a call of main()
+asyncio.run(ExampleApp().async_run('asyncio'))
 ```
 
 # Android Service
