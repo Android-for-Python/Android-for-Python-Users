@@ -1210,7 +1210,7 @@ from android.config import SERVICE_CLASS_NAME
     mActivity = PythonService.mService
 ```
 
-It possible, but uncommon, that Java statements must be executed on the Android UI thread (this is not the same as the Kivy UI thread) this will result in a run time error seen in the unfiltered logcat. In this case use the `@run_on_ui_thread` decorator, for example:
+It possible, but uncommon, that Java statements must be executed on the Android UI thread. This is not the same as the Kivy UI thread, so will result in a run time error seen in the unfiltered logcat. In this case use the `@run_on_ui_thread` decorator, for example:
 
 ```python
 from android.runnable import run_on_ui_thread
