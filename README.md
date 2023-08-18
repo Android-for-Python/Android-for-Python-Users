@@ -1233,7 +1233,7 @@ SpeechRecognizer = autoclass('android.speech.SpeechRecognizer')
         self.speechRecognizer = SpeechRecognizer.createSpeechRecognizer(mActivity)
 ```
 
-It is possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This class implementation is only visible in Python, Java cannot see the implementation (though they can see the Java-defined interface).
+It is possible to write Java class implementations in Python using `PythonJavaClass`, [RTFM](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-class-implementation-in-python). You will need to understand [Java signature format](https://github.com/kivy/pyjnius/blob/master/docs/source/api.rst#java-signature-format). This class implementation is only visible in Python, Java cannot see the implementation (though it can see the Java-defined interface).
 
 Python implementations of Java classes have this general form:
 ```python
