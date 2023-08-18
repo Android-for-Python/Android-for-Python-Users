@@ -1215,6 +1215,7 @@ It possible, but uncommon, that Java statements must be executed on the Android 
 ```python
 from android.runnable import run_on_ui_thread
 from android import mActivity
+from jnius import autoclass
 
 SpeechRecognizer = autoclass('android.speech.SpeechRecognizer')
 
