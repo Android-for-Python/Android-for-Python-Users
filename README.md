@@ -82,6 +82,7 @@ Revised 2023-08-17
   * [Plyer](#plyer)
   * [Pyjnius](#pyjnius)
     + [Basic Pyjnius Usage](#basic-pyjnius-usage)
+    + [More Pyjnius Usage](#more-pyjnius-usage)
     + [Pyjnius Performance](#pyjnius-performance)
     + [Java Abstract Classes](#java-abstract-classes)
     + [Pyjnius Memory Management](#pyjnius-memory-management)
