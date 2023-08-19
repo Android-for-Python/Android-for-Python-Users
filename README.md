@@ -169,6 +169,7 @@ Revised 2023-08-17
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)  
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
+  * [No module named '_version'](no-module-named_version)
 
 
 # Introduction
@@ -1929,6 +1930,7 @@ p4a.branch = some_branch
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
+  * [No module named '_version'](no-module-named_version)
 
 ## No module named 'msvcrt'
 
@@ -2500,3 +2502,18 @@ org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryEr
 
 If you have to do this your app will probably be too large for the Android Store. The above Java settings workaround will not address the constraints of the Store.
 
+## No module named '_version'
+
+```
+RAN: /usr/bin/python3 -c 'import _version; print(_version.__version__)'
+STDOUT:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named '_version'
+```
+
+Buildozer's build database is corrupted, clean it.
+
+```
+buildozer appclean
+```
