@@ -169,7 +169,7 @@ Revised 2023-08-17
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)  
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
-  * [No module named '_version'](no-module-named-_version)
+  * [No module named '_version'](#no-module-named-_version)
 
 
 # Introduction
@@ -1930,7 +1930,7 @@ p4a.branch = some_branch
   * [ValueError: 'border_radius' must have 4, got 0](#valueerror-border_radius-must-have-4-got-0)
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
-  * [No module named '_version'](no-module-named-_version)
+  * [No module named '_version'](#no-module-named-_version)
 
 ## No module named 'msvcrt'
 
