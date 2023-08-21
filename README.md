@@ -1070,7 +1070,7 @@ It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but 
 
 ## Slow App Start
 
-On the desktop, if you start a Kivy app from a desktop icon, the app is slower to start than say from an IDE. This is because Python has to start first. On Android, the same delay due to Python starting exists - Kivy apps can be slow to launch. On Android, the splash screen is used to distract from this delay. The splash screen is a work=around; it isn't the cause of the delay.
+On the desktop, if you start a Kivy app from a desktop icon, the app is slower to start than say from an IDE. This is because Python has to start first. On Android, the same delay due to Python starting exists - Kivy apps can be slow to launch. On Android, the splash screen is used to distract from this delay. The splash screen is a work-around; it isn't the cause of the delay.
 
 If your app is *unusually slow* to start, it is because it is doing too much work in the `__init__()`, `build()` or `on_start()` methods. A common symptom of this is is a black screen *after* the splash screen has closed but before the app displays.
 
