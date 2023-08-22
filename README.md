@@ -257,7 +257,7 @@ The storage architecture is summarized in the [Android documentation](https://de
 
 ## Private Storage
 
-An app can perform Python file operations (read, write, shutil) on its private storage. There are three usable storage location: the app install directory, the app storage directory, and the app cache directory.
+An app can perform Python file operations (read, write, shutil) on its private storage. There are three usable storage location: the app install directory, the app storage directory, and the app cache directory. File names must be valid Linux file names.
 
 No permissions are required to read or write an app's private storage. [More on permissions below](#app-permissions).
 
@@ -1664,7 +1664,7 @@ There are **a lot of useful features** to be found at these links:
 
 Set up signing *before* your release build.
 
-## Set up signing
+## Setup signing
 
 The official [Android signing overview is here](https://developer.android.com/studio/publish/app-signing.html).
 
