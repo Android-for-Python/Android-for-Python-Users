@@ -399,7 +399,7 @@ from kivy.clock import mainthread
         self.label.text = text
 ```
 
-A daemon thread will automatically terminate when the main thread comepletes, providing all threads running at app exit are also daemon threads. Failure to always specify a daemon thread may cause an app to exit in a delayed way.
+A daemon thread will automatically terminate when the main thread completes, providing all threads running at app exit are also daemon threads. Failure to always specify a daemon thread may cause an app to exit in a delayed way.
 
 
 ## Subprocess
