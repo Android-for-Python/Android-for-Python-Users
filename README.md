@@ -369,7 +369,7 @@ Examples of sending a file are in [share_send_example](https://github.com/Androi
 
 ## Threads
 
-Kivy executes on the 'UI thread', Android requires that this thread is always responsive to UI events. As a consequence, long latency operations (e.g. network access, `sleep()`) or computationally expensive operations must be performed in their own Python threads.
+Kivy executes on its 'UI thread', Android requires that its UI thread is always responsive to UI events. As a consequence, long latency operations (e.g. network access, `sleep()`) or computationally expensive operations must be performed in their own Python threads.
 
 Threads must be truly asynchronous to the UI thread, so do not use `join()` in the UI thread. A non-UI thread may not write to a UI widget. [See this basic example](https://gist.github.com/el3/3c8d4e127d41e86ca3f2eae94c25c15f). A thread-safe way to return results to the UI thread is to use the `@mainthread` decorator, for example:
 
