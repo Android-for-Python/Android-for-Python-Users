@@ -1684,7 +1684,7 @@ If you are updating an app in the store, you **must have** the same keystore tha
 
 Check that the keys are set: `env | grep _KEY`
 
-The Android Store requires that apps be built with a minimum API level of 31. Set
+The Android Store requires that apps be built with a minimum API level of 33. Set
 ```
 android.api = 33
 ```
