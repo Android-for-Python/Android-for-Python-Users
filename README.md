@@ -390,7 +390,7 @@ from kivy.clock import mainthread
             # sync a *copy* of the result with the Kivy UI thread
             self.make_thread_safe(str(result))
         except:
-            # handle if you want to
+            # always log a message here
             pass
 
     @mainthread
