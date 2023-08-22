@@ -1682,7 +1682,7 @@ If you are updating an app in the store, you **must have** the same keystore tha
 
 ## Build the release
 
-Check that the keys are set: `env | grep _KEY`, if they are not set read the previous section.
+Check that the keys are set: `env | grep _KEY`, if they are not set read [Setup Signing](#setup-signing).
 
 The Android Store requires that apps be built with a minimum API level of 33. Set
 ```
