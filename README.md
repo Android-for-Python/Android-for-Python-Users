@@ -1678,11 +1678,11 @@ For a Buildozer build, setting up signing consists of two steps:
 
 Here are some [very detailed signing instructions](https://gist.github.com/Guhan-SenSam/fa4ed215ef3419e7b3154de5cb71f641).
 
-Check that the keys are set: `env | grep _KEY`
-
 If you are updating an app in the store, you **must have** the same keystore that was previously used to submit the app to the store. Check that the key values are exported (see links above) as this is how the keys are passed to Buildozer.   
 
 ## Build the release
+
+Check that the keys are set: `env | grep _KEY`
 
 The Android Store requires that apps be built with a minimum API level of 31. Set
 ```
