@@ -384,14 +384,10 @@ from kivy.clock import mainthread
                daemon=True).start()
 
     def some_function(self, arg0):
-        try:
-            # the behavior goes here, creating some result
-            result = 'Greetings, Earthlings.'
-            # sync a *copy* of the result with the Kivy UI thread
-            self.make_thread_safe(str(result))
-        except:
-            # always log a message here
-            pass
+    	# the behavior goes here, creating some result
+        result = 'Greetings, Earthlings.'
+        # sync a *copy* of the result with the Kivy UI thread
+        self.make_thread_safe(str(result))
 
     @mainthread
     def make_thread_safe(self, text):
