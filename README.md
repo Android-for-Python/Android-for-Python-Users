@@ -170,6 +170,7 @@ Revised 2023-08-17
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
   * [No module named '_version'](#no-module-named-_version)
+  * [Can't exec "autopoint"](#cant-exec-autopoint)
 
 
 # Introduction
@@ -1929,6 +1930,7 @@ p4a.branch = some_branch
   * [storage dir path cannot contain spaces](#storage-dir-path-cannot-contain-spaces)
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
   * [No module named '_version'](#no-module-named-_version)
+  * [Can't exec "autopoint"](#cant-exec-autopoint)
 
 ## No module named 'msvcrt'
 
@@ -2112,10 +2114,17 @@ The fix is to upgrade to WSL 2.
 
 - And possibly explicitly specify the location of the certificate in the `request` that generates the error.
 
-```
+```python
 import certifi
 
 resp = request.urlopen(req, cafile=certifi.where())
+```
+
+- Also it is possible to bypass https verification, if you choose to do this understand the risks. This is for your information and not a recommendation.
+
+```python
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 ```
 
 And [buildozer appclean](#changing-buildozerspec).
@@ -2348,7 +2357,7 @@ jnius/jnius.c:55290:5: error: expression is not assignable
     ++Py_REFCNT(o);
 ```
 
-Upgrade Cython `pip3 uninstall cython`, `pip3 install -U cython`.
+Change the Cython version to `0.29.33` as specified in the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst#android-on-ubuntu-2004-and-2204-64bit).
 
 And [buildozer appclean](#changing-buildozerspec).
 
@@ -2515,3 +2524,17 @@ Buildozer's build database is corrupted, clean it.
 ```
 buildozer appclean
 ```
+
+## Can't exec "autopoint"
+
+```
+Can't exec "autopoint": No such file or directory at /usr/share/autoconf/Autom4te/FileUtils.pm line 345
+```
+
+The package uses `gettext`, install `gettext`.
+
+```
+buildozer appclean
+```
+
+
