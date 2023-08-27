@@ -2531,10 +2531,9 @@ buildozer appclean
 Can't exec "autopoint": No such file or directory at /usr/share/autoconf/Autom4te/FileUtils.pm line 345
 ```
 
-Building this Python package or OS library (for example, liblzma) depends on `gettext`, install `gettext`.
+The build of this Python package or OS library (for example, liblzma) depends on `gettext`, install `gettext`.
 
-```
-buildozer appclean
-```
+And [buildozer appclean](#changing-buildozerspec).
+
 
 
