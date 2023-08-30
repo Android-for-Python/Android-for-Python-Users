@@ -1955,7 +1955,9 @@ And [buildozer appclean](#changing-buildozerspec).
 
 Aidl is part of the Google tools. To get the tools you have to accept the Google license agreements.
 
-Delete `~/.buildozer` and `<project>/.buildozer`, then `buildozer android debug` and **accept the Google license agreements**.
+Cleanup with `buildozer appclean`, delete `~/.buildozer`, and `buildozer android debug` and **accept the Google license agreements**.
+
+If you are Linux clueless `~` expands to your home directory you can see this with  `ls -a ~`. 
 
 ## Sdkmanager is not installed
 
@@ -2223,6 +2225,8 @@ And [buildozer appclean](#changing-buildozerspec).
 May occur when building `libffi`.
 
 This can be due to an interaction between WSL 1 and Clang in NDK 25b.
+
+Check your WSL version at Windows prompt with `wsl -l -v`.
 
 Options: 
 
