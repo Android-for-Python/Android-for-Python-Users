@@ -800,7 +800,7 @@ This must contain no more than two periods `.` surrounded by numeric characters.
 
 #### requirements basics
 
-This is the list of pip packages (and possibly versions) that your app imports from.
+This is the list of pip packages (and possibly versions) that your app imports from. So this list will alwys contain `python3, kivy`.
 
 **In addition** Buildozer needs to know all the packages your packages depend on; there is no pip engine to work this out on Android. Determining these is [shown in the next section](#find-the-dependencies).
 
