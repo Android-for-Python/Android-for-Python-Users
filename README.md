@@ -71,6 +71,7 @@ Revised 2023-08-17
 - [Debugging](#debugging)
   * [Install App on Android](#install-app-on-android)
   * [Get an Error Message](#get-an-error-message)
+  * [I Included Android Permissions, but....](#i-included-android-permissions-but)
   * [Slow App Start](#slow-app-start)
 - [Android Hardware](#android-hardware)
   * [Camera](#camera)
@@ -1064,6 +1065,18 @@ Messages from the Android OS rather than from Python can usually be found by sea
 Messages from Android can be cryptic. Most commonly they are due to a missing recipe for a Python package, Java API errors when using pyjnius, or Kivy lifecycle violations.
 
 It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but this is not recomended initially, as it adds unknowns to the debug process. The emulator is useful for checking a debugged app on various devices and Android versions.
+
+## I Included Android Permissions, but....
+
+*If you think you have a permissions issue, you probably have a design issue.*
+
+Sometimes the issue is missing permissions, but you read the Android documentation for the permitted resource so this is not you, right? Many people *guess* and specify too many permissions. It's not usually wrong but it is less than optimal.
+
+Usually the issue is the wrong permissions for the Android device version or Android api version. Some permissions change name, and even meaning with versions. Because permissions are for an *api*, this means that *api*s change and you may be using the wrong api. This is a design issue.
+
+The most common example is [Storage Permissions](#storage-permissions), which may means the design issue is understanding [Android Storage](#android-storage) apis. If you think in terms of 'external storage', this is probably you.
+
+Another example is ACCESS_FINE_LOCATION, see the [Android Bluetooth Permissions](https://developer.android.com/guide/topics/connectivity/bluetooth/permissions) documentation.
 
 ## Slow App Start
 
