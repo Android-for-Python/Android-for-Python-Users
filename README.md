@@ -1070,11 +1070,11 @@ It is possible to [debug using an emulator](#appendix-b--using-an-emulator) but 
 
 *If you think you have a permissions issue, you probably have a design issue.*
 
-Sometimes the issue is missing permissions, but you read the Android documentation for the permitted resource so this is not you, right? Many people *guess* and specify too many permissions. It's not usually wrong but it is less than optimal.
+Sometimes the issue is missing permissions, but you did read the Android documentation for the permitted resource so this is not you, right? Many people *guess* and specify too many permissions. It's not usually wrong but it is less than optimal.
 
 Usually the issue is the wrong permissions for the Android device version or Android api version. Some permissions change name, and even meaning with versions. Because permissions are for an *api*, this means that *api*s change and you may be using the wrong api. This is a design issue.
 
-The most common example is [Storage Permissions](#storage-permissions), which may means the design issue is understanding [Android Storage](#android-storage) apis. If you think in terms of 'external storage', this is probably you.
+The most common example is [Storage Permissions](#storage-permissions), which may mean the design issue is understanding [Android Storage](#android-storage) apis. If you think in terms of 'external storage', this is probably you.
 
 Another example is ACCESS_FINE_LOCATION, see the [Android Bluetooth Permissions](https://developer.android.com/guide/topics/connectivity/bluetooth/permissions) documentation.
 
