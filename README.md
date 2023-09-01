@@ -172,6 +172,7 @@ Revised 2023-08-31
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
   * [No module named '_version'](#no-module-named-_version)
   * [Can't exec "autopoint"](#cant-exec-autopoint)
+  * [# Cython (cython) not found](#cython-cython-not-found)
 
 
 # Introduction
