@@ -264,7 +264,7 @@ An app can perform Python file operations (read, write, shutil) on its private s
 
 No permissions are required to read or write an app's private storage. [More on permissions below](#app-permissions).
 
-Do not confuse private with secure. On older Android versions it is possible for other apps to read private storage. More generally, Android Studio allows inspection of private storage.
+Do not confuse private with secure. On older Android versions it is possible for other apps to read private storage. On modern Android devices the 'App Install Directory' is not secure as Android Studio allows inspection. The 'App Storage Directory' and 'App Cache Directory' are secure.
 
 ### App Install Directory
 
@@ -301,7 +301,7 @@ from android import mActivity
     if result:
         storage_path = str(result.toString())
     else:
-        storage_path = app_storage_path()
+        storage_path = app_storage_path()   # NOT SECURE
 ```
 
 ### App Cache Directory
