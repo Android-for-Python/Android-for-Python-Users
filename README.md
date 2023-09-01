@@ -1945,7 +1945,6 @@ p4a.branch = some_branch
   * [No module named '_version'](#no-module-named-_version)
   * [Can't exec "autopoint"](#cant-exec-autopoint)
   * [# Cython (cython) not found](#cython-cython-not-found)
-)
 
 ## No module named 'msvcrt'
 
