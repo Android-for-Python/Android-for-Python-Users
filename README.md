@@ -1944,6 +1944,8 @@ p4a.branch = some_branch
   * [java.lang.OutOfMemoryError](#javalangoutofmemoryerror)
   * [No module named '_version'](#no-module-named-_version)
   * [Can't exec "autopoint"](#cant-exec-autopoint)
+  * [# Cython (cython) not found](#cython-cython-not-found)
+)
 
 ## No module named 'msvcrt'
 
@@ -2553,4 +2555,12 @@ The build of this Python package or OS library (for example, liblzma) depends on
 And [buildozer appclean](#changing-buildozerspec).
 
 
+## Cython (cython) not found
 
+```
+# Cython (cython) not found, please install it.
+```
+
+Recheck that the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) were followed.
+
+And [buildozer appclean](#changing-buildozerspec).
