@@ -173,6 +173,7 @@ Revised 2023-08-31
   * [No module named '_version'](#no-module-named-_version)
   * [Can't exec "autopoint"](#cant-exec-autopoint)
   * [# Cython (cython) not found](#cython-cython-not-found)
+  * [no attribute '_JavaClass__cls_storage'](#no-attribute-_javaclass__cls_storage)  
 
 
 # Introduction
@@ -1946,6 +1947,8 @@ p4a.branch = some_branch
   * [No module named '_version'](#no-module-named-_version)
   * [Can't exec "autopoint"](#cant-exec-autopoint)
   * [# Cython (cython) not found](#cython-cython-not-found)
+  * [no attribute '_JavaClass__cls_storage'](#no-attribute-_javaclass__cls_storage)
+
 
 ## No module named 'msvcrt'
 
@@ -2564,3 +2567,18 @@ And [buildozer appclean](#changing-buildozerspec).
 Recheck that the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) were followed.
 
 And [buildozer appclean](#changing-buildozerspec).
+
+## no attribute '_JavaClass__cls_storage'
+
+```
+09-01 16:42:41.769  5119  7071 I python  :  AttributeError: 'Class' object has no attribute '_JavaClass__cls_storage'
+```
+
+Pinning the verion of pyjnius causes this issue. This is not required as Pyjnius and it's correct version are always [added automatically](#requirements-basics). 
+
+Remove pyjnius from buildozer.spec requirements.
+
+And [buildozer appclean](#changing-buildozerspec).
+
+
+
