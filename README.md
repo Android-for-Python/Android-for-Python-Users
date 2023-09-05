@@ -173,7 +173,9 @@ Revised 2023-08-31
   * [No module named '_version'](#no-module-named-_version)
   * [Can't exec "autopoint"](#cant-exec-autopoint)
   * [# Cython (cython) not found](#cython-cython-not-found)
-  * [no attribute '_JavaClass__cls_storage'](#no-attribute-_javaclass__cls_storage)  
+  * [no attribute '_JavaClass__cls_storage'](#no-attribute-_javaclass__cls_storage)
+  * [Error compiling Cython file:](#error-compiling-cython-file)
+
 
 
 # Introduction
@@ -1948,6 +1950,8 @@ p4a.branch = some_branch
   * [Can't exec "autopoint"](#cant-exec-autopoint)
   * [# Cython (cython) not found](#cython-cython-not-found)
   * [no attribute '_JavaClass__cls_storage'](#no-attribute-_javaclass__cls_storage)
+  * [Error compiling Cython file:](#error-compiling-cython-file)
+
 
 
 ## No module named 'msvcrt'
@@ -2580,5 +2584,24 @@ Remove pyjnius from buildozer.spec requirements.
 
 And [buildozer appclean](#changing-buildozerspec).
 
+## Error compiling Cython file:
 
+```
+[DEBUG]:        Error compiling Cython file:
+[DEBUG]:        ------------------------------------------------------------
+[DEBUG]:        ...
+[DEBUG]:                    raise GstPlayerException('Unable to get the bus from the pipeline')
+[DEBUG]:
+[DEBUG]:                gst_bus_enable_sync_message_emission(self.bus)
+[DEBUG]:                if self.eos_cb or self.message_cb:
+[DEBUG]:                    self.hid_message = c_bus_connect_message(
+[DEBUG]:                            self.bus, _on_gstplayer_message, <void *>self)
+[DEBUG]:                                      ^
+[DEBUG]:        ------------------------------------------------------------
+[DEBUG]:
+[DEBUG]:        kivy/lib/gstplayer/_gstplayer.pyx:228:30: Cannot assign type 'void (void *, GstMessage *) except * nogil' to 'buscallback_t'. Exception values are incompatible. Suggest adding 'noexcept' to type 'void (void *, GstMessage *) except * nogil'.
+```
 
+The Cython version is incorrect. Recheck that the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) were followed.
+
+And [buildozer appclean](#changing-buildozerspec).
