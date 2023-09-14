@@ -553,7 +553,7 @@ As explained in the next section, this does not work with a sticky foreground se
    self.start_service('Worker').stop(mActivity)
 ```
 
-When debugging, the default Python filter excludes any print statements in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`.
+When debugging, the default Python filter excludes any print statements in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`. *Note*, that name parameter is the name of the service with only the first character capitalized, exactly as it appears in buildozer.spec .
 
 Within a service, the service's Android activity can be obtained using:
 
@@ -1490,7 +1490,7 @@ if platform not in ['android', 'ios']:
 
 ## Layout
 
-A portable layout must be an *elastic* layout, because on a mobile device the Kivy window is defined by the screen and the screen changes between devices.
+A portable layout must be an *elastic* layout, because on a mobile device the Kivy window is defined by the screen and the screen changes between devices. Read the [Android Documentation](https://developer.android.com/guide/practices/screens_support.html).
 
 Setting widget properties such as size, size_hint, or orientation make the layout less elastic. But setting some of these layout constraints is required to achieve a particular layout, so portable layout is a balance between the two.
 
@@ -1498,7 +1498,7 @@ Mobile device screen resolution (dpi), screen orientation (landscape or portrait
 
 ### Screen Resolution
 
-Screen resolution can be addressed by specifying font size in units of sp, and widget size in units of dp. See [Kivy Metrics](https://kivy.org/doc/stable/api-kivy.metrics.html).
+Screen resolution can be addressed by specifying font size in units of sp, and widget size in units of dp. See [Kivy Metrics](https://kivy.org/doc/stable/api-kivy.metrics.html), and the [Android Documentation](https://developer.android.com/training/multiscreen/screendensities).
 
 ### Screen Orientation
 
@@ -2578,7 +2578,11 @@ And [buildozer appclean](#changing-buildozerspec).
 09-01 16:42:41.769  5119  7071 I python  :  AttributeError: 'Class' object has no attribute '_JavaClass__cls_storage'
 ```
 
-Pinning the verion of pyjnius causes this issue. This is not required as Pyjnius and it's correct version are always [added automatically](#requirements-basics). 
+1) Check the Cython version is correct. Recheck that the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) were followed.
+
+And [buildozer appclean](#changing-buildozerspec).
+
+2) Pinning the verion of pyjnius can cause this issue. This is not required as Pyjnius and it's correct version are always [added automatically](#requirements-basics). 
 
 Remove pyjnius from buildozer.spec requirements.
 
