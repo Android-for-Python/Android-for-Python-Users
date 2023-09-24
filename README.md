@@ -713,7 +713,7 @@ There is an **obsolete** Docker image. **DO NOT USE IT.** The Docker image is no
 
 - Create `main.py` containing the [Kivy Hello World app](https://kivy.org/doc/stable/guide/basic.html#create-an-application).
 
-- Run `buildozer init` - this will create a `buildozer.spec` default template. Edit it to say that `android.api=32`.
+- Run `buildozer init` - this will create a `buildozer.spec` default template. Edit it to say that `android.api=33`.
 
 - Run `buildozer android debug`. This will take a while, especially the first time.
 
@@ -747,6 +747,8 @@ Failure to follow this syntax may result in hard-to-understand behavior.
 Generally change as few options as possible; resist the temptation to overspecify. You will over-constrain the implementation.
 
  - Change the `title` and `package.name`.
+
+ - Change `android.api` to `33`.
 
  - If the app is for distribution via a store, also change `package.domain`.
 
@@ -1206,13 +1208,15 @@ DownloadManagerRequest = autoclass('android.app.DownloadManager$Request')
 
 Then use this to write code with Python syntax and semantics, and Java class semantics added. Some basic knowledge of Java semantics is required. Get over it. Android classes will require (possibly extensive) reading of the [Android Developer Guide](https://developer.android.com/guide) and [Android Reference](https://developer.android.com/reference).
 
-The [record_audio_example](https://github.com/Android-for-Python/record_audio_example) is small and uses two different Android api classes. There is also a reference to the Android Java example that it is based on. 
+The [record_audio_example](https://github.com/Android-for-Python/record_audio_example) is small and uses two different Android API classes. There is also a reference to the Android Java example that it is based on. 
 
 Add your own Java to the package using the Buildozer options `android.add_src` and `android.add_jars` in the `buildozer.spec`. Java files should be organized in sub-directories reflecting the Java package hierarchy.
 
 Add AndroidX Java packages (or other Maven packages) using the Buildozer option `android.gradle_dependencies` in the buildozer.spec. See [Maven AndroidX Group](https://mvnrepository.com/artifact/androidx).
 
-Note: some documentation examples are obsolete. If you see `.renpy.` as a sub field in an autoclass argument replace it with `.kivy.`.
+There are lots of small Java examples of using Android system APIs at [www.java2s.com/Code/Android](http://www.java2s.com/Code/Android/CatalogAndroid.htm).
+
+Note: some Kivy documentation examples are obsolete. If you see `.renpy.` as a sub field in an autoclass argument replace it with `.kivy.`.
 
 ### Pyjnius Memory Management
 
