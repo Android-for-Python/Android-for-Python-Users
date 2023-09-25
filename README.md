@@ -2526,7 +2526,11 @@ Gradle fails with
 [DEBUG]:   	   > java.lang.OutOfMemoryError (no error message)
 ```
 
-This is a Java error. It occurs because your app is too large for the Java settings. Typically your app will be larger than 100MB.
+This is a Java error.
+
+It may occur due to too many builds with Gradle errors, and Gradle not freeing memory. Try rbooting the machine. 
+
+More likely it occurs because your app is too large for the Java settings. Typically your app will be larger than 100MB.
 
 Check that you do not have any unexpected data files in your app.
 
