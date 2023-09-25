@@ -2528,11 +2528,9 @@ Gradle fails with
 
 This is a Java error.
 
-It may occur due to too many builds with Gradle errors, and Gradle not freeing memory. Try rbooting the machine. 
+It may occur due to too many builds having Gradle errors, and Gradle not freeing memory. Try rebooting the machine. 
 
-More likely it occurs because your app is too large for the Java settings. Typically your build apk would be larger than 100MB. An apk this large will be a problem for the Android Store.
-
-Check that you do not have any unexpected data files in your app.
+More likely it occurs because your app is too large for the Java settings. Check that you do not have any unexpected data files in your app; or simmply too many data files in your design.
 
 To change the Java settings see the Java documentation https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_configuration_properties
 
@@ -2541,7 +2539,7 @@ You will have to create `~/.gradle/gradle.properties`, and add this line:
 org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
 ```
 
-If you have to do this your app will probably be too large for the Android Store. The above Java settings workaround will not address the constraints of the Store.
+If you have to do this and your apk is larger tahn 100MB is will probably be too large for the Android Store. The above Java settings workaround will not address the constraints of the Store.
 
 ## No module named '_version'
 
