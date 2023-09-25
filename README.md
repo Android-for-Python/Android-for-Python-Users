@@ -2530,7 +2530,7 @@ This is a Java error.
 
 It may occur due to too many builds with Gradle errors, and Gradle not freeing memory. Try rbooting the machine. 
 
-More likely it occurs because your app is too large for the Java settings. Typically your app will be larger than 100MB.
+More likely it occurs because your app is too large for the Java settings. Typically your build apk would be larger than 100MB. An apk this large will be a problem for the Android Store.
 
 Check that you do not have any unexpected data files in your app.
 
