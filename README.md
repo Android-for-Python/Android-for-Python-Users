@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-08-31
+Revised 2023-10-03
 
 # Table of Contents
 
@@ -511,7 +511,14 @@ An [Android Service](https://developer.android.com/guide/components/services) pe
 
 **A service is a Python script, not a Kivy App**. You can use some functions from the Kivy package, but nothing that depends on an instantiated Kivy App class. There is no Kivy event loop (so no Clock), there is no SDL2 (so no codecs). Don't even think about instantiating a Kivy App class (there is no Window). **Most Kivy functions will not work in a stand-alone Python script that does not contain an instantiated App.**     
 
-There are two Kivy examples [Kivy Service OSC](https://github.com/tshirtman/kivy_service_osc), and [Multi-Service Example](https://github.com/Android-for-Python/Multi-Service-Example). OSC is a good package for message passing between app and service. However it is not designed for passing large data; consider using the file system in this case. OSC requires `INTERNET` permission.
+There are three Kivy examples:
+ - [Kivy Service OSC](https://github.com/tshirtman/kivy_service_osc)
+ - [Multi-Service Example](https://github.com/Android-for-Python/Multi-Service-Example).
+ - [Music Service Example](https://github.com/Android-for-Python/music_service_example)
+
+The first is a basic example, the second illustrates multiple services, and the third a service that is persistent regardless of app state.
+
+OSC is a good package for message passing between app and service. However it is not designed for passing large data; consider using the file system in this case. OSC requires `INTERNET` permission.
 
 ## Specifying a Service 
 
@@ -531,26 +538,58 @@ from android import mActivity
        service_name = str(context.getPackageName()) + '.Service' + name
        service = autoclass(service_name)
        service.start(mActivity,'')   # starts or re-initializes a service
-       return service
 
    self.start_service('Worker') # starts a service
 ```
 
 `service_name` is the name of a Java class implementing the service, which in turn executes the file `the_service.py`.
 
-Most documentation and examples show stopping a service like this (assuming the class variables have been previously set):
+Stop a service by sending a message (using OSC) from the app to the service, to terminate the service's event loop.
+
+```python
+## Inside the service
+from android.config import SERVICE_CLASS_NAME
+PythonService = autoclass(SERVICE_CLASS_NAME)
+
+    self.mService = PythonService.mService
+    self.loop_running = True
+
+    # Loop
+    while self.loop_running:   # set False in response to some message
+        sleep(0.1)
+    self.mService.stopSelf()
+```
+
+Some documentation shows stopping a service from the app. But it does not work in the general case as the app cannot always know the service state, only Android knows the service state 
 
 ```python
    # This does not work with a sticky foreground service
    self.service.stop(self.mActivity)
 ```
 
-As explained in the next section, this does not work with a sticky foreground service. The general way to stop a service is to re-initialize the service then immediately stop it:
+More generally check if the service is already running before starting it. An already running service will loose it's internal state if it is started again. This is required in the case of a persistent ('sticky') service, as at `on_start` the app cannot know if the service is running without testing for its existance.
 
 ```python
-   # a general way to stop a service
-   # re-initializes then stops the service
-   self.start_service('Worker').stop(mActivity)
+    def get_service_name(self, name):
+        context =  mActivity.getApplicationContext()
+        return str(context.getPackageName()) + '.Service' + name
+
+    def service_is_running(self, name):
+        service_name = self.get_service_name(name)
+        context =  mActivity.getApplicationContext()
+        manager = cast('android.app.ActivityManager',
+                       mActivity.getSystemService(context.ACTIVITY_SERVICE))
+        for service in manager.getRunningServices(100):
+            if service.service.getClassName() == service_name:
+                return True
+        return False
+           
+    def start_service_if_not_running(self, name):
+        if self.service_is_running(name):
+            return
+        service = autoclass(self.get_service_name(name))
+        service.start(mActivity,'round_music_note_white_24',
+                      'Music Service','Started','')   
 ```
 
 When debugging, the default Python filter excludes any print statements in the service. To see output from the service use the `adb logcat -s` option, for example `adb logcat -s Worker`. *Note*, that name parameter is the name of the service with only the first character capitalized, exactly as it appears in buildozer.spec .
