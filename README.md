@@ -1696,7 +1696,7 @@ For a Buildozer build, setting up signing consists of two steps:
 
 Here are some [very detailed signing instructions](https://gist.github.com/Guhan-SenSam/fa4ed215ef3419e7b3154de5cb71f641).
 
-If you are updating an app in the store, you **must have** the same keystore that was previously used to submit the app to the store. Check that the key values are exported (see links above) as this is how the keys are passed to Buildozer.   
+If you are **updating** an app in the store, you **must have** the same keystore that was previously used to submit the app to the store. Export the four keystore values in the same way as you did after you first created them. Check that the key values are exported (`env | grep _KEY`) as this is how the keys are passed to Buildozer.   
 
 ## Build the release
 
