@@ -831,11 +831,13 @@ There are a lots of other options; most users should ignore these.
 
 ### package.name
 
-This must contain only alpha numeric characters. Do not use any other characters.
+All characters must be alphanumeric or an underscore `[a-zA-Z0-9_]`.
 
 ### package.domain
 
-This must contain exactly one period `.` surrounded by alpha numeric characters. Do not use any other characters. Anthing else will cause the [Gradle build tool](https://gradle.org/) to fail.
+All characters must be alphanumeric, an underscore, or a period `[a-zA-Z0-9_.]`.
+A period `.` must not be the last character.
+Any period `.` must be followed by a letter.
 
 ### version
 
