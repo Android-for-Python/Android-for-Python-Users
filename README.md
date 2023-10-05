@@ -748,7 +748,7 @@ There is an **obsolete** Docker image. **DO NOT USE IT.** The Docker image is no
 
 ## Try Hello World
 
-- Create a project directory and cd to it: `mkdir hello; cd hello`.
+- Create a project directory and cd to it: `mkdir ~/hello; cd ~/hello`.
 
 - Create `main.py` containing the [Kivy Hello World app](https://kivy.org/doc/stable/guide/basic.html#create-an-application).
 
