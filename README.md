@@ -744,7 +744,7 @@ Read [Buildozer's installation documentation](https://github.com/kivy/buildozer/
 
 There is an **obsolete** Docker image. **DO NOT USE IT.** The Docker image is not maintained.
 
-**If building on WSL**, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. Never build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`). This may give unpredictable results, and **builds that are five to ten times slower**.
+**If building on WSL**, always build the project in a directory on the Linux partition (somewhere under WSL `cd ~`). You will have to copy your project from the Windows partition to the Linux partition. Never build the project in a directory on the Windows partition (usually `/mnt/c/` or `/mnt/d/`). This may give unpredictable results, and **builds that are five to ten times slower than on the WSL partition**.
 
 ## Try Hello World
 
