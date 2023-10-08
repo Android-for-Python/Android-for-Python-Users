@@ -921,9 +921,9 @@ Some Kivy widgets have requirement dependencies:
 
 * `kivy.network.urlrequest` needs  `requests, urllib3, chardet, idna, certifi`
 
-* `kivy.uix.video` needs `ffpyplayer`
+* `kivy.uix.video` needs `ffpyplayer` and optionally `ffpyplayer_codecs`
 
-* `kivy.core.audio.SoundLoader` needs `ffpyplayer, ffpyplayer_codecs` 
+* `kivy.core.audio.SoundLoader` needs `ffpyplayer` and optionally `ffpyplayer_codecs` 
 
 * Not a Kivy Widget, but `requests` depends on `urllib3, chardet, idna, certifi` or `urllib3, charset-normalizer==2.1.1, idna, certifi`
 
