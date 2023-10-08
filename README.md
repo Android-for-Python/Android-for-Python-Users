@@ -921,7 +921,14 @@ Some Kivy widgets have requirement dependencies:
 
 * `kivy.network.urlrequest` needs  `requests, urllib3, chardet, idna, certifi`
 
-* `kivy.uix.video` needs `ffpyplayer` and optionally `ffpyplayer_codecs`
+* `kivy.uix.video` needs `ffpyplayer` and usually `ffpyplayer_codecs`
+
+* `kivy.uix.video` SDL2 crashes may be addressed with the following before all other import statements:
+
+```
+import os
+os.environ["SDL_AUDIODRIVER"] = "android"
+``` 
 
 * `kivy.core.audio.SoundLoader` needs `ffpyplayer` and optionally `ffpyplayer_codecs` 
 
