@@ -925,13 +925,21 @@ Some Kivy widgets have requirement dependencies:
 
 * `kivy.core.audio.SoundLoader` needs `ffpyplayer` and optionally `ffpyplayer_codecs` 
 
-* Not a Kivy Widget, but `requests` depends on `urllib3, chardet, idna, certifi` or `urllib3, charset-normalizer==2.1.1, idna, certifi`
-
 #### Requirements Examples
 
 For examples [see](https://github.com/Android-for-Python/INDEX-of-Examples#readme).
 
 Using the technique described above, we get the following:
+
+##### Requests
+
+```
+requirements = python3, kivy, requests, urllib3, chardet, idna, certifi
+```
+or
+```
+requirements = python3, kivy, requests, urllib3, charset-normalizer==2.1.1, idna, certifi
+```
 
 ##### Pyrebase4
 ```
