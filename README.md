@@ -2201,7 +2201,7 @@ The fix is to upgrade to WSL 2.
 ```python
 import certifi
 
-resp = request.urlopen(req, cafile=certifi.where())
+resp = requests.urlopen(req, cafile=certifi.where())
 ```
 
 - Also it is possible to bypass https verification, if you choose to do this understand the risks. This is for your information and not a recommendation.
