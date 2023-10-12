@@ -2192,16 +2192,34 @@ The fix is to upgrade to WSL 2.
 
 `[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate`
 
+Check for basic errors, or explictly add a certificate reference.
+
 - Check that `certifi` is included in the [requirements](#requirements).
 
-- Check that the request to use Android's network api conforms to the [Kivy Lifecycle](#kivy-lifecycle). 
+- Check that the request to use Android's network api conforms to the [Kivy Lifecycle](#kivy-lifecycle). This may vary by Android version, but generally not before `on_start()`.
 
-- And possibly explicitly specify the location of the certificate in the `request` that generates the error.
+- Possibly explicitly specify the location of the certificate in an environment variable at the top of the file, before other imports except these two.
+
+```python
+import os
+import certifi
+os.environ['SSL_CERT_FILE'] = certifi.where()
+```
+
+- Possibly explicitly tell ssl where the certificate is. 
+
+```python
+import ssl
+import certifi
+ssl.default_ca_certs = certifi.where()
+```
+
+- Possibly explicitly specify the location of the certificate in the `requests` that generates the error.
 
 ```python
 import certifi
 
-resp = requests.urlopen(req, cafile=certifi.where())
+resp = requests.get(req, cafile=certifi.where())
 ```
 
 - Also it is possible to bypass https verification, if you choose to do this understand the risks. This is for your information and not a recommendation.
