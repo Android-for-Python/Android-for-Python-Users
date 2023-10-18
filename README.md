@@ -4,7 +4,7 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
-Revised 2023-10-03
+Revised 2023-10-17
 
 # Table of Contents
 
@@ -756,8 +756,15 @@ There is an **obsolete** Docker image. **DO NOT USE IT.** The Docker image is no
 
 - Run `buildozer android debug`. This will take a while, especially the first time.
 
-- Install the app on your phone. [Learn how.](#install-app-on-android).  
+- A successful build completes showing this on the terminal:
+```
+# Android packaging done!
+# APK myapp-0.1-arm64-v8a_armeabi-v7a-debug.apk available in the bin directory
+```
 
+- An unsuccessful build of this example almost certainly means the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst), or these instructions, were not followed.
+
+- Install the app on your phone. [Learn how.](#install-app-on-android).
 
 ## Changing `buildozer.spec`
 
