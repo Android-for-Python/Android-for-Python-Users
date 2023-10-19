@@ -351,7 +351,7 @@ Example usage is in [shared_storage_example](https://github.com/Android-for-Pyth
 
 ### Storage Permissions
 
-On devices running Android 10 and later, no permissions are requires to read or write an app's own shared storage or private storage. An app cannot overwrite another app's shared file.
+On devices running Android 10 and later, no permissions are requires to read or write an app's own shared storage or private storage. An app cannot modify another app's shared file.
 
 Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission if android.api < 33.
 
