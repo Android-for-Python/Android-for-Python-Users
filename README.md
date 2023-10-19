@@ -699,7 +699,7 @@ For example: If the app connects to a network, add `INTERNET` permission.
 
 `WRITE_EXTERNAL_STORAGE` is never required for api >= 30. [[Learn more](https://developer.android.com/training/data-storage#permissions).]
 
-`READ_EXTERNAL_STORAGE` for api >= 33 this is only required to read another app's shared file in the Documents collection. [[Android docs](https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE). Note the docs to do not mention the case described above]
+`READ_EXTERNAL_STORAGE` for api >= 33 this is only required to read another app's shared file in the Documents collection. [[Android docs](https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE). Note the docs to do not mention the case described here.]
 
 ## User permissions
 
