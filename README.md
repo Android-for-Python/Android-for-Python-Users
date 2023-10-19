@@ -351,9 +351,11 @@ Example usage is in [shared_storage_example](https://github.com/Android-for-Pyth
 
 ### Storage Permissions
 
-On devices running Android 10 and later, no permissions are requires to read or write an app's own shared storage or private storage.
+On devices running Android 10 and later, no permissions are requires to read or write an app's own shared storage or private storage. An app cannot overwrite another app's shared file.
 
-Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission if android.api < 33 and READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_MEDIA_AUDIO [see](https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE) if android.api >= 33.  An app cannot overwrite another app's shared file.
+Reading another app's shared storage requires READ_EXTERNAL_STORAGE permission if android.api < 33.
+
+If android.api >= 33 use one or more of READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_MEDIA_AUDIO, READ_EXTERNAL_STORAGE [see Android docs](https://developer.android.com/reference/android/Manifest.permission#READ_EXTERNAL_STORAGE). Despite what it says in the Android docs, READ_EXTERNAL_STORAGE is required to read another app's shared file when the file is part of the Documents collection. 
 
 There is one special case which is different from typical desktop usage. An app cannot read another app's file in the Downloads directory, regardless of permissions.
 
