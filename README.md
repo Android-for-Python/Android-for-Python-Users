@@ -177,7 +177,6 @@ Revised 2023-10-17
   * [Error compiling Cython file:](#error-compiling-cython-file)
 
 
-
 # Introduction
 
 Python and Kivy are portable across operating systems because of [POSIX](https://en.wikipedia.org/wiki/POSIX), Python wheels, and pip. However Android is not POSIX-compliant, wheels are not usually available for Android, and pip is not installed on Android. Clearly many apps won't 'just work' on Android. The document is about porting a Kivy app to Android.
@@ -1084,6 +1083,8 @@ Buildozer's behavior can be unpredictable in any of these cases:
 
 * The buildozer.spec `source.exclude_dir` is used, as `source.include_ext` has priority, so some files in the excluded directory may not be excluded.
 
+* There is a `setup.py` from some other build tool in the project directory.
+
 # Debugging
 
 ## Install App on Android
@@ -1126,6 +1127,8 @@ If the app has been [installed on Android](#install-app-on-android), search the 
 ModuleNotFoundError: No module named 'some-import-name'
 ```
 Where 'some-import-name' is in 'some-pip-package-name', the error occurs because 'some-pip-package-name' is missing from [buildozer.spec requirements](#requirements). To get 'some-pip-package-name' look at the import statement in the Python code, it will typically be similar to `from some-pip-package-name import some-import-name`. Get the file name and line number of the import statement from the traceback.
+
+If 'some-import-name' is a directory in your app **and** it contains `.py` files **and** the app was tested on Windows. Then update your Python on Windows and test the app on Windows again. (For a while MS shipped an 'improved' Python - luckily they stopped.)
 
 Messages from the Android OS rather than from Python can usually be found by searching for `backtrace`. If using adb, Android messages appear by default. If using Buildozer, the messages are filtered to be Python only. To see the Android messages when using Buildozer, in `buildozer.spec` comment out the Python-only filter:
 ```
