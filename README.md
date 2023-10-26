@@ -175,6 +175,7 @@ Revised 2023-10-17
   * [# Cython (cython) not found](#cython-cython-not-found)
   * [no attribute '_JavaClass__cls_storage'](#no-attribute-_javaclass__cls_storage)
   * [Error compiling Cython file:](#error-compiling-cython-file)
+  * [missing optional dependency 'openpyxl'](#missing-optional-dependency-openpyxl)
 
 
 # Introduction
@@ -2023,7 +2024,7 @@ p4a.branch = some_branch
   * [# Cython (cython) not found](#cython-cython-not-found)
   * [no attribute '_JavaClass__cls_storage'](#no-attribute-_javaclass__cls_storage)
   * [Error compiling Cython file:](#error-compiling-cython-file)
-
+  * [missing optional dependency 'openpyxl'](#missing-optional-dependency-openpyxl)
 
 
 ## No module named 'msvcrt'
@@ -2701,3 +2702,8 @@ And [buildozer appclean](#changing-buildozerspec).
 The Cython version is incorrect. Recheck that the [install instructions](https://github.com/kivy/buildozer/blob/master/docs/source/installation.rst) were followed.
 
 And [buildozer appclean](#changing-buildozerspec).
+
+
+## missing optional dependency 'openpyxl'
+
+In `buildozer.spec` `requirements` add `et_xmlfile` in addition to `openpyxl`.
