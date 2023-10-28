@@ -792,23 +792,25 @@ Failure to follow this syntax may result in hard-to-understand behavior.
 
 ## What should I change?
 
-Generally change as few options as possible; resist the temptation to overspecify. You will over-constrain the implementation.
+Generally change as few options as possible; resist the temptation to overspecify, use the defaults as much as possible.
 
- - Change the `title` and `package.name`.
+ - Change the `title` and [package.name](#packagename).
 
- - Change `android.api` to `33`.
+ - Change [android.api](#androidapi) to `33`.
 
- - If the app is for distribution via a store, also change `package.domain`.
+ - If the app is for distribution via a store, also change [package.domain](#packagedomain).
 
- - If the app includes data files, add any necessary file extensions in `source.include_exts`.
+ - If the app includes data files, add any necessary file extensions in [source.include_exts](#sourceinclude_exts).
 
- - If the app uses Python packages that are normally installed with `pip`, add these and their dependencies to `requirements`.
+ - If the app uses Python packages that are normally installed with `pip`, add these and their dependencies to [requirements](#requirements).
+
+ - If the app layout supports landscape, or landscape and portrait; enable the required device [orientation](#orientation).  
 
  - Optionally add `presplash.filename`, and `icon.filename` (icon must be a `.png`).
 
  - Add the required [Android Permissions](#app-permissions) to `android.permissions`. For example, if the app connects to a network add `INTERNET` permission. 
 
- - If the app is for the Android store you will need to increase the default `android.api`.
+ - If the app is for the Android store you may want to increase the default `android.api` to 34.
 
  - If you want to add Java use `android.add_src`, `android.add_jars`, `android.add_aars`, or for Maven Java packages `android.gradle_dependencies`.
 
@@ -845,8 +847,9 @@ All characters must be alphanumeric or an underscore `[a-zA-Z0-9_]`.
 ### package.domain
 
 All characters must be alphanumeric, an underscore, or a period `[a-zA-Z0-9_.]`.
-A period `.` must not be the last character.
-Any period `.` must be followed by a letter.
+A period `.` must not be the last character. Any period `.` must be followed by a letter.
+
+Do not use a domain owned by somebody else. The default value `org.test` is not accepted by the Android Store. 
 
 ### version
 
@@ -986,13 +989,11 @@ None of these options are trivial. That is why it said AVOID DISAPPOINTMENT in [
 
 Some combination of `portrait`, `landscape`, `portrait-reverse`, `landscape-reverse`. And `landscape` is `portrait` rotated 90 degrees counter clockwise.
 
-The previous `all` option is no longer available, use:
+For all use:
 
 ```
 orientation = portrait, landscape, portrait-reverse, landscape-reverse
 ```
-
-**Note** As of 2023/01/28 a workaround for an api 31 issue, using KIVY_ORIENTATION, is no longer required.
 
 ### fullscreen
 
