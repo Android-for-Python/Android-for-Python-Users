@@ -1564,7 +1564,7 @@ if platform not in ['android', 'ios']:
 
 ## Layout
 
-A portable layout must be an *elastic* layout, because on a mobile device the Kivy window is defined by the screen and the screen changes between devices. Read the [Android Documentation](https://developer.android.com/guide/practices/screens_support.html).
+A portable layout must be an *elastic* layout, because on a mobile device the Kivy window is defined by the screen and the screen changes between devices. Read the [Android Documentation](https://developer.android.com/guide/practices/screens_support.html). 
 
 Setting widget properties such as size, size_hint, or orientation make the layout less elastic. But setting some of these layout constraints is required to achieve a particular layout, so portable layout is a balance between the two.
 
@@ -1588,7 +1588,7 @@ Window aspect ratio on a desktop defaults to 4:3, but screen aspect ratio varies
 
 A truly elastic layout has only hints, and no sizes. In practice this may not look good in all cases. So we must specify the size of some widgets, but this requires the other widgets to be more elastic.
 
-Geometry tells us there is no right answer. You can however localize issues by for example filling an AnchorLayout with a Label for background color, then centering a fixed size widget in this layout. There are probably many similar techniques, but as far as I know there is no documentation of these.
+Geometry tells us there is no right answer. You can however localize issues. For example; instead of placing a UI Widiget in a BoxLayout element, place the UI Widget (centered and filling in one direction) in a RelativeLaout (or AnchorLayout) with the RelativeLayout inside the BoxLayout element. The UI Widgets *spacing* will locally adjust to BoxLayout changes, and the layout as a whole will scale with different screen aspect ratios. You will have to fill the RelativeLaout or AnchorLayout with some background color matching the UI Widgets, this will hide the adjustment space in the not-filled direction.  
 
 ### Testing Portability
 
