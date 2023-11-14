@@ -4,6 +4,8 @@ Android for Python Users
 
 *An unofficial Buildozer Users' Guide*
 
+**2023-11-13 This repository is archived.**
+
 Revised 2023-10-17
 
 # Table of Contents
